@@ -8,7 +8,7 @@
 
 ## Install Maven
 
-Article for [downloading Maven](https://java.tutorials24x7.com/blog/how-to-install-openjdk-17-on-windows)
+Article for [downloading Maven](https://phoenixnap.com/kb/install-maven-windows)
 
 ## Install git
 
