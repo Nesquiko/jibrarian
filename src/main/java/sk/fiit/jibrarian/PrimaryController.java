@@ -1,4 +1,4 @@
-package sk.fiit;
+package sk.fiit.jibrarian;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

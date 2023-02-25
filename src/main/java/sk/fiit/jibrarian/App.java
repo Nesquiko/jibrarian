@@ -1,4 +1,4 @@
-package sk.fiit;
+package sk.fiit.jibrarian;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
