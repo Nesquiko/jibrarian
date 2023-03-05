@@ -1,1 +1,95 @@
-<mxfile host="app.diagrams.net" modified="2023-03-04T15:00:16.457Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36" etag="sSUpoQFUXabwgxUQ9q4u" version="20.7.4" type="github"><diagram id="u2RXuAuM1ZONc2ouVt6J" name="Page-1">3VpbT9swGP01fRxyrqSP0DL20G0IkLY9TW78NTGkceW4t/36OY1zdQp0S1qKhFB8Yif28fk+H7sZWKP55pbjRfiVEYgGJiKbgTUemKZhm+Yg/UNkmyGX7jADAk6JqlQCD/QPKBApdEkJJLWKgrFI0EUd9Fkcgy9qGOacrevVZiyqv3WBA9CABx9HOvqDEhFmqOegEv8CNAjzNxtI3ZnjvLICkhATtq5A1s3AGnHGRHY134wgSsnLecnafd5zt+gYh1i8pUHwOPkzefzNVk/x9ejRcwN3/PuT4WSPWeFoqUY8pskiwlvVabHNmQAiiVFFxkXIAhbj6KZErzlbxgTS1yFZKutMGFtI0JDgEwixVbOMl4JJKBTzSN2VI+Hbn6r9rvArLVzYaJgD40319nhbLd0Bp3MQwBWYCM6ei2mzJJINKh3JXhIVlLAl9+El5pQYMQ9AvFDPKqZaxggw2T8uuUUcIizoqt4PrMQaFPVU0yvO0xkpKiwYjUVSefJdCsgKKu5MT4lORd3QqUvjoOryInt/XqoMpIR2ajtEeZenUJguiVJzF7bsU0V3n9AF8qx/Ed4JZGa4XehMU4Zh1ZVRZLP8EVnHVKtSM/sFW1FVJzrKF5j3kamcV+TyLlJS9sCj5yT7sJzUqG46aNB/UtJWwwmOCY0DCd6lTqEptVJIqSrWIRXwsMC7WVpLQ1QXzYxG0YhFjO/aWrPZzPT9QhSVO8Sduo5biGMFXMDmZXnos6kaXNZpzIvr0swYeUyHFSPjoP3TXwvhg+NVo/iaseckbRbLfxGdcsx193EQ0R3QZjTkZxg6ccMW3qy+eLNaeZPIGASm0Rkq02pQ7LxRmsVUdM6xbobvIQG+6jbuCQZv1squ63swnXXDrt1g1zqxfj2N29t0qTERW4puxev50C7eqefYDuqH3pa8elR6DT2vPuJnUGn17Ok9efo1bI3fG0I/gnKNlrx7XGrdlqUtPbqRNJpIuYOzW90aW+qC0tdWN7c3mvUMXKF5GYvURLiR7Mb1lMurIL0iWMB/st+FZBtLmd3CJWrh0u6Ny+E+p9CRZDsgrYjrd8OaqW+vvsFaEXa+O6ymjy3OSE4W6qa+WbgHTECGNbryBWXdWoLjGFp3+KqhbWW5eWLVHcu6JZjsdq8Ux/0QfRyD0CTaPTnR+r7siqSJtpo9zo7mpg8zT21xTd2HXZH57lRmjJNwyjAnZ5ieG0bMblsGj5uddfOQ89xHcnbAI3YbyZ45tdyOSG7mjLe63d5yRh4lWs6opOizY9loarnNabRZuv5OJXVLdw9ztjvY+VBMtwn6uEzrBzzfp0/pJw+n3mg0Y994q//9h+CXxfKLiexXn/K7E+vmLw==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-03-05T09:57:07.883Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36" etag="CglpO9v4qeUAqNTNajmF" version="21.0.2" type="github">
+  <diagram id="u2RXuAuM1ZONc2ouVt6J" name="Page-1">
+    <mxGraphModel dx="1422" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-15" value="Display" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.409;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=3;" parent="1" source="gTLzLT_ovjnBCT86g6D_-1" target="gTLzLT_ovjnBCT86g6D_-3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="95" />
+              <mxPoint x="280" y="95" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;entryX=0.417;entryY=-0.083;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="gTLzLT_ovjnBCT86g6D_-1" target="gTLzLT_ovjnBCT86g6D_-16" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="220" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=3;" parent="1" source="gTLzLT_ovjnBCT86g6D_-1" target="gTLzLT_ovjnBCT86g6D_-21" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="95" />
+              <mxPoint x="240" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-1" value="Landing Page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="70" y="70" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-2" value="Books in library" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="140" y="110" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-3" value="Book Detail" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="340" y="50" width="120" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-5" value="Reserve" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="440" y="30" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-8" value="Give out" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="440" y="70" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-12" value="Take in" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="440" y="110" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-14" value="Edit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="440" y="150" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-16" value="Borrowed Books" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="80" y="520" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-18" value="Borrowed until&lt;br&gt;dates" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="570" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-19" value="Reserved Books" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="570" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-21" value="New Book Page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="340" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-23" value="Reader Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="690" y="30" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-24" value="Librarian Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="690" y="60" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-25" value="Add New Book" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="440" y="210" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-26" value="Admin Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="310" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-29" value="Admin Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="690" y="90" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-30" value="Add Librarian" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="410" y="330" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-31" value="Remove Librarian" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="410" y="400" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-32" value="Object" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="690" y="120" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="UENm6vXJXYiIuP29thLv-4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=4;" edge="1" parent="1" target="gTLzLT_ovjnBCT86g6D_-26">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="380" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
