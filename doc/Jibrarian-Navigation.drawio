@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-03-12T12:21:35.976Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36" etag="N7n95KNo8MM3fR5-kzI_" version="21.0.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-03-12T12:25:36.720Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36" etag="HcdHzzuxUSMvupN1AwOF" version="21.0.2" type="github">
   <diagram id="u2RXuAuM1ZONc2ouVt6J" name="Page-1">
     <mxGraphModel dx="1422" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -53,11 +53,11 @@
         <mxCell id="gTLzLT_ovjnBCT86g6D_-21" value="New Book Page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="320" y="380" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="gTLzLT_ovjnBCT86g6D_-23" value="Reader Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="600" y="30" width="120" height="20" as="geometry" />
+        <mxCell id="gTLzLT_ovjnBCT86g6D_-23" value="Library Member Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="600" y="30" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="gTLzLT_ovjnBCT86g6D_-24" value="Librarian Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="600" y="60" width="120" height="20" as="geometry" />
+          <mxGeometry x="600" y="60" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="gTLzLT_ovjnBCT86g6D_-25" value="Add New Book" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
           <mxGeometry x="410" y="370" width="90" height="30" as="geometry" />
@@ -66,7 +66,7 @@
           <mxGeometry x="320" y="510" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="gTLzLT_ovjnBCT86g6D_-29" value="Admin Action" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="600" y="90" width="120" height="20" as="geometry" />
+          <mxGeometry x="600" y="90" width="130" height="20" as="geometry" />
         </mxCell>
         <mxCell id="gTLzLT_ovjnBCT86g6D_-30" value="Add Librarian" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="430" y="490" width="100" height="30" as="geometry" />
