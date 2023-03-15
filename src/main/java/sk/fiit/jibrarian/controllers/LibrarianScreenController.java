@@ -43,7 +43,6 @@ public class LibrarianScreenController implements Initializable {
         try {
             URL fxmlLocation = getClass().getResource(part);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
-            System.out.println(fxmlLocation);
             root = loader.load();
 
         }catch (IOException error){
