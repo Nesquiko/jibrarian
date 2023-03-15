@@ -9,6 +9,8 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import sk.fiit.jibrarian.App;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -57,6 +59,11 @@ public class LibrarianScreenController implements Initializable {
         add_book_btn.setDisable(false);
         lib_btn.setSelected(false);
         add_book_btn.setSelected(false);
+    }
+
+    @FXML
+    public void exit() throws IOException {
+        App.setRoot("views/user_auth");
     }
 
     private void loadScreenPart(String part){
