@@ -27,7 +27,7 @@
                         <Insets left="70.0" />
                     </HBox.margin></ToggleButton>
                 <Region prefHeight="64.0" prefWidth="392.0" />
-                <ToggleButton onAction="#exit" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="57.0" prefWidth="158.0" style="-fx-background-color: #ffffff;" text="xyz@gmail.com" textAlignment="CENTER">
+                <ToggleButton alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="57.0" prefWidth="158.0" stylesheets="@style.css" text="xyz@gmail.com" textAlignment="CENTER">
                     <font>
                         <Font name="Arial Bold" size="16.0" />
                     </font>

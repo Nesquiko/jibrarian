@@ -26,14 +26,14 @@ public class UserScreenController implements Initializable {
     private ToggleButton lib_btn, borrow_btn;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadScreenPart("../views/librarian_library_screen.fxml");
+        loadScreenPart("../views/library_catalog_screen.fxml");
         lib_btn.setSelected(true);
         lib_btn.setDisable(true);
     }
 
     @FXML
     public void library(ActionEvent actionEvent) {
-        loadScreenPart("../views/librarian_library_screen.fxml");
+        loadScreenPart("../views/library_catalog_screen.fxml");
         lib_btn.setDisable(true);
         borrow_btn.setDisable(false);
         borrow_btn.setSelected(false);
