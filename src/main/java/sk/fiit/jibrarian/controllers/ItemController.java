@@ -8,26 +8,27 @@ import sk.fiit.jibrarian.model.Item;
 
 public class ItemController {
     @FXML
-    private Label book_author;
+    private Label bookAuthor;
     @FXML
-    private Label book_available;
+    private Label bookAvailable;
     @FXML
-    private ImageView book_img;
+    private ImageView bookImg;
     @FXML
-    private Label book_reserved;
+    private Label bookReserved;
     @FXML
-    private Label book_title;
+    private Label bookTitle;
     @FXML
-    private Label book_total;
+    private Label bookTotal;
     private Item item;
-    public void setData(Item item){
+
+    public void setData(Item item) {
         this.item = item;
-        book_author.setText(item.getAuthor());
-        book_title.setText(item.getTitle());
-        book_available.setText("Available: "+item.getAvailable().toString());
-        book_reserved.setText("Reserved: "+item.getReserved().toString());
-        book_total.setText("Total: "+item.getTotal().toString());
+        bookAuthor.setText(item.getAuthor());
+        bookTitle.setText(item.getTitle());
+        bookAvailable.setText("Available: " + item.getAvailable().toString());
+        bookReserved.setText("Reserved: " + item.getReserved().toString());
+        bookTotal.setText("Total: " + item.getTotal().toString());
         Image img = new Image(getClass().getResourceAsStream("../views/book.png"));
-        book_img.setImage(img);
+        bookImg.setImage(img);
     }
 }

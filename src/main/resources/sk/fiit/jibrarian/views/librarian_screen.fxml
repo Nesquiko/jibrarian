@@ -9,41 +9,53 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="915.0" style="-fx-background-color: #f0ecec;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="sk.fiit.jibrarian.controllers.LibrarianScreenController">
-   <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="866.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
-         <children>
-            <ToggleButton fx:id="lib_btn" mnemonicParsing="false" onAction="#library" prefHeight="57.0" prefWidth="103.0" stylesheets="@style.css" text="Library" textAlignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin></ToggleButton>
-            <ToggleButton fx:id="add_book_btn" mnemonicParsing="false" onAction="#add_book" prefHeight="57.0" prefWidth="105.0" stylesheets="@style.css" text="Add Book" textAlignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </HBox.margin></ToggleButton>
-            <ToggleButton fx:id="borrow_btn" mnemonicParsing="false" onAction="#borrowed_books" prefHeight="57.0" prefWidth="131.0" stylesheets="@style.css" text="Borrowed Books" textAlignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin></ToggleButton>
-            <Region prefHeight="64.0" prefWidth="392.0" />
-            <ToggleButton alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="57.0" prefWidth="158.0" stylesheets="@style.css" text="xyz@gmail.com" textAlignment="CENTER">
-               <font>
-                  <Font name="Arial Bold" size="16.0" />
-               </font>
-            </ToggleButton>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <AnchorPane fx:id="ap" prefHeight="458.0" prefWidth="913.0" BorderPane.alignment="CENTER" />
-   </center>
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="522.0" prefWidth="915.0" style="-fx-background-color: #f0ecec;"
+            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
+            fx:controller="sk.fiit.jibrarian.controllers.LibrarianScreenController">
+    <top>
+        <HBox alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="866.0" style="-fx-background-color: #ffffff;"
+              BorderPane.alignment="CENTER">
+            <children>
+                <ToggleButton fx:id="libBtn" mnemonicParsing="false" onAction="#library" prefHeight="57.0"
+                              prefWidth="103.0" stylesheets="@style.css" text="Library" textAlignment="CENTER">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets right="10.0"/>
+                    </HBox.margin>
+                </ToggleButton>
+                <ToggleButton fx:id="addBookBtn" mnemonicParsing="false" onAction="#add_book" prefHeight="57.0"
+                              prefWidth="105.0" stylesheets="@style.css" text="Add Book" textAlignment="CENTER">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0" right="10.0"/>
+                    </HBox.margin>
+                </ToggleButton>
+                <ToggleButton fx:id="borrowBtn" mnemonicParsing="false" onAction="#borrowed_books" prefHeight="57.0"
+                              prefWidth="131.0" stylesheets="@style.css" text="Borrowed Books" textAlignment="CENTER">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0"/>
+                    </HBox.margin>
+                </ToggleButton>
+                <Region prefHeight="64.0" prefWidth="392.0"/>
+                <ToggleButton alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit"
+                              prefHeight="57.0" prefWidth="158.0" stylesheets="@style.css" text="xyz@gmail.com"
+                              textAlignment="CENTER">
+                    <font>
+                        <Font name="Arial Bold" size="16.0"/>
+                    </font>
+                </ToggleButton>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <AnchorPane fx:id="ap" prefHeight="458.0" prefWidth="913.0" BorderPane.alignment="CENTER"/>
+    </center>
 </BorderPane>

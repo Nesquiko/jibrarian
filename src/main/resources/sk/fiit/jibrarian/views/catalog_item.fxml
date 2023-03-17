@@ -9,55 +9,60 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/" fx:controller="sk.fiit.jibrarian.controllers.ItemController">
-   <children>
-      <HBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <VBox alignment="CENTER" prefHeight="166.0" prefWidth="289.0">
-               <children>
-                  <Label fx:id="book_title" prefHeight="67.0" prefWidth="182.0" text="Book Title" wrapText="true">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="40.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label fx:id="book_author" prefHeight="50.0" prefWidth="170.0" text="Author" wrapText="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER" prefHeight="66.0" prefWidth="176.0">
-                     <children>
-                        <Label fx:id="book_available" text="Available:" wrapText="true">
-                           <HBox.margin>
-                              <Insets left="5.0" right="10.0" />
-                           </HBox.margin>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0"
+            prefWidth="400.0"
+            style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;"
+            xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
+            fx:controller="sk.fiit.jibrarian.controllers.ItemController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="166.0" prefWidth="289.0">
+                    <children>
+                        <Label fx:id="bookTitle" prefHeight="67.0" prefWidth="182.0" text="Book Title" wrapText="true">
+                            <font>
+                                <Font name="System Bold" size="18.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="40.0"/>
+                            </VBox.margin>
                         </Label>
-                        <Label fx:id="book_reserved" text="Reserved:" wrapText="true">
-                           <HBox.margin>
-                              <Insets left="5.0" right="10.0" />
-                           </HBox.margin>
+                        <Label fx:id="bookAuthor" prefHeight="50.0" prefWidth="170.0" text="Author" wrapText="true">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
                         </Label>
-                        <Label fx:id="book_total" text="Total:" wrapText="true">
-                           <HBox.margin>
-                              <Insets left="5.0" right="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <ImageView fx:id="book_img" fitHeight="150.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@book.png" />
-               </image>
-               <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </HBox.margin>
-            </ImageView>
-         </children>
-      </HBox>
-   </children>
+                        <HBox alignment="CENTER" prefHeight="66.0" prefWidth="176.0">
+                            <children>
+                                <Label fx:id="bookAvailable" text="Available:" wrapText="true">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                                <Label fx:id="bookReserved" text="Reserved:" wrapText="true">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                                <Label fx:id="bookTotal" text="Total:" wrapText="true">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="10.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <ImageView fx:id="bookImg" fitHeight="150.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@book.png"/>
+                    </image>
+                    <HBox.margin>
+                        <Insets left="10.0" right="10.0"/>
+                    </HBox.margin>
+                </ImageView>
+            </children>
+        </HBox>
+    </children>
 </AnchorPane>

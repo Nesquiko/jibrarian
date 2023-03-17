@@ -21,29 +21,29 @@ public class UserScreenController implements Initializable {
     @FXML
     private BorderPane bp;
     @FXML
-    private AnchorPane ap;
-    @FXML
-    private ToggleButton lib_btn, borrow_btn;
+    private ToggleButton libBtn, borrowBtn;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadScreenPart("../views/library_catalog_screen.fxml");
-        lib_btn.setSelected(true);
-        lib_btn.setDisable(true);
+        libBtn.setSelected(true);
+        libBtn.setDisable(true);
     }
 
     @FXML
     public void library(ActionEvent actionEvent) {
         loadScreenPart("../views/library_catalog_screen.fxml");
-        lib_btn.setDisable(true);
-        borrow_btn.setDisable(false);
-        borrow_btn.setSelected(false);
+        libBtn.setDisable(true);
+        borrowBtn.setDisable(false);
+        borrowBtn.setSelected(false);
     }
+
     @FXML
     public void borrowed_books(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_borrowed_books_screen.fxml");
-        borrow_btn.setDisable(true);
-        lib_btn.setDisable(false);
-        lib_btn.setSelected(false);
+        borrowBtn.setDisable(true);
+        libBtn.setDisable(false);
+        libBtn.setSelected(false);
     }
 
     @FXML
@@ -51,14 +51,14 @@ public class UserScreenController implements Initializable {
         App.setRoot("views/user_auth");
     }
 
-    private void loadScreenPart(String part){
+    private void loadScreenPart(String part) {
         Parent root = null;
         try {
             URL fxmlLocation = getClass().getResource(part);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
-        }catch (IOException error){
+        } catch (IOException error) {
             Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
         }
 

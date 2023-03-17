@@ -16,48 +16,48 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AdminScreenController  implements Initializable {
+public class AdminScreenController implements Initializable {
 
     @FXML
     private BorderPane bp;
     @FXML
-    private AnchorPane ap;
-    @FXML
-    private ToggleButton lib_btn, add_book_btn, dashboard_btn;
+    private ToggleButton libBtn, addBookBtn, dashboardBtn;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadScreenPart("../views/library_catalog_screen.fxml");
-        lib_btn.setSelected(true);
-        lib_btn.setDisable(true);
+        libBtn.setSelected(true);
+        libBtn.setDisable(true);
     }
 
     @FXML
     public void library(ActionEvent actionEvent) {
         loadScreenPart("../views/library_catalog_screen.fxml");
-        lib_btn.setDisable(true);
-        add_book_btn.setDisable(false);
-        dashboard_btn.setDisable(false);
-        add_book_btn.setSelected(false);
-        dashboard_btn.setSelected(false);
+        libBtn.setDisable(true);
+        addBookBtn.setDisable(false);
+        dashboardBtn.setDisable(false);
+        addBookBtn.setSelected(false);
+        dashboardBtn.setSelected(false);
     }
 
     @FXML
     public void add_book(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_add_book_screen.fxml");
-        add_book_btn.setDisable(true);
-        lib_btn.setDisable(false);
-        dashboard_btn.setDisable(false);
-        lib_btn.setSelected(false);
-        dashboard_btn.setSelected(false);
+        addBookBtn.setDisable(true);
+        libBtn.setDisable(false);
+        dashboardBtn.setDisable(false);
+        libBtn.setSelected(false);
+        dashboardBtn.setSelected(false);
     }
+
     @FXML
     public void admin_dashboard(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_borrowed_books_screen.fxml");
-        dashboard_btn.setDisable(true);
-        lib_btn.setDisable(false);
-        add_book_btn.setDisable(false);
-        lib_btn.setSelected(false);
-        add_book_btn.setSelected(false);
+        dashboardBtn.setDisable(true);
+        libBtn.setDisable(false);
+        addBookBtn.setDisable(false);
+        libBtn.setSelected(false);
+        addBookBtn.setSelected(false);
     }
 
     @FXML
@@ -65,14 +65,14 @@ public class AdminScreenController  implements Initializable {
         App.setRoot("views/user_auth");
     }
 
-    private void loadScreenPart(String part){
+    private void loadScreenPart(String part) {
         Parent root = null;
         try {
             URL fxmlLocation = getClass().getResource(part);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
-        }catch (IOException error){
+        } catch (IOException error) {
             Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
         }
 
