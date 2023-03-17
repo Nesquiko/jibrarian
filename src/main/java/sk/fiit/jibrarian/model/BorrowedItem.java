@@ -1,6 +1,7 @@
 package sk.fiit.jibrarian.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BorrowedItem {
@@ -11,20 +12,17 @@ public class BorrowedItem {
     private String title;
     private String author;
     private LocalDate until;
-    private ItemStatus status;
 
     public BorrowedItem() {
     }
 
-    public BorrowedItem(UUID id, UUID userId, UUID itemId, String title, String author, LocalDate until,
-                        ItemStatus status) {
+    public BorrowedItem(UUID id, UUID userId, UUID itemId, String title, String author, LocalDate until) {
         this.id = id;
         this.userId = userId;
         this.itemId = itemId;
         this.title = title;
         this.author = author;
         this.until = until;
-        this.status = status;
     }
 
     public UUID getId() {
@@ -75,11 +73,17 @@ public class BorrowedItem {
         this.until = until;
     }
 
-    public ItemStatus getStatus() {
-        return status;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BorrowedItem that = (BorrowedItem) o;
+        return id.equals(that.id) && userId.equals(that.userId) && itemId.equals(that.itemId) && title.equals(
+                that.title) && author.equals(that.author) && until.equals(that.until);
     }
 
-    public void setStatus(ItemStatus status) {
-        this.status = status;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, itemId, title, author, until);
     }
 }

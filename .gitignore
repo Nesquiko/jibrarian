@@ -39,4 +39,5 @@ build/
 
 .idea/workspace.xml
 .idea/sonarlint/
+.idea/uiDesigner.xml
 doc/mockups/images
