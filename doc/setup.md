@@ -63,3 +63,13 @@ To stop the container, use the following command:
 ```bash
 docker stop jibrarian-psql
 ```
+
+## Setup the PostgreSQL database
+
+To setup the PostgreSQL database, you can use the following command:
+
+```bash
+mvn flyway:migrate
+```
+
+This command will run the migrations in the project, which will create the tables in the database.

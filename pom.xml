@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>sk.fiit.jibrarian</groupId>
     <artifactId>jibrarian</artifactId>
@@ -9,7 +9,15 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
+        <postgres.db>jibrarian</postgres.db>
+        <postgres.port>42069</postgres.port>
 
+        <flyway.user>jibrarian</flyway.user>
+        <flyway.password>password</flyway.password>
+        <flyway.schemas>public</flyway.schemas>
+        <flyway.locations>filesystem:db/migration</flyway.locations>
+        <flyway.sqlMigrationPrefix>v</flyway.sqlMigrationPrefix>
+        <flyway.url>jdbc:postgresql://localhost:${postgres.port}/${postgres.db}</flyway.url>
     </properties>
     <dependencies>
         <dependency>
@@ -21,6 +29,11 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>19.0.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -51,6 +64,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.15.1</version>
             </plugin>
         </plugins>
     </build>

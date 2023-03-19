@@ -41,3 +41,6 @@ build/
 .idea/sonarlint/
 .idea/uiDesigner.xml
 doc/mockups/images
+.idea/dataSources
+.idea/dataSources.local.xml
+.idea/dataSources.xml
