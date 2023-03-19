@@ -73,3 +73,13 @@ mvn flyway:migrate
 ```
 
 This command will run the migrations in the project, which will create the tables in the database.
+
+## Verify the PostgreSQL connection
+
+To verify that the PostgreSQL connection works, you can use the following command:
+
+```bash
+mvn verify
+```
+
+Which will run the tests in the project. If the connection works, the tests should pass.
