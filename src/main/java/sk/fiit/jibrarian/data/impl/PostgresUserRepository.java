@@ -8,6 +8,7 @@ import sk.fiit.jibrarian.model.User;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -93,7 +94,7 @@ public class PostgresUserRepository implements UserRepository {
         } catch (SQLException e) {
             // TODO log as error
         }
-        return List.of();
+        return Collections.emptyList();
     }
 
     @Override
@@ -107,7 +108,7 @@ public class PostgresUserRepository implements UserRepository {
         } catch (SQLException e) {
             // TODO log as error
         }
-        return List.of();
+        return Collections.emptyList();
     }
 
     private List<User> getUsersWithRole(PreparedStatement statement) throws SQLException {

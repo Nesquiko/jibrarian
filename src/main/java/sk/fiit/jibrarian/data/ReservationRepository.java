@@ -12,6 +12,9 @@ public interface ReservationRepository {
      */
     void saveReservation(Reservation reservation) throws TooManyReservationsException;
 
+    /**
+     * Returns all reservations for user
+     */
     List<Reservation> getReservationsForUser(User user);
 
     /**
