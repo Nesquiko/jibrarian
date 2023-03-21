@@ -1,5 +1,6 @@
 package sk.fiit.jibrarian.data.impl;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,12 @@ class PostgresUserRepositoryIT {
                 .setPassword("password")
                 .build();
         clearDatabase();
+    }
+
+    @AfterAll
+    static void tearDownClass() throws SQLException {
+        clearDatabase();
+        connectionPool.close();
     }
 
     @BeforeEach
@@ -108,8 +115,8 @@ class PostgresUserRepositoryIT {
 
     private static void clearDatabase() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
-                var statement = connectionWrapper.getConnection().prepareStatement("delete from users")
+            var connectionWrapper = connectionPool.getConnWrapper();
+            var statement = connectionWrapper.getConnection().prepareStatement("delete from users")
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {

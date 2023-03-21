@@ -13,5 +13,11 @@ create table if not exists items
     pages       integer      not null,
     total       integer      not null,
     available   integer      not null,
-    reserved    integer      not null
+    reserved    integer      not null,
+    image       bytea,
+
+    constraint available_check check (available >= 0),
+    constraint reserved_check check (reserved >= 0),
+    constraint total_check check (total >= 0),
+    constraint total_available_reserved_check check (total = available + reserved)
 );

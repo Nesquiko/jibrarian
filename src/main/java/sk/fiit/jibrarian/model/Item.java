@@ -18,11 +18,13 @@ public class Item {
     private Integer available;
     private Integer reserved;
 
+    private byte[] image;
+
     public Item() {
     }
 
     public Item(UUID id, String title, String author, String description, String language, String genre, String isbn,
-                ItemType itemType, Integer pages, Integer total, Integer available, Integer reserved) {
+                ItemType itemType, Integer pages, Integer total, Integer available, Integer reserved, byte[] image) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -35,6 +37,7 @@ public class Item {
         this.total = total;
         this.available = available;
         this.reserved = reserved;
+        this.image = image;
     }
 
     public UUID getId() {
@@ -131,6 +134,14 @@ public class Item {
 
     public void setReserved(Integer reserved) {
         this.reserved = reserved;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     @Override

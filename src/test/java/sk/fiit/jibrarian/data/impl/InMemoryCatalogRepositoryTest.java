@@ -114,6 +114,6 @@ class InMemoryCatalogRepositoryTest {
 
     private Item createItem(String title) {
         return new Item(UUID.randomUUID(), title, "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                1, 1, 1, 1);
+                1, 1, 1, 1, null);
     }
 }

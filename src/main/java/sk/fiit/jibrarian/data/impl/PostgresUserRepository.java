@@ -8,6 +8,7 @@ import sk.fiit.jibrarian.model.User;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public void saveUser(User user) throws AlreadyExistingUserException {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "insert into users (id, email, pass_hash, role) values (?, ?, ?, ?::user_role)")
         ) {
@@ -43,7 +44,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public Optional<User> getUserByEmail(String email) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where email = ?")
         ) {
@@ -66,7 +67,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public void updateUser(User user) throws UserNotFound {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "update users set email = ?, pass_hash = ?, role = ?::user_role where id = ?")
         ) {
@@ -85,7 +86,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public List<User> getAllLibrarians() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where role = 'librarian'")
         ) {
@@ -93,13 +94,13 @@ public class PostgresUserRepository implements UserRepository {
         } catch (SQLException e) {
             // TODO log as error
         }
-        return List.of();
+        return Collections.emptyList();
     }
 
     @Override
     public List<User> getAllAdmins() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where role = 'admin'")
         ) {
@@ -107,7 +108,7 @@ public class PostgresUserRepository implements UserRepository {
         } catch (SQLException e) {
             // TODO log as error
         }
-        return List.of();
+        return Collections.emptyList();
     }
 
     private List<User> getUsersWithRole(PreparedStatement statement) throws SQLException {
