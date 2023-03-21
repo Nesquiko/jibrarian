@@ -107,7 +107,7 @@ public class ConnectionPool {
         }
     }
 
-    public ConnectionWrapper getConnection() throws SQLException {
+    public ConnectionWrapper getConnWrapper() throws SQLException {
         while (connPool.isEmpty()) {
             if (usedConnections.size() < maxPoolSize) {
                 connPool.add(createConnection());

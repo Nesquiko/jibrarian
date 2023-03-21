@@ -51,7 +51,7 @@ class PostgresReservationRepositoryIT {
         clearDatabase();
         user = new User(UUID.randomUUID(), "email", "passHash", Role.MEMBER);
         item = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                100, 10, 10, 0);
+                100, 10, 10, 0, null);
         saveUser(user);
         saveItem(item);
     }
@@ -104,8 +104,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveUser(User user) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
-                var statement = connectionWrapper.getConnection()
+            var connectionWrapper = connectionPool.getConnWrapper();
+            var statement = connectionWrapper.getConnection()
                         .prepareStatement(
                                 "insert into users (id, email, pass_hash, role) values (?, ?, ?, ?::user_role)")
         ) {
@@ -121,8 +121,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveItem(Item item) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
-                var statement = connectionWrapper.getConnection().prepareStatement(
+            var connectionWrapper = connectionPool.getConnWrapper();
+            var statement = connectionWrapper.getConnection().prepareStatement(
                         """
                                 insert into items (id, title, author, description, language, genre, isbn, item_type,
                                     pages, total, available, reserved) values (?, ?, ?, ?, ?, ?, ?, ?::item_type, ?, ?, ?, ?);
@@ -149,8 +149,8 @@ class PostgresReservationRepositoryIT {
 
     private static void clearDatabase() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
-                var statement = connectionWrapper.getConnection()
+            var connectionWrapper = connectionPool.getConnWrapper();
+            var statement = connectionWrapper.getConnection()
                         .prepareStatement("delete from reservations; delete from items; delete from users;")
         ) {
             statement.executeUpdate();

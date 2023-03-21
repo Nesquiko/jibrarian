@@ -24,7 +24,7 @@ public class PostgresReservationRepository implements ReservationRepository {
     @Override
     public void saveReservation(Reservation reservation) throws TooManyReservationsException {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select count(*) from reservations where user_id = ? and deleted_at is null")
         ) {
@@ -41,7 +41,7 @@ public class PostgresReservationRepository implements ReservationRepository {
         }
 
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "insert into reservations (id, user_id, item_id, until, deleted_at) values (?, ?, ?, ?, ?)")
         ) {
@@ -59,7 +59,7 @@ public class PostgresReservationRepository implements ReservationRepository {
     @Override
     public List<Reservation> getReservationsForUser(User user) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, user_id, item_id, until, deleted_at from reservations where user_id = ? and deleted_at is null")
         ) {
@@ -85,7 +85,7 @@ public class PostgresReservationRepository implements ReservationRepository {
     @Override
     public void deleteReservation(Reservation reservation) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "update reservations set deleted_at = ? where id = ?")
         ) {

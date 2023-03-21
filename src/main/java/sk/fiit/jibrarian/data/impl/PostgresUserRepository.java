@@ -24,7 +24,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public void saveUser(User user) throws AlreadyExistingUserException {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "insert into users (id, email, pass_hash, role) values (?, ?, ?, ?::user_role)")
         ) {
@@ -44,7 +44,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public Optional<User> getUserByEmail(String email) {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where email = ?")
         ) {
@@ -67,7 +67,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public void updateUser(User user) throws UserNotFound {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "update users set email = ?, pass_hash = ?, role = ?::user_role where id = ?")
         ) {
@@ -86,7 +86,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public List<User> getAllLibrarians() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where role = 'librarian'")
         ) {
@@ -100,7 +100,7 @@ public class PostgresUserRepository implements UserRepository {
     @Override
     public List<User> getAllAdmins() {
         try (
-                var connectionWrapper = connectionPool.getConnection();
+                var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
                         "select id, email, pass_hash, role from users where role = 'admin'")
         ) {
