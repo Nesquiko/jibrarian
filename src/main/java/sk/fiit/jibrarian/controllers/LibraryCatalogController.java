@@ -3,7 +3,6 @@ package sk.fiit.jibrarian.controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -14,30 +13,29 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.impl.InMemoryCatalogRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
-import sk.fiit.jibrarian.model.Role;
-import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+
+import static sk.fiit.jibrarian.controllers.UserAuthController.user;
+
 
 public class LibraryCatalogController implements Initializable {
     @FXML
     private GridPane libraryCatalog;
     public List<Item> itemList = new ArrayList<>();
 
-    private User user;
+  /*  private User user;
 
 
     public void setUser(User user) {
         this.user = user;
         this.user.setRole(user.getRole());
-    }
+    }*/
 
     public CatalogRepository inMemoryCatalogRepository = new InMemoryCatalogRepository();
 
@@ -105,7 +103,8 @@ public class LibraryCatalogController implements Initializable {
                     }
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
-                    stage.initModality(Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
+                    stage.initModality(
+                            Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
 
                     switch (role) {
                         case ("MEMBER") -> {

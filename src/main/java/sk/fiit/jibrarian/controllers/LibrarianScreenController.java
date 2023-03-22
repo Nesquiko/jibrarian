@@ -6,11 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import sk.fiit.jibrarian.App;
-import sk.fiit.jibrarian.model.Role;
-import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,18 +25,19 @@ public class LibrarianScreenController implements Initializable {
 
     private String whoAmI;
 
-    private User user;
+    /*private User user;
 
     public void setUser(User user) {
         this.user = user;
         this.user.setRole(user.getRole());
         loadScreenPart("../views/library_catalog_screen.fxml");
-    }
+    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         libBtn.setSelected(true);
         libBtn.setDisable(true);
+        loadScreenPart("../views/library_catalog_screen.fxml");
     }
 
     @FXML
@@ -84,11 +82,11 @@ public class LibrarianScreenController implements Initializable {
             URL fxmlLocation = getClass().getResource(part);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
-
+            /*
             if (part.equals("../views/library_catalog_screen.fxml")){
                 LibraryCatalogController libraryCatalogController = loader.getController();
                 libraryCatalogController.setUser(user);
-            }
+            }*/
 
         } catch (IOException error) {
             Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);

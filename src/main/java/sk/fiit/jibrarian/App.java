@@ -19,6 +19,7 @@ public class App extends Application {
 
     private static Scene scene;
 
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("views/user_auth"), 640, 480);
@@ -32,12 +33,10 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-
-
-
+        /*
         Parent root = fxmlLoader.load();
 
-        User user = new User();
+        //User user = new User();
         switch (fxml) {
 
             case ("views/user_screen") -> {
@@ -50,9 +49,9 @@ public class App extends Application {
                 user.setRole(Role.LIBRARIAN);
                 librarianScreenController.setUser(user);
             }
-        }
+        }*/
 
-        return root;
+        return fxmlLoader.load();
     }
 
     public static void maximizeScreen() { // Method Maximizes Screen
