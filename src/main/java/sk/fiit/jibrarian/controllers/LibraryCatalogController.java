@@ -6,29 +6,42 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.data.CatalogRepository;
+import sk.fiit.jibrarian.data.impl.InMemoryCatalogRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
+import sk.fiit.jibrarian.model.Role;
+import sk.fiit.jibrarian.model.User;
 
-import java.awt.print.Book;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LibraryCatalogController implements Initializable {
     @FXML
     private GridPane libraryCatalog;
     public List<Item> itemList = new ArrayList<>();
 
-    private List<Item> getData() {
-        List<Item> itemList = new ArrayList<>();
+    private User user;
+
+
+    public void setUser(User user) {
+        this.user = user;
+        this.user.setRole(user.getRole());
+    }
+
+    public CatalogRepository inMemoryCatalogRepository = new InMemoryCatalogRepository();
+
+    private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException {
         Item item;
         for (int i = 0; i < 12; i++) {
             item = new Item();
@@ -43,14 +56,19 @@ public class LibraryCatalogController implements Initializable {
             item.setReserved(1);
             item.setTotal(6);
             item.setPages(100);
-            itemList.add(item);
+            inMemoryCatalogRepository.saveItem(item);
         }
-        return itemList;
+        return inMemoryCatalogRepository.getItemPage(0, 12);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        itemList.addAll(getData());
+        List<Item> books;
+        try {
+            books = getData();
+        } catch (CatalogRepository.ItemAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
         int column = 0;
         int row = 0;
         try {
@@ -58,9 +76,12 @@ public class LibraryCatalogController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../views/catalog_item.fxml"));
                 AnchorPane anchorPane = loader.load();
+
+                Item item = books.get(i);
                 ItemController itemController = loader.getController();
-                Item item = itemList.get(i);
                 itemController.setData(item);
+
+
                 if (column == 3) {
                     column = 0;
                     row++;
@@ -68,10 +89,15 @@ public class LibraryCatalogController implements Initializable {
                 libraryCatalog.add(anchorPane, column++, row);
 
                 anchorPane.setOnMouseClicked(mouseEvent -> {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../views/book_modal.fxml"));
+                    String viewName = "";
+                    String role = user.getRole().toString();
+                    switch (role) {
+                        case ("MEMBER") -> viewName = "../views/book_modal_user.fxml";
+                        case ("LIBRARIAN") -> viewName = "../views/book_modal_librarian.fxml";
+                    }
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
                     Parent root;
 
-                    Node node = (Node) mouseEvent.getSource();
                     try {
                         root = fxmlLoader.load();
                     } catch (IOException e) {
@@ -80,10 +106,20 @@ public class LibraryCatalogController implements Initializable {
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
                     stage.initModality(Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
-                    BookModalController bookModalController = fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
-                    bookModalController.setData(item); //posleme data do BookModal controllera, ktory je vlastne v novom okne
-                    stage.show();
 
+                    switch (role) {
+                        case ("MEMBER") -> {
+                            BookModalUserController bookModalUserController =
+                                    fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
+                            bookModalUserController.setData(
+                                    item); //posleme data do BookModal controllera, ktory je vlastne v novom okne
+                        }
+                        case ("LIBRARIAN") -> {
+                            BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
+                            bookModalLibrarianController.setData(item);
+                        }
+                    }
+                    stage.show();
                 });
 
 

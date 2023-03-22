@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="447.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.BookModalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="447.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.BookModalUserController">
     <children>
-      <Button fx:id="reserveButton" layoutX="303.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" style="-fx-background-color: lightblue; -fx-border-radius: 50 px;" stylesheets="@book_modal_styles.css" text="Reserve" textFill="WHITE">
+      <Button fx:id="reserveButton" layoutX="303.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" stylesheets="@book_modal_styles.css" text="Reserve" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font></Button>

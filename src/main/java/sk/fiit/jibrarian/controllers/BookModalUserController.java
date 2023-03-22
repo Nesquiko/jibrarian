@@ -1,18 +1,13 @@
 package sk.fiit.jibrarian.controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.model.Item;
 
-import java.awt.event.MouseEvent;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class BookModalController {
+public class BookModalUserController {
     @FXML
     public Label description;
     public Button reserveButton;
@@ -27,8 +22,6 @@ public class BookModalController {
     @FXML
     private Label bookTotal;
     private Item item;
-
-
 
 
     public void setData(Item item) {
