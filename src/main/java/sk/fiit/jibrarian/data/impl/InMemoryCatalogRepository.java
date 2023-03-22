@@ -16,6 +16,10 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     private final ConcurrentHashMap<UUID, Item> items = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, BorrowedItem> borrowedItems = new ConcurrentHashMap<>();
 
+    public ConcurrentHashMap<UUID, Item> getItems() {
+        return items;
+    }
+
     @Override
     public void saveItem(Item item) throws ItemAlreadyExistsException {
         if (items.containsKey(item.getId())) {
