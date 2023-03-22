@@ -27,15 +27,7 @@ import static sk.fiit.jibrarian.controllers.UserAuthController.user;
 public class LibraryCatalogController implements Initializable {
     @FXML
     private GridPane libraryCatalog;
-    public List<Item> itemList = new ArrayList<>();
 
-  /*  private User user;
-
-
-    public void setUser(User user) {
-        this.user = user;
-        this.user.setRole(user.getRole());
-    }*/
 
     public CatalogRepository inMemoryCatalogRepository = new InMemoryCatalogRepository();
 

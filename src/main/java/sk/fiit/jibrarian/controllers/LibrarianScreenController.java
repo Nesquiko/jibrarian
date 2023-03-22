@@ -82,11 +82,7 @@ public class LibrarianScreenController implements Initializable {
             URL fxmlLocation = getClass().getResource(part);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
-            /*
-            if (part.equals("../views/library_catalog_screen.fxml")){
-                LibraryCatalogController libraryCatalogController = loader.getController();
-                libraryCatalogController.setUser(user);
-            }*/
+
 
         } catch (IOException error) {
             Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
