@@ -5,7 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
 
 import java.io.IOException;
 
@@ -39,7 +40,13 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            RepositoryFactory.initializeEnvironment();
+        } catch (EnvironmentSetupException e) {
+            System.out.println("Failed to initialize environment: " + e.getMessage());
+            System.exit(1);
+        }
+
         launch();
     }
-
 }
