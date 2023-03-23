@@ -1,17 +1,28 @@
 .toggle-button{
     -fx-background-color: transparent;
     -fx-text-fill: black;
-},
+}
 .toggle-button:selected {
     -fx-background-color: linear-gradient(#ffffff 70%, #2e86ab);
     -fx-text-fill: black;
     -fx-text-weight: bold;
-},
+}
 .toggle-button:hover {
     -fx-background-color: #2e86ab;
     -fx-text-fill: white;
     -fx-border-width: 0px 0px 0px 3px;
-},
+}
 .toggle-button:disabled {
     -fx-opacity: 1;
+}
+
+.user-auth-button {
+    -fx-background-color: #2E86AB;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 20 20 20 20;
+}
+.user-auth-button:hover {
+    -fx-background-color: #21a7df; 
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 20 20 20 20;
 }

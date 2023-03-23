@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+//import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
@@ -16,11 +17,12 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-
-
+    
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("views/user_auth"), 640, 480);
+        scene = new Scene(loadFXML("views/Login"), 800, 600);
+        //Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
+        //stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.show();
     }
