@@ -10,16 +10,14 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.CatalogRepository;
-import sk.fiit.jibrarian.data.impl.InMemoryCatalogRepository;
+import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
-import sk.fiit.jibrarian.model.ItemType;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 import static sk.fiit.jibrarian.controllers.UserAuthController.user;
 
@@ -29,26 +27,31 @@ public class LibraryCatalogController implements Initializable {
     private GridPane libraryCatalog;
 
 
-    public CatalogRepository inMemoryCatalogRepository = new InMemoryCatalogRepository();
+    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException {
+    private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
         Item item;
-        for (int i = 0; i < 12; i++) {
+        /*
+        for (int i = 0; i < 5; i++) {
             item = new Item();
-            item.setAuthor("Lev Nikolajevic Tolstoy");
+            item.setAuthor("Miroslav Toorovic");
             item.setId(UUID.randomUUID());
-            item.setTitle("War and Peace");
-            item.setDescription("hocico");
+            item.setTitle("JavaFX Ultra Pro Course");
+            item.setDescription("ALELELEEELE");
             item.setLanguage("EN");
             item.setItemType(ItemType.BOOK);
-            item.setGenre("Genre");
+            item.setGenre("Course");
             item.setAvailable(5);
             item.setReserved(1);
             item.setTotal(6);
             item.setPages(100);
-            inMemoryCatalogRepository.saveItem(item);
-        }
-        return inMemoryCatalogRepository.getItemPage(0, 12);
+            URI uri = getClass().getResource("../views/book.png").toURI();
+            Path path = Path.of(uri);
+            byte[] imageBytes = Files.readAllBytes(path);
+            item.setImage(imageBytes);
+            catalogRepository.saveItem(item);
+        }*/
+        return catalogRepository.getItemPage(1, 12);
     }
 
     @Override
@@ -56,13 +59,13 @@ public class LibraryCatalogController implements Initializable {
         List<Item> books;
         try {
             books = getData();
-        } catch (CatalogRepository.ItemAlreadyExistsException e) {
+        } catch (CatalogRepository.ItemAlreadyExistsException | IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
         int column = 0;
         int row = 0;
         try {
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i < books.size(); i++) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../views/catalog_item.fxml"));
                 AnchorPane anchorPane = loader.load();
