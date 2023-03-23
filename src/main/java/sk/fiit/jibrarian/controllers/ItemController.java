@@ -30,5 +30,10 @@ public class ItemController {
         bookTotal.setText("Total: " + item.getTotal().toString());
         Image img = new Image(getClass().getResourceAsStream("../views/book.png"));
         bookImg.setImage(img);
+        //byte[] byteArrayImage = item.getImage();
+        //ByteArrayInputStream bis = new ByteArrayInputStream(byteArrayImage);
+        //BufferedImage buffImage = ImageIO.read(bis);
+        //ImageIO.write(buffImage, "jpg", new File("img.jpg"));
+        //bookImg.setImage(new Image("../img.jpg"));
     }
 }
