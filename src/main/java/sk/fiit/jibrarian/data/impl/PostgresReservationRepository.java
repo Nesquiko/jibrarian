@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PostgresReservationRepository implements ReservationRepository {
-
+    private static final Logger LOGGER = Logger.getLogger(PostgresReservationRepository.class.getName());
     private final ConnectionPool connectionPool;
 
     public PostgresReservationRepository(ConnectionPool connectionPool) {
@@ -30,14 +32,13 @@ public class PostgresReservationRepository implements ReservationRepository {
         ) {
             statement.setObject(1, reservation.getUserId());
             var resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                if (resultSet.getInt(1) >= 3) {
-                    throw new TooManyReservationsException(
-                            String.format("User %s has too many reservations", reservation.getUserId()));
-                }
+            if (resultSet.next() && (resultSet.getInt(1) >= 3)) {
+                LOGGER.log(Level.WARNING, "User {0} has too many reservations", reservation.getUserId());
+                throw new TooManyReservationsException(
+                        String.format("User %s has too many reservations", reservation.getUserId()));
             }
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while checking reservations for user", e);
         }
 
         try (
@@ -52,7 +53,7 @@ public class PostgresReservationRepository implements ReservationRepository {
             statement.setObject(5, reservation.getDeletedAt());
             statement.executeUpdate();
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while saving reservation", e);
         }
     }
 
@@ -77,7 +78,7 @@ public class PostgresReservationRepository implements ReservationRepository {
             }
             return reservations;
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while getting reservations for user", e);
         }
         return Collections.emptyList();
     }
@@ -93,7 +94,7 @@ public class PostgresReservationRepository implements ReservationRepository {
             statement.setObject(2, reservation.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while deleting reservation", e);
         }
     }
 }

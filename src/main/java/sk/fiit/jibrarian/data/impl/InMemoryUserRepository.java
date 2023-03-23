@@ -7,15 +7,18 @@ import sk.fiit.jibrarian.model.User;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InMemoryUserRepository implements UserRepository {
 
+    private static final Logger LOGGER = Logger.getLogger(InMemoryUserRepository.class.getName());
     private final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
 
     @Override
     public void saveUser(User user) throws AlreadyExistingUserException {
         if (users.containsKey(user.getEmail())) {
-            // TODO Log it
+            LOGGER.log(Level.WARNING, "User with id {0} already exists", user.getId());
             throw new AlreadyExistingUserException(String.format("User with id %s already exists", user.getId()));
         }
         users.put(user.getEmail(), user);
@@ -29,7 +32,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public void updateUser(User user) throws UserNotFound {
         if (!users.containsKey(user.getEmail())) {
-            // TODO Log it
+            LOGGER.log(Level.WARNING, "User with id {0} doesnt exist", user.getId());
             throw new UserNotFound(String.format("User with id %s doesn't exist", user.getId()));
         }
         users.put(user.getEmail(), user);

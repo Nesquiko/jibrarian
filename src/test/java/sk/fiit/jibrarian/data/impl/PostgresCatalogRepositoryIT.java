@@ -15,7 +15,11 @@ import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
@@ -37,9 +41,10 @@ class PostgresCatalogRepositoryIT {
     private User user;
 
     @BeforeAll
-    static void setUpClass() throws SQLException, IOException {
-        image = Files.readAllBytes(Path.of(
-                Objects.requireNonNull(PostgresCatalogRepository.class.getResource("/book-cover.png")).getFile()));
+    static void setUpClass() throws SQLException, IOException, URISyntaxException {
+        URI uri = PostgresCatalogRepositoryIT.class.getResource("/book-cover.png").toURI();
+        Path path = Path.of(uri);
+        image = Files.readAllBytes(path);
         connectionPool = new ConnectionPoolBuilder()
                 .setHost("localhost")
                 .setPort(42069)

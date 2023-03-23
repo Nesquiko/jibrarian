@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PostgresCatalogRepository implements CatalogRepository {
+    private static final Logger LOGGER = Logger.getLogger(PostgresCatalogRepository.class.getName());
     private final ConnectionPool connectionPool;
 
     public PostgresCatalogRepository(ConnectionPool connectionPool) {
@@ -52,10 +55,10 @@ public class PostgresCatalogRepository implements CatalogRepository {
             statement.executeUpdate();
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505")) {
+                LOGGER.log(Level.WARNING, "Item {0} already exists", item.getId());
                 throw new ItemAlreadyExistsException(String.format("Item with id %s already exists", item.getId()));
             }
-            throw new RuntimeException(e);
-            // TODO log it as error
+            LOGGER.log(Level.SEVERE, "Error while saving item", e);
         }
     }
 
@@ -81,7 +84,7 @@ public class PostgresCatalogRepository implements CatalogRepository {
             }
             return items;
         } catch (SQLException e) {
-            // TODO log it as error
+            LOGGER.log(Level.SEVERE, "Error while getting item page", e);
         }
         return Collections.emptyList();
     }
@@ -116,7 +119,7 @@ public class PostgresCatalogRepository implements CatalogRepository {
                 throw new ItemNotFoundException(String.format("Item with id %s not found", item.getId()));
             }
         } catch (SQLException e) {
-            // TODO log it as error
+            LOGGER.log(Level.SEVERE, "Error while updating item", e);
         }
     }
 
@@ -156,11 +159,13 @@ public class PostgresCatalogRepository implements CatalogRepository {
             connWrapper.getConnection().setAutoCommit(true);
             return borrowedItem;
         } catch (SQLException e) {
-            if ("23514".equals(e.getSQLState()))
+            if ("23514".equals(e.getSQLState())) {
+                LOGGER.log(Level.WARNING, "Item {0} is not available", item.getId());
                 throw new ItemNotAvailableException(String.format("Item with id %s is not available", item.getId()));
-            throw new RuntimeException(e);
-            // TODO log it as error
+            }
+            LOGGER.log(Level.SEVERE, "Error while lending item", e);
         }
+        return null;
     }
 
     @Override
@@ -196,7 +201,7 @@ public class PostgresCatalogRepository implements CatalogRepository {
             }
             return borrowedItems;
         } catch (SQLException e) {
-            // TODO log it as error
+            LOGGER.log(Level.SEVERE, "Error while getting borrowed items for user", e);
         }
         return Collections.emptyList();
     }
@@ -234,9 +239,10 @@ public class PostgresCatalogRepository implements CatalogRepository {
                 connWrapper.getConnection().setAutoCommit(true);
                 return item;
             }
+            LOGGER.log(Level.WARNING, "Item {0} not found", borrowedItem.getItemId());
             throw new ItemNotFoundException(String.format("Item with id %s not found", borrowedItem.getItemId()));
         } catch (SQLException e) {
-            // TODO log it as error
+            LOGGER.log(Level.SEVERE, "Error while returning item", e);
         }
         return null;
     }
