@@ -51,7 +51,7 @@ public class LibraryCatalogController implements Initializable {
             item.setImage(imageBytes);
             catalogRepository.saveItem(item);
         }*/
-        return catalogRepository.getItemPage(1, 12);
+        return catalogRepository.getItemPage(0, 12);
     }
 
     @Override

@@ -71,7 +71,7 @@ public class AddBookController implements Initializable {
     private void addBookToDB() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
         if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || quantityInput.getValue().equals(0) ||
                 languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty()) {
-            showDialog();
+            showDialog("FILL ALL FIELDS!!!");
         } else {
             Item newBook = new Item();
             newBook.setAuthor(authorInput.getText());
@@ -89,6 +89,8 @@ public class AddBookController implements Initializable {
             byte[] imageBytes = Files.readAllBytes(chosenImageFile.toPath());
             newBook.setImage(imageBytes);
             catalogRepository.saveItem(newBook);
+            showDialog("ADDED BOOK SUCCESSFULLY");
+            clearFields();
         }
     }
 
@@ -103,13 +105,22 @@ public class AddBookController implements Initializable {
         return fileChooser;
     }
 
-    private void showDialog() {
-        Alert alert = new Alert(Alert.AlertType.NONE, "FILL MISSING FIELDS! ", ButtonType.OK);
+    private void showDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.NONE, message, ButtonType.OK);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
             alert.close();
         }
+    }
+    @FXML
+    private void clearFields(){
+        titleInput.clear();
+        authorInput.clear();
+        languageInput.clear();
+        descriptionInput.clear();
+        Image img = new Image(getClass().getResourceAsStream("../views/choose.png"));
+        chosenBookImage.setImage(img);
     }
 
 }
