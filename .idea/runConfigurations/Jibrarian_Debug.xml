@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Jibrarian Debug" type="CompoundRunConfigurationType">
+    <toRun name="jibrarian-debug-conf" type="MavenRunConfiguration" />
+    <toRun name="debugger-server" type="Remote" />
+    <method v="2" />
+  </configuration>
+</component>
