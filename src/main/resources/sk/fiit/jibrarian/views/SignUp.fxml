@@ -24,12 +24,12 @@
             <Font size="26.0" />
          </font>
       </PasswordField>
-      <Button fx:id="SignUpButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#SignUp" onMouseEntered="#CursorHand" onMouseExited="#NormalCursor" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Sign Up" textFill="WHITE">
+      <Button fx:id="SignUpButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#SignUp" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Sign Up" textFill="WHITE">
          <font>
             <Font size="32.0" />
          </font>
       </Button>
-      <Button fx:id="CancelButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#Cancel" onMouseEntered="#CursorHand" onMouseExited="#NormalCursor" prefWidth="500.0" style="-fx-background-color: #FFFFFF; -fx-border-radius: 20 20 20 20; -fx-border-color: #969696; -fx-border-width: 1.25; -fx-background-radius: 20 20 20 20;" text="Cancel" textFill="#969696" textOverrun="CLIP">
+      <Button fx:id="CancelButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#Cancel" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Cancel" textFill="#969696" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>

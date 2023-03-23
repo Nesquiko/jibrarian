@@ -136,45 +136,8 @@ public class LoginController {
     }
     
     @FXML
-    void CursorHand(MouseEvent event) {
-    	Scene scene = (Scene) LogInButton.getScene();
-        scene.setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    void NormalCursor(MouseEvent event) {
-    	Scene scene = (Scene) LogInButton.getScene();
-        scene.setCursor(Cursor.DEFAULT);
-    }
-    
-    @FXML
     void RedirectForgotPassword(MouseEvent event) {  //redirect to forgot password window
-    	ForgotPassword.setTextFill(Color.web("#c8c8c8"));
-    	Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                	ForgotPassword.setTextFill(Color.web("#969696"));
-                });
-            }
-        };
-        timer.schedule(task, 100);
     	//redirect to forgot password
-    }
-
-    @FXML
-    void MouseEnterForgotPassword(MouseEvent event) { //underline forgot password
-    	Scene scene = (Scene) ForgotPassword.getScene();
-        scene.setCursor(Cursor.HAND);
-        this.ForgotPassword.setUnderline(true);
-    }
-
-    @FXML
-    void MouseExitForgotPassword(MouseEvent event) { //undo underline forgot password
-    	Scene scene = (Scene) ForgotPassword.getScene();
-        scene.setCursor(Cursor.DEFAULT);
-        this.ForgotPassword.setUnderline(false);
     }
     
     public void setLastErrorMsg(int id) {

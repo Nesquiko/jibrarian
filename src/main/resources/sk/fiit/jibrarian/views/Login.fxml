@@ -25,22 +25,22 @@
             <Font size="26.0" />
          </font>
       </PasswordField>
-      <CheckBox fx:id="RememberMe" layoutX="150.0" layoutY="310.0" mnemonicParsing="false" text="Remember me" textFill="#969696" visible="false">
+      <CheckBox fx:id="RememberMe" layoutX="150.0" layoutY="310.0" mnemonicParsing="false" styleClass="forgot-password-href" stylesheets="@style.css" text="Remember me" textFill="#969696" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </CheckBox>
-      <Button fx:id="LogInButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#LogIn" onMouseEntered="#CursorHand" onMouseExited="#NormalCursor" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Log In" textFill="WHITE" textOverrun="CLIP">
+      <Button fx:id="LogInButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#LogIn" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Log In" textFill="WHITE" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>
       </Button>
-      <Label fx:id="ForgotPassword" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="517.0" layoutY="310.0" onMouseClicked="#RedirectForgotPassword" onMouseEntered="#MouseEnterForgotPassword" onMouseExited="#MouseExitForgotPassword" prefHeight="25.0" prefWidth="133.0" text="Forgot password" textAlignment="RIGHT" textFill="#969696" visible="false">
+      <Label fx:id="ForgotPassword" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="517.0" layoutY="310.0" onMouseClicked="#RedirectForgotPassword" prefHeight="25.0" prefWidth="133.0" styleClass="forgot-password-href" stylesheets="@style.css" text="Forgot password" textAlignment="RIGHT" textFill="#969696" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="SignUpButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#SignUp" onMouseEntered="#CursorHand" onMouseExited="#NormalCursor" prefWidth="500.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #969696; -fx-border-width: 1.25; -fx-border-radius: 20 20 20 20; -fx-background-radius: 20 20 20 20;" text="Sign Up" textFill="#969696" textOverrun="CLIP">
+      <Button fx:id="SignUpButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#SignUp" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Sign Up" textFill="#969696" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>

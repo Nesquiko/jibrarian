@@ -25,4 +25,20 @@
     -fx-background-color: #21a7df; 
     -fx-border-radius: 20 20 20 20;
     -fx-background-radius: 20 20 20 20;
+    -fx-cursor: HAND;
+}
+.user-auth-gray-button {
+    -fx-background-color: #EEEEEE;
+    -fx-border-color:  #959595;
+    -fx-border-width: 1.25;
+    -fx-border-radius: 20 20 20 20;
+    -fx-background-radius: 20 20 20 20;
+}
+.user-auth-gray-button:hover {
+    -fx-background-color: #FFFFFF;
+    -fx-cursor: HAND;
+}
+.forgot-password-href:hover {
+    -fx-underline: 1;
+    -fx-cursor: HAND;
 }
