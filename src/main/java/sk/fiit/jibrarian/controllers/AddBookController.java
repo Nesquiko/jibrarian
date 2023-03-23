@@ -98,9 +98,7 @@ public class AddBookController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Book Cover Image");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("JPEG", "*.jpeg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
+                new FileChooser.ExtensionFilter("JPG,JPEG,PNG", "*.jpg", "*.jpeg", "*.png")
         );
         return fileChooser;
     }
