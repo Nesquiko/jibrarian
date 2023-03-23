@@ -7,12 +7,11 @@ import sk.fiit.jibrarian.data.impl.InMemoryUserRepository;
 import sk.fiit.jibrarian.data.impl.PostgresCatalogRepository;
 import sk.fiit.jibrarian.data.impl.PostgresReservationRepository;
 import sk.fiit.jibrarian.data.impl.PostgresUserRepository;
-
 import java.sql.SQLException;
 import java.util.Objects;
 
 public class RepositoryFactory {
-    private static final String ENVIRONMENT_PROPERTY = "env";
+    private static final String ENVIRONMENT_PROPERTY = "db"; //"env"
     private static final String IN_MEMORY_ENVIRONMENT = "in-memory";
     private static final String DB_ENVIRONMENT = "db";
     private static final String DB_HOST_PROP = "db.host";

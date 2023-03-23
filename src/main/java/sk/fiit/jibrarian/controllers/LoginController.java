@@ -5,6 +5,7 @@ import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 import org.postgresql.util.PSQLException;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.util.Random;
@@ -53,18 +54,27 @@ public class LoginController {
 
     @FXML
     private Button SignUpButton;
+
+    private static final Logger log = Logger.getLogger(LoginController.class.getName());
     
+    public Logger getLog() {
+        return LoginController.log;
+    }
+
     public void switchToUserScreen() throws IOException {
+        getLog().info("Opening user interface");
         App.setRoot("views/user_screen");
         App.maximizeScreen();
     }
 
     public void switchToLibrarianScreen() throws IOException {
+        getLog().info("Opening librarian interface");
         App.setRoot("views/librarian_screen");
         App.maximizeScreen();
     }
 
     public void switchToAdminScreen() throws IOException {
+        getLog().info("Opening admin interface");
         App.setRoot("views/admin_screen");
         App.maximizeScreen();
     }
@@ -78,7 +88,8 @@ public class LoginController {
         .setDatabase("jibrarian").setUser("jibrarian").setPassword("password").build();
         } catch (PSQLException error) {
             setErrorMsg("Could not connect to DB");
-            throw new ConnectException("Could not connect to DB...");
+            getLog().severe("Could not connect to DB\n" + error);
+            return;
         }
         PostgresUserRepository db = new PostgresUserRepository(connectionPool);
         var user = db.getUserByEmail(this.Email.getText());
@@ -87,11 +98,13 @@ public class LoginController {
         //If there are no users with this email
         if (user.isPresent() == false) {
             setErrorMsg("Incorrect email or password...");
+            getLog().info("User was not found");
             return;
         }
         //if passwords match
         else if (BCrypt.verifyer().verify(this.Password.getText().toCharArray(), user.get().getPassHash()).verified == false) {
             setErrorMsg("Incorrect email or password...");
+            getLog().info("User entered incorrect password");
             return;
         }
         
@@ -100,7 +113,10 @@ public class LoginController {
         if (userRole == Role.MEMBER) switchToUserScreen();
         else if (userRole == Role.LIBRARIAN) switchToLibrarianScreen();
         else if (userRole == Role.ADMIN) switchToAdminScreen();
-        else throw new IllegalArgumentException("No role with db value " + userRole);
+        else {
+            setErrorMsg("Something went wrong...");
+            getLog().severe("Role not found");
+        }
 
     }
 

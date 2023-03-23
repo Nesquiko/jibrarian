@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.logging.Logger;
 import org.postgresql.util.PSQLException;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import javafx.application.Platform;
@@ -50,6 +51,12 @@ public class SignupController {
     private Label ErrorMsg;
     
     private int LastErrorMsg;
+
+    private static final Logger log = Logger.getLogger(SignupController.class.getName());
+    
+    public Logger getLog() {
+        return SignupController.log;
+    }
     
     @FXML
     void Cancel(ActionEvent event) throws IOException { //loads back the login stage
@@ -72,22 +79,26 @@ public class SignupController {
     }
     
     @FXML
-    void SignUp(ActionEvent event) throws SQLException, IOException { //sign up to the application 
+    void SignUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
         // sign up checking for formats & lengths
 		if (Email.getText().length() < 8) {
         	SetErrorMsg("Email has to have at least 8 characters...");
+            getLog().warning("Invalid email address");
     		return;
         }
         else if (EmailValidityCheck(Email.getText()) == false) {
         	SetErrorMsg("Invalid email format...");
+            getLog().warning("Invalid email address");
     		return;
         }
         else if (Password.getText().length() < 8) {
         	SetErrorMsg("Password has to have at least 8 characters...");
+            getLog().warning("Invalid password");
         	return;
         }
         else if (Password.getText().compareTo(PasswordConfirm.getText()) != 0) {
         	SetErrorMsg("Passwords do not match...");
+            getLog().warning("Passwords do not match");
         	return;
         }
         
@@ -98,7 +109,8 @@ public class SignupController {
         .setDatabase("jibrarian").setUser("jibrarian").setPassword("password").build();
         } catch (PSQLException error) {
             SetErrorMsg("Could not connect to DB...");
-            throw new ConnectException("Could not connect to DB...");
+            getLog().severe("Could not connect to DB");
+            return;
         }
         PostgresUserRepository db = new PostgresUserRepository(connectionPool);
 
@@ -109,9 +121,11 @@ public class SignupController {
             db.saveUser(user);
         } catch (AlreadyExistingUserException error) {
             SetErrorMsg("User with this email already exists...");
+            getLog().warning("User with this email already exists");
             return;
         }
         connectionPool.close();
+        getLog().info("User successfully created");
 
 		//successfully signed in
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Login.fxml")); //redirecting back to the login page
