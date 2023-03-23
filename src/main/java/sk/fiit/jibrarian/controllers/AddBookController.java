@@ -63,8 +63,10 @@ public class AddBookController implements Initializable {
     private void chooseImage() {
         Stage stage = (Stage) (addBookButton.getScene()).getWindow();
         chosenImageFile = fileChooser.showOpenDialog(stage);
-        image = new Image(String.valueOf(chosenImageFile));
-        chosenBookImage.setImage(image);
+        if(chosenImageFile != null){
+            image = new Image(String.valueOf(chosenImageFile));
+            chosenBookImage.setImage(image);
+        }
     }
 
     @FXML
