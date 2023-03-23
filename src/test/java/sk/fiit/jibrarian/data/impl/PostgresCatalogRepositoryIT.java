@@ -42,7 +42,7 @@ class PostgresCatalogRepositoryIT {
 
     @BeforeAll
     static void setUpClass() throws SQLException, IOException, URISyntaxException {
-        URI uri = PostgresCatalogRepositoryIT.class.getResource("/book-cover.png").toURI();
+        URI uri = Objects.requireNonNull(PostgresCatalogRepositoryIT.class.getResource("/book-cover.png")).toURI();
         Path path = Path.of(uri);
         image = Files.readAllBytes(path);
         connectionPool = new ConnectionPoolBuilder()
