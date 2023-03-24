@@ -6,6 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.model.Item;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ItemController {
     @FXML
     private Label bookAuthor;
@@ -21,19 +25,16 @@ public class ItemController {
     private Label bookTotal;
     private Item item;
 
-    public void setData(Item item) {
+    public void setData(Item item) throws IOException {
         this.item = item;
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
         bookAvailable.setText("Available: " + item.getAvailable().toString());
         bookReserved.setText("Reserved: " + item.getReserved().toString());
         bookTotal.setText("Total: " + item.getTotal().toString());
-        Image img = new Image(getClass().getResourceAsStream("../views/book.png"));
-        bookImg.setImage(img);
-        //byte[] byteArrayImage = item.getImage();
-        //ByteArrayInputStream bis = new ByteArrayInputStream(byteArrayImage);
-        //BufferedImage buffImage = ImageIO.read(bis);
-        //ImageIO.write(buffImage, "jpg", new File("img.jpg"));
-        //bookImg.setImage(new Image("../img.jpg"));
+        byte[] byteArrayImage = item.getImage();
+        InputStream is = new ByteArrayInputStream(byteArrayImage);
+        javafx.scene.image.Image image1 = new Image(is);
+        bookImg.setImage(image1);
     }
 }
