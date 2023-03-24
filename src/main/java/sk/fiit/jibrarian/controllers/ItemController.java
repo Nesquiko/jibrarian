@@ -34,7 +34,7 @@ public class ItemController {
         bookTotal.setText("Total: " + item.getTotal().toString());
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);
-        javafx.scene.image.Image image1 = new Image(is);
-        bookImg.setImage(image1);
+        Image image = new Image(is);
+        bookImg.setImage(image);
     }
 }
