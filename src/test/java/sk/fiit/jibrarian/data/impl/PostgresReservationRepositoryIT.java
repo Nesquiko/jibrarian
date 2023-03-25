@@ -104,8 +104,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveUser(User user) {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection()
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection()
                         .prepareStatement(
                                 "insert into users (id, email, pass_hash, role) values (?, ?, ?, ?::user_role)")
         ) {
@@ -121,8 +121,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveItem(Item item) {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection().prepareStatement(
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement(
                         """
                                 insert into items (id, title, author, description, language, genre, isbn, item_type,
                                     pages, total, available, reserved) values (?, ?, ?, ?, ?, ?, ?, ?::item_type, ?, ?, ?, ?);
@@ -149,9 +149,13 @@ class PostgresReservationRepositoryIT {
 
     private static void clearDatabase() {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection()
-                        .prepareStatement("delete from reservations; delete from items; delete from users;")
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection()
+                        .prepareStatement("""
+                                truncate table reservations;
+                                truncate table items cascade;
+                                truncate table users cascade;
+                                """)
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {
