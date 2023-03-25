@@ -148,8 +148,8 @@ public class RepositoryFactory {
                 .setDatabase(dbName)
                 .setUser(user)
                 .setPassword(password)
-                .setMaxPoolSize(5)
-                .setInitialPoolSize(2)
+                .setMaxPoolSize(3)
+                .setInitialPoolSize(0)
                 .build();
     }
 }
