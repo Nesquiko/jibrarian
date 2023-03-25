@@ -15,9 +15,7 @@ import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -42,7 +40,8 @@ class PostgresCatalogRepositoryIT {
 
     @BeforeAll
     static void setUpClass() throws SQLException, IOException, URISyntaxException {
-        URI uri = Objects.requireNonNull(PostgresCatalogRepositoryIT.class.getResource("/book-cover.png")).toURI();
+        URI uri = Objects.requireNonNull(PostgresCatalogRepositoryIT.class.getResource("/hitchhikers-guide-cover.png"))
+                .toURI();
         Path path = Path.of(uri);
         image = Files.readAllBytes(path);
         connectionPool = new ConnectionPoolBuilder()
@@ -192,7 +191,11 @@ class PostgresCatalogRepositoryIT {
         try (
                 var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection()
-                        .prepareStatement("delete from borrowed_items;delete from items; delete from users")
+                        .prepareStatement("""
+                                truncate table borrowed_items;
+                                truncate table items cascade;
+                                truncate table users cascade;
+                                """)
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {

@@ -115,8 +115,8 @@ class PostgresUserRepositoryIT {
 
     private static void clearDatabase() {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection().prepareStatement("delete from users")
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement("truncate table users cascade")
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {
