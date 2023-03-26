@@ -1,5 +1,9 @@
 package sk.fiit.jibrarian.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,11 +18,9 @@ import sk.fiit.jibrarian.model.ItemType;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -47,8 +49,18 @@ public class AddBookController implements Initializable {
     @FXML
     private TextField titleInput;
     private Image image;
+
     private FileChooser fileChooser;
     private File chosenImageFile;
+    @FXML
+    private TextField totalPagesInput;
+    @FXML
+    private TextField isbnInput;
+    @FXML
+    private Label isbnLabel;
+    @FXML
+    private ComboBox<String> genreInput;
+    private String[] itemTypes = { "Book", "Article", "Magazine" };
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
     @Override
@@ -63,7 +75,7 @@ public class AddBookController implements Initializable {
     private void chooseImage() {
         Stage stage = (Stage) (addBookButton.getScene()).getWindow();
         chosenImageFile = fileChooser.showOpenDialog(stage);
-        if(chosenImageFile != null){
+        if (chosenImageFile != null) {
             image = new Image(String.valueOf(chosenImageFile));
             chosenBookImage.setImage(image);
         }
@@ -71,8 +83,8 @@ public class AddBookController implements Initializable {
 
     @FXML
     private void addBookToDB() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
-        if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || quantityInput.getValue().equals(0) ||
-                languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty()) {
+        if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || quantityInput.getValue()
+                .equals(0) || languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty()) {
             showDialog("FILL ALL FIELDS!!!");
         } else {
             Item newBook = new Item();
@@ -99,9 +111,8 @@ public class AddBookController implements Initializable {
     private FileChooser setFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Book Cover Image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("JPG,JPEG,PNG", "*.jpg", "*.jpeg", "*.png")
-        );
+        fileChooser.getExtensionFilters()
+                .addAll(new FileChooser.ExtensionFilter("JPG,JPEG,PNG", "*.jpg", "*.jpeg", "*.png"));
         return fileChooser;
     }
 
@@ -113,8 +124,9 @@ public class AddBookController implements Initializable {
             alert.close();
         }
     }
+
     @FXML
-    private void clearFields(){
+    private void clearFields() {
         titleInput.clear();
         authorInput.clear();
         languageInput.clear();
