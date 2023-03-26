@@ -69,6 +69,19 @@ public class AddBookController implements Initializable {
         SpinnerValueFactory<Integer> valueFactory = //
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
         quantityInput.setValueFactory(valueFactory);
+        ObservableList<String> elements = FXCollections.observableArrayList(itemTypes);
+        genreInput.setItems(elements);
+        genreInput.getSelectionModel().selectFirst();
+        genreInput.setOnAction(actionEvent -> {
+            var selectedItem = genreInput.getSelectionModel().getSelectedItem();
+            if(selectedItem.equals("Book")){
+                isbnLabel.setVisible(true);
+                isbnInput.setVisible(true);
+            }else {
+                isbnLabel.setVisible(false);
+                isbnInput.setVisible(false);
+            }
+        });
     }
 
     @FXML
