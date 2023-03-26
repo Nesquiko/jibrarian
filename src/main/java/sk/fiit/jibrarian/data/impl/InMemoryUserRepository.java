@@ -14,6 +14,17 @@ public class InMemoryUserRepository implements UserRepository {
 
     private static final Logger LOGGER = Logger.getLogger(InMemoryUserRepository.class.getName());
     private final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
+    private User currentlyLoggedInUser;
+
+    @Override
+    public void saveCurrentlyLoggedInUser(User user) {
+        this.currentlyLoggedInUser = user;
+    }
+
+    @Override
+    public Optional<User> getCurrentlyLoggedInUser() {
+        return Optional.ofNullable(currentlyLoggedInUser);
+    }
 
     @Override
     public void saveUser(User user) throws AlreadyExistingUserException {
