@@ -49,7 +49,6 @@ public class AddBookController implements Initializable {
     @FXML
     private TextField titleInput;
     private Image image;
-
     private FileChooser fileChooser;
     private File chosenImageFile;
     @FXML
@@ -59,8 +58,13 @@ public class AddBookController implements Initializable {
     @FXML
     private Label isbnLabel;
     @FXML
+    private ComboBox<String> itemTypeInput;
+    @FXML
     private ComboBox<String> genreInput;
-    private String[] itemTypes = { "Book", "Article", "Magazine" };
+    private String[] itemTypes = {"Book", "Article", "Magazine"};
+    private String[] itemGenres =
+            {"Action and Adventure", "Classics", "Comic Book", "Detective and Mystery", "Fantasy", "Historical Fiction",//
+             "Horror", "Literary Fiction", "Romance", "Science Fiction (Sci-Fi)", "Short Stories", "Suspense and Thrillers"};
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
     @Override
@@ -69,15 +73,17 @@ public class AddBookController implements Initializable {
         SpinnerValueFactory<Integer> valueFactory = //
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
         quantityInput.setValueFactory(valueFactory);
-        ObservableList<String> elements = FXCollections.observableArrayList(itemTypes);
-        genreInput.setItems(elements);
-        genreInput.getSelectionModel().selectFirst();
-        genreInput.setOnAction(actionEvent -> {
+        ObservableList<String> genres = FXCollections.observableArrayList(itemGenres);
+        genreInput.setItems(genres);
+        ObservableList<String> types = FXCollections.observableArrayList(itemTypes);
+        itemTypeInput.setItems(types);
+        itemTypeInput.getSelectionModel().selectFirst();
+        itemTypeInput.setOnAction(actionEvent -> {
             var selectedItem = genreInput.getSelectionModel().getSelectedItem();
-            if(selectedItem.equals("Book")){
+            if (selectedItem.equals("Book")) {
                 isbnLabel.setVisible(true);
                 isbnInput.setVisible(true);
-            }else {
+            } else {
                 isbnLabel.setVisible(false);
                 isbnInput.setVisible(false);
             }
@@ -116,12 +122,12 @@ public class AddBookController implements Initializable {
             newBook.setTitle(titleInput.getText());
             newBook.setDescription(descriptionInput.getText());
             newBook.setLanguage(languageInput.getText());
-            newBook.setItemType(ItemType.BOOK);
-            newBook.setGenre("unknown");
+            newBook.setItemType(getItemTypeFromSelected());
+            newBook.setGenre(genreInput.getSelectionModel().getSelectedItem().toString());
             newBook.setAvailable(quantityInput.getValue());
             newBook.setReserved(0);
             newBook.setTotal(quantityInput.getValue());
-            newBook.setPages(100);
+            newBook.setPages(Integer.valueOf(totalPagesInput.getText()));
 
             byte[] imageBytes = Files.readAllBytes(chosenImageFile.toPath());
             newBook.setImage(imageBytes);
@@ -137,6 +143,18 @@ public class AddBookController implements Initializable {
         fileChooser.getExtensionFilters()
                 .addAll(new FileChooser.ExtensionFilter("JPG,JPEG,PNG", "*.jpg", "*.jpeg", "*.png"));
         return fileChooser;
+    }
+
+    private ItemType getItemTypeFromSelected() {
+        switch (genreInput.getSelectionModel().getSelectedItem()) {
+            case "Book":
+                return ItemType.BOOK;
+            case "Magazine":
+                return ItemType.MAGAZINE;
+            case "Article":
+                return ItemType.ARTICLE;
+        }
+        return ItemType.BOOK;
     }
 
     private void showDialog(String message) {
