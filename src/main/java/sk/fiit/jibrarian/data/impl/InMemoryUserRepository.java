@@ -43,7 +43,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public void updateUser(User user) throws UserNotFound {
         if (!users.containsKey(user.getEmail())) {
-            LOGGER.log(Level.WARNING, "User with email {0} doesn't exist", user.getEmail());
+            LOGGER.log(Level.WARNING, "User with email {0} doesnt exist", user.getEmail());
             throw new UserNotFound(String.format("User with id %s doesn't exist", user.getId()));
         }
         users.put(user.getEmail(), user);

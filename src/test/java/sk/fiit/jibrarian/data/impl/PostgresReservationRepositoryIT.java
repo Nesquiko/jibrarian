@@ -58,7 +58,7 @@ class PostgresReservationRepositoryIT {
 
     @Test
     void saveReservation() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
@@ -69,20 +69,20 @@ class PostgresReservationRepositoryIT {
     @Test
     void saveReservationTooManyReservations() throws TooManyReservationsException {
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         assertThrows(TooManyReservationsException.class, () -> postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null)));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null)));
     }
 
     @Test
     void getReservationsForUserOnlyNotDeleted() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
-        var deletedReservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var deletedReservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), LocalDateTime.now().minusSeconds(1));
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.saveReservation(deletedReservation);
@@ -93,7 +93,7 @@ class PostgresReservationRepositoryIT {
 
     @Test
     void deleteReservation() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.deleteReservation(reservation);
