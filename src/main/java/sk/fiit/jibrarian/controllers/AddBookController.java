@@ -82,6 +82,16 @@ public class AddBookController implements Initializable {
                 isbnInput.setVisible(false);
             }
         });
+        // force the field to be numeric only
+        totalPagesInput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    totalPagesInput.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 
     @FXML
