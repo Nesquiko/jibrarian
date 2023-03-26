@@ -83,7 +83,6 @@ public class LibrarianScreenController implements Initializable {
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
-
         } catch (IOException error) {
             Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
         }

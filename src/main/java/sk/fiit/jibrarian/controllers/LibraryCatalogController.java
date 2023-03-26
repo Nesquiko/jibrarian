@@ -10,16 +10,13 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.CatalogRepository;
-import sk.fiit.jibrarian.data.impl.InMemoryCatalogRepository;
+import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
-import sk.fiit.jibrarian.model.ItemType;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 import static sk.fiit.jibrarian.controllers.UserAuthController.user;
 
@@ -29,48 +26,26 @@ public class LibraryCatalogController implements Initializable {
     private GridPane libraryCatalog;
 
 
-    public CatalogRepository inMemoryCatalogRepository = new InMemoryCatalogRepository();
+    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException {
-        Item item;
-        for (int i = 0; i < 12; i++) {
-            item = new Item();
-            item.setAuthor("Lev Nikolajevic Tolstoy");
-            item.setId(UUID.randomUUID());
-            item.setTitle("War and Peace");
-            item.setDescription("hocico");
-            item.setLanguage("EN");
-            item.setItemType(ItemType.BOOK);
-            item.setGenre("Genre");
-            item.setAvailable(5);
-            item.setReserved(1);
-            item.setTotal(6);
-            item.setPages(100);
-            inMemoryCatalogRepository.saveItem(item);
-        }
-        return inMemoryCatalogRepository.getItemPage(0, 12);
+    private List<Item> getData() {
+        return catalogRepository.getItemPage(0, 12);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<Item> books;
-        try {
-            books = getData();
-        } catch (CatalogRepository.ItemAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        }
+        List<Item> books = getData();
+
         int column = 0;
         int row = 0;
         try {
-            for (int i = 0; i < 12; i++) {
+            for (Item book : books) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../views/catalog_item.fxml"));
                 AnchorPane anchorPane = loader.load();
 
-                Item item = books.get(i);
                 ItemController itemController = loader.getController();
-                itemController.setData(item);
-
+                itemController.setData(book);
 
                 if (column == 3) {
                     column = 0;
@@ -103,11 +78,11 @@ public class LibraryCatalogController implements Initializable {
                             BookModalUserController bookModalUserController =
                                     fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
                             bookModalUserController.setData(
-                                    item); //posleme data do BookModal controllera, ktory je vlastne v novom okne
+                                    book); //posleme data do BookModal controllera, ktory je vlastne v novom okne
                         }
                         case ("LIBRARIAN") -> {
                             BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
-                            bookModalLibrarianController.setData(item);
+                            bookModalLibrarianController.setData(book);
                         }
                     }
                     stage.show();
