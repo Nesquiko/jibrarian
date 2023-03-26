@@ -79,7 +79,7 @@ public class AddBookController implements Initializable {
         itemTypeInput.setItems(types);
         itemTypeInput.getSelectionModel().selectFirst();
         itemTypeInput.setOnAction(actionEvent -> {
-            var selectedItem = genreInput.getSelectionModel().getSelectedItem();
+            var selectedItem = itemTypeInput.getSelectionModel().getSelectedItem();
             if (selectedItem.equals("Book")) {
                 isbnLabel.setVisible(true);
                 isbnInput.setVisible(true);
@@ -111,9 +111,11 @@ public class AddBookController implements Initializable {
     }
 
     @FXML
-    private void addBookToDB() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
-        if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || quantityInput.getValue()
-                .equals(0) || languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty()) {
+    private void addBookToDB() throws CatalogRepository.ItemAlreadyExistsException, IOException {
+        if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || totalPagesInput.getText().isEmpty()
+                ||(Integer.parseInt(totalPagesInput.getText()) < 1 || Integer.parseInt(totalPagesInput.getText()) > 9999) ||
+                languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty() || chosenImageFile == null
+                || genreInput.getSelectionModel().isEmpty()) {
             showDialog("FILL ALL FIELDS!!!");
         } else {
             Item newBook = new Item();
@@ -146,7 +148,7 @@ public class AddBookController implements Initializable {
     }
 
     private ItemType getItemTypeFromSelected() {
-        switch (genreInput.getSelectionModel().getSelectedItem()) {
+        switch (itemTypeInput.getSelectionModel().getSelectedItem()) {
             case "Book":
                 return ItemType.BOOK;
             case "Magazine":
