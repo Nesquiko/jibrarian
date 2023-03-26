@@ -18,11 +18,11 @@
     <right>
         <VBox alignment="CENTER" prefHeight="700.0" prefWidth="474.0" BorderPane.alignment="CENTER">
             <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="463.0">
+            <HBox alignment="CENTER" prefHeight="517.0" prefWidth="474.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="128.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="128.0">
                      <children>
-                        <Label text="Item Type">
+                        <Label fx:id="itemTypeLabel" text="Item Type" textFill="RED">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -30,7 +30,7 @@
                               <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Genre">
+                        <Label fx:id="genreLabel" text="Genre" textFill="RED">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -40,7 +40,7 @@
                         </Label>
                      </children>
                   </VBox>
-                  <VBox prefHeight="114.0" prefWidth="324.0">
+                  <VBox alignment="CENTER" prefHeight="521.0" prefWidth="324.0">
                      <children>
                         <ComboBox fx:id="itemTypeInput" prefHeight="35.0" prefWidth="311.0">
                            <VBox.margin>
@@ -58,32 +58,38 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
                         </ComboBox>
+                            <ImageView fx:id="chosenBookImage" fitHeight="343.0" fitWidth="232.0" onMouseClicked="#chooseImage" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@choose.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
+                            </ImageView>
+                            <HBox alignment="CENTER" prefHeight="69.0" prefWidth="324.0">
+                                <children>
+                                    <Button fx:id="addBookButton" mnemonicParsing="false" onMouseClicked="#addBookToDB" prefHeight="40.0" prefWidth="100.0" text="Add Book">
+                                        <HBox.margin>
+                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                        </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                    </Button>
+                                    <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#clearFields" prefHeight="40.0" prefWidth="100.0" text="Cancel">
+                                        <HBox.margin>
+                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                        </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                    </Button>
+                                </children>
+                            </HBox>
                      </children>
                   </VBox>
                </children>
             </HBox>
-                <ImageView fx:id="chosenBookImage" fitHeight="343.0" fitWidth="232.0" onMouseClicked="#chooseImage" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@choose.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="40.0" />
-               </VBox.margin>
-                </ImageView>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Button fx:id="addBookButton" mnemonicParsing="false" onMouseClicked="#addBookToDB" prefHeight="30.0" prefWidth="100.0" text="Add Book">
-                            <HBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </HBox.margin>
-                        </Button>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#clearFields" prefHeight="30.0" prefWidth="100.0" text="Cancel">
-                            <HBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </HBox.margin>
-                        </Button>
-                    </children>
-                </HBox>
             </children>
         </VBox>
     </right>
@@ -94,7 +100,7 @@
                     <children>
                         <VBox alignment="CENTER">
                             <children>
-                                <Label text="Title">
+                                <Label fx:id="titleLabel" text="Title" textFill="RED">
                                     <VBox.margin>
                                         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
                                     </VBox.margin>
@@ -102,7 +108,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                                <Label text="Author">
+                                <Label fx:id="authorLabel" text="Author" textFill="RED">
                                     <VBox.margin>
                                         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
                                     </VBox.margin>
@@ -110,7 +116,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                                <Label text="Quantity">
+                                <Label fx:id="quantityLabel" text="Quantity">
                                     <VBox.margin>
                                         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
                                     </VBox.margin>
@@ -118,7 +124,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                                <Label text="Language">
+                                <Label fx:id="languageLabel" text="Language" textFill="RED">
                                     <VBox.margin>
                                         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
                                     </VBox.margin>
@@ -126,7 +132,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                        <Label prefHeight="28.0" prefWidth="120.0" text="Total Pages" wrapText="true">
+                        <Label fx:id="totalPagesLabel" prefHeight="28.0" prefWidth="120.0" text="Total Pages" textFill="RED" wrapText="true">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -134,7 +140,7 @@
                               <Insets bottom="13.0" left="13.0" right="13.0" top="13.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="isbnLabel" text="ISBN">
+                        <Label fx:id="isbnLabel" text="ISBN" textFill="RED">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -200,7 +206,7 @@
                 </HBox>
             <VBox prefHeight="234.0" prefWidth="486.0">
                <children>
-                      <Label alignment="CENTER" prefHeight="0.0" prefWidth="98.0" text="Description">
+                      <Label fx:id="descriptionLabel" alignment="CENTER" prefHeight="0.0" prefWidth="98.0" text="Description" textFill="RED">
                           <font>
                               <Font name="System Bold" size="18.0" />
                           </font>

@@ -14,7 +14,6 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,30 +28,24 @@ public class LibraryCatalogController implements Initializable {
 
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
+    private List<Item> getData() {
         return catalogRepository.getItemPage(0, 12);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<Item> books;
-        try {
-            books = getData();
-        } catch (CatalogRepository.ItemAlreadyExistsException | IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        List<Item> books = getData();
+
         int column = 0;
         int row = 0;
         try {
-            for (int i = 0; i < books.size(); i++) {
+            for (Item book : books) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../views/catalog_item.fxml"));
                 AnchorPane anchorPane = loader.load();
 
-                Item item = books.get(i);
                 ItemController itemController = loader.getController();
-                itemController.setData(item);
-
+                itemController.setData(book);
 
                 if (column == 3) {
                     column = 0;
@@ -85,11 +78,11 @@ public class LibraryCatalogController implements Initializable {
                             BookModalUserController bookModalUserController =
                                     fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
                             bookModalUserController.setData(
-                                    item); //posleme data do BookModal controllera, ktory je vlastne v novom okne
+                                    book); //posleme data do BookModal controllera, ktory je vlastne v novom okne
                         }
                         case ("LIBRARIAN") -> {
                             BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
-                            bookModalLibrarianController.setData(item);
+                            bookModalLibrarianController.setData(book);
                         }
                     }
                     stage.show();

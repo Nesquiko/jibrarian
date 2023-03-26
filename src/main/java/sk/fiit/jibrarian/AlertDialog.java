@@ -14,16 +14,8 @@ public class AlertDialog {
         }
     }
 
-    public static void showDialog(String message, String alertType){
-        Alert.AlertType type;
-        switch (alertType){
-            case "INFO": type = Alert.AlertType.INFORMATION; break;
-            case "CONFIRMATION": type = Alert.AlertType.CONFIRMATION; break;
-            case "WARNING": type = Alert.AlertType.WARNING; break;
-            case "ERROR": type = Alert.AlertType.ERROR; break;
-            default: type = Alert.AlertType.NONE; break;
-        }
-        Alert alert = new Alert(type, message, ButtonType.OK);
+    public static void showDialog(String message, Alert.AlertType alertType){
+        Alert alert = new Alert(alertType, message, ButtonType.OK);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
