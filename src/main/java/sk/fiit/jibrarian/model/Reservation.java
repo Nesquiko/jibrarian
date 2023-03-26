@@ -8,17 +8,17 @@ import java.util.UUID;
 public class Reservation {
     private UUID id;
     private UUID userId;
-    private UUID itemId;
+    private Item item;
     private LocalDate until;
     private LocalDateTime deletedAt;
 
     public Reservation() {
     }
 
-    public Reservation(UUID id, UUID userId, UUID itemId, LocalDate until, LocalDateTime deletedAt) {
+    public Reservation(UUID id, UUID userId, Item item, LocalDate until, LocalDateTime deletedAt) {
         this.id = id;
         this.userId = userId;
-        this.itemId = itemId;
+        this.item = item;
         this.until = until;
         this.deletedAt = deletedAt;
     }
@@ -39,12 +39,12 @@ public class Reservation {
         this.userId = userId;
     }
 
-    public UUID getItemId() {
-        return itemId;
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemId(UUID itemId) {
-        this.itemId = itemId;
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public LocalDate getUntil() {
@@ -68,13 +68,13 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return id.equals(that.id) && userId.equals(that.userId) && itemId.equals(that.itemId) && until.equals(
+        return id.equals(that.id) && userId.equals(that.userId) && item.equals(that.item) && until.equals(
                 that.until) && Objects.equals(deletedAt, that.deletedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, itemId, until, deletedAt);
+        return Objects.hash(id, userId, item, until, deletedAt);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Reservation {
         return "Reservation{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", itemId=" + itemId +
+                ", item=" + item +
                 ", until=" + until +
                 ", deletedAt=" + deletedAt +
                 '}';
