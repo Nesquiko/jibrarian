@@ -52,7 +52,8 @@ public class AdminScreenController implements Initializable {
 
     @FXML
     public void admin_dashboard(ActionEvent actionEvent) {
-        loadScreenPart("../views/librarian_borrowed_books_screen.fxml");
+
+        loadScreenPart("../views/admin_screen_list.fxml");
         dashboardBtn.setDisable(true);
         libBtn.setDisable(false);
         addBookBtn.setDisable(false);
