@@ -24,6 +24,9 @@ import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import static sk.fiit.jibrarian.AlertDialog.showDialog;
+
+
 public class AddBookController implements Initializable {
     @FXML
     private Button addBookButton;
@@ -116,7 +119,8 @@ public class AddBookController implements Initializable {
                 ||(Integer.parseInt(totalPagesInput.getText()) < 1 || Integer.parseInt(totalPagesInput.getText()) > 9999) ||
                 languageInput.getText().isEmpty() || descriptionInput.getText().isEmpty() || chosenImageFile == null
                 || genreInput.getSelectionModel().isEmpty()) {
-            showDialog("FILL ALL FIELDS!!!");
+            //alertDialog("FILL ALL FIELDS!", "ERROR");
+            showDialog("FILL ALL FIELDS!", "ERROR");
         } else {
             Item newBook = new Item();
             newBook.setAuthor(authorInput.getText());
@@ -134,7 +138,7 @@ public class AddBookController implements Initializable {
             byte[] imageBytes = Files.readAllBytes(chosenImageFile.toPath());
             newBook.setImage(imageBytes);
             catalogRepository.saveItem(newBook);
-            showDialog("ADDED BOOK SUCCESSFULLY");
+            showDialog("ADDED BOOK SUCCESSFULLY", "INFO");
             clearFields();
         }
     }
@@ -157,15 +161,6 @@ public class AddBookController implements Initializable {
                 return ItemType.ARTICLE;
         }
         return ItemType.BOOK;
-    }
-
-    private void showDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.NONE, message, ButtonType.OK);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
-            alert.close();
-        }
     }
 
     @FXML
