@@ -30,27 +30,6 @@ public class LibraryCatalogController implements Initializable {
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
     private List<Item> getData() throws CatalogRepository.ItemAlreadyExistsException, IOException, URISyntaxException {
-        Item item;
-        /*
-        for (int i = 0; i < 5; i++) {
-            item = new Item();
-            item.setAuthor("Miroslav Toorovic");
-            item.setId(UUID.randomUUID());
-            item.setTitle("JavaFX Ultra Pro Course");
-            item.setDescription("ALELELEEELE");
-            item.setLanguage("EN");
-            item.setItemType(ItemType.BOOK);
-            item.setGenre("Course");
-            item.setAvailable(5);
-            item.setReserved(1);
-            item.setTotal(6);
-            item.setPages(100);
-            URI uri = getClass().getResource("../views/book.png").toURI();
-            Path path = Path.of(uri);
-            byte[] imageBytes = Files.readAllBytes(path);
-            item.setImage(imageBytes);
-            catalogRepository.saveItem(item);
-        }*/
         return catalogRepository.getItemPage(0, 12);
     }
 
