@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.LibraryCatalogController">
    <children>
       <HBox alignment="CENTER">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="leftArrow" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#pageDecrement" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@arrow_left.png" />
                </image>
@@ -39,7 +39,7 @@
                     <Insets bottom="20.0" top="20.0" />
                 </padding>
             </GridPane>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="rightArrow" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#pageIncrement" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@arrow_right.png" />
                </image>
@@ -49,6 +49,9 @@
             </ImageView>
          </children>
       </HBox>
-      <Label text="Current page" />
+      <Label fx:id="catalogPageLabel" text="Current page">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
    </children>
 </VBox>

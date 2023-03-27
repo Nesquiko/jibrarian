@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -24,20 +26,34 @@ import static sk.fiit.jibrarian.controllers.UserAuthController.user;
 public class LibraryCatalogController implements Initializable {
     @FXML
     private GridPane libraryCatalog;
+    @FXML
+    private Label catalogPageLabel;
+    @FXML
+    private ImageView leftArrow;
+    @FXML
+    private ImageView rightArrow;
+    private Integer currentPage = 0;
 
 
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private List<Item> getData() {
-        return catalogRepository.getItemPage(0, 12);
+    private List<Item> getData(Integer page) {
+        return catalogRepository.getItemPage(page, 12);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<Item> books = getData();
+        getCatalogPage(currentPage);
+        catalogPageLabel.setText(String.valueOf(currentPage + 1));
+    }
+
+    public void getCatalogPage(Integer page) {
+        List<Item> books = getData(page);
 
         int column = 0;
         int row = 0;
+        rightArrow.setVisible(books.size() >= 12);
+        leftArrow.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
                 FXMLLoader loader = new FXMLLoader();
@@ -96,4 +112,19 @@ public class LibraryCatalogController implements Initializable {
         }
     }
 
+    @FXML
+    private void pageIncrement() {
+        libraryCatalog.getChildren().clear();
+        getCatalogPage(++currentPage);
+        catalogPageLabel.setText(String.valueOf(currentPage + 1));
+    }
+
+    @FXML
+    private void pageDecrement() {
+        if (currentPage > 0) {
+            libraryCatalog.getChildren().clear();
+            getCatalogPage(--currentPage);
+            catalogPageLabel.setText(String.valueOf(currentPage + 1));
+        }
+    }
 }
