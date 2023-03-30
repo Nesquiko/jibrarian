@@ -15,3 +15,10 @@
 .toggle-button:disabled {
     -fx-opacity: 1;
 }
+.button{
+    -fx-background-color: transparent;
+    -fx-opacity: 0.6;
+}
+.button:hover{
+    -fx-opacity: 1;
+}

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,9 +30,9 @@ public class LibraryCatalogController implements Initializable {
     @FXML
     private Label catalogPageLabel;
     @FXML
-    private ImageView leftArrow;
+    private Button leftArrowBtn;
     @FXML
-    private ImageView rightArrow;
+    private Button rightArrowBtn;
     private Integer currentPage = 0;
 
 
@@ -52,8 +53,8 @@ public class LibraryCatalogController implements Initializable {
 
         int column = 0;
         int row = 0;
-        rightArrow.setVisible(books.size() >= 12);
-        leftArrow.setVisible(currentPage != 0);
+        rightArrowBtn.setVisible(books.size() >= 12);
+        leftArrowBtn.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
                 FXMLLoader loader = new FXMLLoader();
