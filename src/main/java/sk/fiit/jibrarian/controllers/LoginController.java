@@ -102,6 +102,7 @@ public class LoginController {
         
         //opening the proper UI depending on users role
         Role userRole = user.get().getRole();
+        getRepo().saveCurrentlyLoggedInUser(user.get());
         if (userRole == Role.MEMBER) switchToUserScreen();
         else if (userRole == Role.LIBRARIAN) switchToLibrarianScreen();
         else if (userRole == Role.ADMIN) switchToAdminScreen();

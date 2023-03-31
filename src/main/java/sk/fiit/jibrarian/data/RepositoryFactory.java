@@ -7,10 +7,14 @@ import sk.fiit.jibrarian.data.impl.InMemoryUserRepository;
 import sk.fiit.jibrarian.data.impl.PostgresCatalogRepository;
 import sk.fiit.jibrarian.data.impl.PostgresReservationRepository;
 import sk.fiit.jibrarian.data.impl.PostgresUserRepository;
+
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RepositoryFactory {
+    private static final Logger LOGGER = Logger.getLogger(RepositoryFactory.class.getName());
     private static final String ENVIRONMENT_PROPERTY = "env";
     private static final String IN_MEMORY_ENVIRONMENT = "in-memory";
     private static final String DB_ENVIRONMENT = "db";
@@ -42,8 +46,7 @@ public class RepositoryFactory {
     public static void initializeEnvironment() throws EnvironmentSetupException {
         var env = System.getProperty(ENVIRONMENT_PROPERTY);
         if (Objects.isNull(env)) {
-            // TODO log it
-            System.out.println("No environment specified, using in-memory environment");
+            LOGGER.log(Level.INFO, "No environment specified, using in-memory environment");
             env = IN_MEMORY_ENVIRONMENT;
         }
 
@@ -55,22 +58,28 @@ public class RepositoryFactory {
     }
 
     public static CatalogRepository getCatalogRepository() throws UninitializedRepositoryException {
-        if (Objects.isNull(catalogRepository))
+        if (Objects.isNull(catalogRepository)) {
+            LOGGER.log(Level.SEVERE, "Catalog repository is not initialized");
             throw new UninitializedRepositoryException("Catalog repository is not initialized");
+        }
 
         return catalogRepository;
     }
 
     public static UserRepository getUserRepository() throws UninitializedRepositoryException {
-        if (Objects.isNull(userRepository))
+        if (Objects.isNull(userRepository)) {
+            LOGGER.log(Level.SEVERE, "User repository is not initialized");
             throw new UninitializedRepositoryException("User repository is not initialized");
+        }
 
         return userRepository;
     }
 
     public static ReservationRepository getReservationRepository() throws UninitializedRepositoryException {
-        if (Objects.isNull(reservationRepository))
+        if (Objects.isNull(reservationRepository)) {
+            LOGGER.log(Level.SEVERE, "Reservation repository is not initialized");
             throw new UninitializedRepositoryException("Reservation repository is not initialized");
+        }
 
         return reservationRepository;
     }
@@ -88,21 +97,21 @@ public class RepositoryFactory {
     }
 
     private static void initializeInMemoryEnv() {
-        System.out.println("Using in-memory environment");
+        LOGGER.log(Level.INFO, "Using in-memory environment");
         setCatalogRepository(new InMemoryCatalogRepository());
         setUserRepository(new InMemoryUserRepository());
         setReservationRepository(new InMemoryReservationRepository());
     }
 
     private static void initializeDbEnv() throws EnvironmentSetupException {
-        System.out.println("Using db environment");
+        LOGGER.log(Level.INFO, "Using db environment");
         try {
             var connectionPool = connectToDb();
             setCatalogRepository(new PostgresCatalogRepository(connectionPool));
             setUserRepository(new PostgresUserRepository(connectionPool));
             setReservationRepository(new PostgresReservationRepository(connectionPool));
         } catch (SQLException e) {
-            // TODO log it
+            LOGGER.log(Level.SEVERE, "Failed to connect to db", e);
             throw new EnvironmentSetupException("Failed to connect to db");
         }
     }
@@ -139,8 +148,8 @@ public class RepositoryFactory {
                 .setDatabase(dbName)
                 .setUser(user)
                 .setPassword(password)
-                .setMaxPoolSize(5)
-                .setInitialPoolSize(2)
+                .setMaxPoolSize(3)
+                .setInitialPoolSize(0)
                 .build();
     }
 }

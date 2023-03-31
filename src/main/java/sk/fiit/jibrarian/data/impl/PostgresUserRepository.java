@@ -12,13 +12,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PostgresUserRepository implements UserRepository {
-
+    private static final Logger LOGGER = Logger.getLogger(PostgresUserRepository.class.getName());
     private final ConnectionPool connectionPool;
+
+    private User currentlyLoggedInUser;
 
     public PostgresUserRepository(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
+    }
+
+    @Override
+    public void saveCurrentlyLoggedInUser(User user) {
+        this.currentlyLoggedInUser = user;
+    }
+
+    @Override
+    public Optional<User> getCurrentlyLoggedInUser() {
+        return Optional.ofNullable(currentlyLoggedInUser);
     }
 
     @Override
@@ -34,10 +48,11 @@ public class PostgresUserRepository implements UserRepository {
             statement.setString(4, user.getRole().getDbValue());
             statement.executeUpdate();
         } catch (SQLException e) {
-            // TODO log as error
             if (e.getSQLState().equals("23505")) {
+                LOGGER.log(Level.WARNING, "User with email {0} already exists", user.getEmail());
                 throw new AlreadyExistingUserException("User with email " + user.getEmail() + " already exists");
             }
+            LOGGER.log(Level.SEVERE, "Error while saving user", e);
         }
     }
 
@@ -59,7 +74,7 @@ public class PostgresUserRepository implements UserRepository {
                 ));
             }
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while getting user by email", e);
         }
         return Optional.empty();
     }
@@ -79,7 +94,7 @@ public class PostgresUserRepository implements UserRepository {
             if (updated == 0)
                 throw new UserNotFound("User with id " + user.getId() + " not found");
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while updating user", e);
         }
     }
 
@@ -92,7 +107,7 @@ public class PostgresUserRepository implements UserRepository {
         ) {
             return getUsersWithRole(statement);
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while getting all librarians", e);
         }
         return Collections.emptyList();
     }
@@ -106,7 +121,7 @@ public class PostgresUserRepository implements UserRepository {
         ) {
             return getUsersWithRole(statement);
         } catch (SQLException e) {
-            // TODO log as error
+            LOGGER.log(Level.SEVERE, "Error while getting all admins", e);
         }
         return Collections.emptyList();
     }

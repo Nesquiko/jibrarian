@@ -8,6 +8,16 @@ import java.util.Optional;
 public interface UserRepository {
 
     /**
+     * Saves user as currently logged-in user
+     */
+    void saveCurrentlyLoggedInUser(User user);
+
+    /**
+     * Returns currently logged-in user, if it doesn't exist, returns empty optional
+     */
+    Optional<User> getCurrentlyLoggedInUser();
+
+    /**
      * Persists user
      */
     void saveUser(User user) throws AlreadyExistingUserException;
