@@ -119,17 +119,8 @@ public class LoginController {
 
     @FXML
     void signUp(ActionEvent event) throws IOException { //redirect to sign up window
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/SignUp.fxml"));
-        Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
-        current_stage.close();
-
-        Stage sign_up = new Stage();
-        Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
-        sign_up.getIcons().add(icon);
-        sign_up.setScene(new Scene(root));
-        sign_up.setResizable(false);
-        sign_up.show();
+        getLog().info("Opening registration interface");
+        App.setRoot("views/SignUp");
     }
     
     @FXML

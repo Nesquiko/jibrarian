@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-//import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
@@ -24,6 +23,7 @@ public class App extends Application {
         //Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
         //stage.getIcons().add(icon);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

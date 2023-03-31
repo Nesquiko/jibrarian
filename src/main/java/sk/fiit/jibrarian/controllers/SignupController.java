@@ -20,7 +20,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.UserRepository.AlreadyExistingUserException;
@@ -63,17 +65,8 @@ public class SignupController {
     
     @FXML
     void cancel(ActionEvent event) throws IOException { //loads back the login stage
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Login.fxml"));
-        Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
-        current_stage.close();
-
-        Stage log_in = new Stage();
-        Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
-        log_in.getIcons().add(icon);
-        log_in.setScene(new Scene(root));
-        log_in.setResizable(false);
-        log_in.show();
+    	App.setRoot("views/Login");
+        getLog().info("Opening login interface");
     }
     
     public boolean emailValidityCheck(String Email){
@@ -116,25 +109,14 @@ public class SignupController {
             return;
         }
         getLog().info("User successfully created");
-
-		//successfully signed in
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Login.fxml")); //redirecting back to the login page
-        Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
-        current_stage.close();
-        
-        LoginController Login = loader.getController();
-        Login.setErrorMsgColor("#00c900");
-        Login.setErrorMsg("You have succesfully signed in!");
-
-        Stage LogIn = new Stage();
-        Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
-        LogIn.getIcons().add(icon);
-        LogIn.setScene(new Scene(root));
-        LogIn.setResizable(false);
-        LogIn.show();
+        setErrorMsgColor("#00c900");
+        setErrorMsg("You have succesfully signed in!");
     }
     
+    public void setErrorMsgColor(String color) {
+    	this.errorMsg.setTextFill(Color.web(color));
+    }
+
     public void setLastErrorMsg(int id) {
     	this.lastErrorMsg = id;
     }

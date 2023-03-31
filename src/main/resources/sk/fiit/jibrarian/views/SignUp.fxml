@@ -29,7 +29,7 @@
             <Font size="32.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#cancel" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Cancel" textFill="#969696" textOverrun="CLIP">
+      <Button fx:id="cancelButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#cancel" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Log In" textFill="#969696" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>
