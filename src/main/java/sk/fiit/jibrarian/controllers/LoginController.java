@@ -6,13 +6,11 @@ import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
-import org.postgresql.util.PSQLException;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -26,39 +24,45 @@ import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.App;
-import sk.fiit.jibrarian.data.ConnectionPool;
-import sk.fiit.jibrarian.data.impl.PostgresUserRepository;
+import sk.fiit.jibrarian.data.UserRepository;
+import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Role;
 
 public class LoginController {
 
     @FXML
-    private TextField Email;
+    private TextField email;
 
     @FXML
-    private Label ErrorMsg;
+    private Label errorMsg;
     
-    private int LastErrorMsg;
+    private int lastErrorMsg;
 
     @FXML
-    private Label ForgotPassword;
+    private Label forgotPassword;
 
     @FXML
-    private Button LogInButton;
+    private Button logInButton;
 
     @FXML
-    private PasswordField Password;
+    private PasswordField password;
 
     @FXML
-    private CheckBox RememberMe;
+    private CheckBox rememberMe;
 
     @FXML
-    private Button SignUpButton;
+    private Button signUpButton;
 
-    private static final Logger log = Logger.getLogger(LoginController.class.getName());
+    private UserRepository userRepo = RepositoryFactory.getUserRepository();
+
+    private static final Logger LOG = Logger.getLogger(LoginController.class.getName());
+
+    public UserRepository getRepo() {
+        return userRepo;
+    }
     
     public Logger getLog() {
-        return LoginController.log;
+        return LoginController.LOG;
     }
 
     public void switchToUserScreen() throws IOException {
@@ -80,31 +84,24 @@ public class LoginController {
     }
 
     @FXML
-    void LogIn(ActionEvent event) throws SQLException, IOException, ConnectException {	//user login
-        //connecting to db
-        ConnectionPool connectionPool;
-        try {
-            connectionPool = new ConnectionPool.ConnectionPoolBuilder().setHost("localhost").setPort(42069)
-        .setDatabase("jibrarian").setUser("jibrarian").setPassword("password").build();
-        } catch (PSQLException error) {
-            setErrorMsg("Could not connect to DB");
-            getLog().severe("Could not connect to DB\n" + error);
-            return;
-        }
-        PostgresUserRepository db = new PostgresUserRepository(connectionPool);
-        var user = db.getUserByEmail(this.Email.getText());
-        connectionPool.close();
+    void logIn(ActionEvent event) throws SQLException, IOException, ConnectException {	//user login
+        //getting user
+        var user = getRepo().getUserByEmail(this.email.getText());
 
         //If there are no users with this email
         if (user.isPresent() == false) {
             setErrorMsg("Incorrect email or password...");
             getLog().info("User was not found");
+            this.email.setText("");
+            this.password.setText("");
             return;
         }
         //if passwords match
-        else if (BCrypt.verifyer().verify(this.Password.getText().toCharArray(), user.get().getPassHash()).verified == false) {
+        else if (BCrypt.verifyer().verify(this.password.getText().toCharArray(), user.get().getPassHash()).verified == false) {
             setErrorMsg("Incorrect email or password...");
             getLog().info("User entered incorrect password");
+            this.email.setText("");
+            this.password.setText("");
             return;
         }
         
@@ -121,10 +118,10 @@ public class LoginController {
     }
 
     @FXML
-    void SignUp(ActionEvent event) throws IOException { //redirect to sign up window
+    void signUp(ActionEvent event) throws IOException { //redirect to sign up window
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/SignUp.fxml"));
         Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) SignUpButton.getScene().getWindow();
+        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
         current_stage.close();
 
         Stage sign_up = new Stage();
@@ -136,31 +133,31 @@ public class LoginController {
     }
     
     @FXML
-    void RedirectForgotPassword(MouseEvent event) {  //redirect to forgot password window
+    void redirectForgotPassword(MouseEvent event) {  //redirect to forgot password window
     	//redirect to forgot password
     }
     
     public void setLastErrorMsg(int id) {
-    	this.LastErrorMsg = id;
+    	this.lastErrorMsg = id;
     }
     
     public int getLastErrorMsg() {
-    	return LastErrorMsg;
+    	return lastErrorMsg;
     }
     
     public void setErrorMsgNull() {
-        this.ErrorMsg.setText(" ");
-        this.ErrorMsg.setTextFill(Color.web("#ff0000"));
+        this.errorMsg.setText(" ");
+        this.errorMsg.setTextFill(Color.web("#ff0000"));
     }
     
     public void setErrorMsgColor(String color) {
-    	this.ErrorMsg.setTextFill(Color.web(color));
+    	this.errorMsg.setTextFill(Color.web(color));
     }
     
     public void setErrorMsg(String info) {
     	int id = new Random().nextInt(1000000);
     	this.setLastErrorMsg(id);
-    	this.ErrorMsg.setText(info);
+    	this.errorMsg.setText(info);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override

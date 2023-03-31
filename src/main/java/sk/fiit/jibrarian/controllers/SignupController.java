@@ -8,13 +8,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.logging.Logger;
-import org.postgresql.util.PSQLException;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,47 +20,52 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import sk.fiit.jibrarian.data.ConnectionPool;
+import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.UserRepository.AlreadyExistingUserException;
-import sk.fiit.jibrarian.data.impl.PostgresUserRepository;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 public class SignupController {
 
     @FXML
-    private Button CancelButton;
+    private Button cancelButton;
 
     @FXML
-    private TextField Email;
+    private TextField email;
 
     @FXML
-    private PasswordField Password;
+    private PasswordField password;
 
     @FXML
-    private PasswordField PasswordConfirm;
+    private PasswordField passwordConfirm;
 
     @FXML
-    private Button SignUpButton;
+    private Button signUpButton;
     
     @FXML
-    private Label ErrorMsg;
+    private Label errorMsg;
     
-    private int LastErrorMsg;
+    private int lastErrorMsg;
 
-    private static final Logger log = Logger.getLogger(SignupController.class.getName());
+    private UserRepository userRepo = RepositoryFactory.getUserRepository();
+
+    private static final Logger LOG = Logger.getLogger(LoginController.class.getName());
+
+    public UserRepository getRepo() {
+        return userRepo;
+    }
     
     public Logger getLog() {
-        return SignupController.log;
+        return SignupController.LOG;
     }
     
     @FXML
-    void Cancel(ActionEvent event) throws IOException { //loads back the login stage
+    void cancel(ActionEvent event) throws IOException { //loads back the login stage
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Login.fxml"));
         Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) SignUpButton.getScene().getWindow();
+        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
         current_stage.close();
 
         Stage log_in = new Stage();
@@ -73,64 +76,51 @@ public class SignupController {
         log_in.show();
     }
     
-    public boolean EmailValidityCheck(String Email){
+    public boolean emailValidityCheck(String Email){
         String EmailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
         return Email.matches(EmailRegex);
     }
     
     @FXML
-    void SignUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
+    void signUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
         // sign up checking for formats & lengths
-		if (Email.getText().length() < 8) {
-        	SetErrorMsg("Email has to have at least 8 characters...");
+		if (email.getText().length() < 8) {
+        	setErrorMsg("Email has to have at least 8 characters...");
             getLog().warning("Invalid email address");
     		return;
         }
-        else if (EmailValidityCheck(Email.getText()) == false) {
-        	SetErrorMsg("Invalid email format...");
+        else if (emailValidityCheck(email.getText()) == false) {
+        	setErrorMsg("Invalid email format...");
             getLog().warning("Invalid email address");
     		return;
         }
-        else if (Password.getText().length() < 8) {
-        	SetErrorMsg("Password has to have at least 8 characters...");
+        else if (password.getText().length() < 8) {
+        	setErrorMsg("Password has to have at least 8 characters...");
             getLog().warning("Invalid password");
         	return;
         }
-        else if (Password.getText().compareTo(PasswordConfirm.getText()) != 0) {
-        	SetErrorMsg("Passwords do not match...");
+        else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
+        	setErrorMsg("Passwords do not match...");
             getLog().warning("Passwords do not match");
         	return;
         }
-        
-        //connecting to db
-        ConnectionPool connectionPool;
-        try {
-            connectionPool = new ConnectionPool.ConnectionPoolBuilder().setHost("localhost").setPort(42069)
-        .setDatabase("jibrarian").setUser("jibrarian").setPassword("password").build();
-        } catch (PSQLException error) {
-            SetErrorMsg("Could not connect to DB...");
-            getLog().severe("Could not connect to DB");
-            return;
-        }
-        PostgresUserRepository db = new PostgresUserRepository(connectionPool);
 
         //pushing new member into database
-        String hashedPass = BCrypt.withDefaults().hashToString(12, this.Password.getText().toCharArray());
-        User user = new User(new UUID(100000, 10000000), this.Email.getText(), hashedPass, Role.MEMBER);
+        String hashedPass = BCrypt.withDefaults().hashToString(12, this.password.getText().toCharArray());
+        User user = new User(UUID.randomUUID(), this.email.getText(), hashedPass, Role.MEMBER);
         try {
-            db.saveUser(user);
+            getRepo().saveUser(user);
         } catch (AlreadyExistingUserException error) {
-            SetErrorMsg("User with this email already exists...");
+            setErrorMsg("User with this email already exists...");
             getLog().warning("User with this email already exists");
             return;
         }
-        connectionPool.close();
         getLog().info("User successfully created");
 
 		//successfully signed in
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Login.fxml")); //redirecting back to the login page
         Parent root = (Parent) loader.load();
-        Stage current_stage = (Stage) SignUpButton.getScene().getWindow();
+        Stage current_stage = (Stage) signUpButton.getScene().getWindow();
         current_stage.close();
         
         LoginController Login = loader.getController();
@@ -145,40 +135,28 @@ public class SignupController {
         LogIn.show();
     }
     
-    @FXML
-    void CursorHand(MouseEvent event) {
-    	Scene scene = (Scene) CancelButton.getScene();
-        scene.setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    void NormalCursor(MouseEvent event) {
-    	Scene scene = (Scene) CancelButton.getScene();
-        scene.setCursor(Cursor.DEFAULT);
+    public void setLastErrorMsg(int id) {
+    	this.lastErrorMsg = id;
     }
     
-    public void SetLastErrorMsg(int id) {
-    	this.LastErrorMsg = id;
+    public int getLastErrorMsg() {
+    	return this.lastErrorMsg;
     }
     
-    public int GetLastErrorMsg() {
-    	return LastErrorMsg;
+    public void setErrorMsgNull() {
+        this.errorMsg.setText(" ");
     }
     
-    public void SetErrorMsgNull() {
-        this.ErrorMsg.setText(" ");
-    }
-    
-    public void SetErrorMsg(String info) {
+    public void setErrorMsg(String info) {
     	int id = new Random().nextInt(1000000);
-    	this.SetLastErrorMsg(id);
-    	this.ErrorMsg.setText(info);
+    	this.setLastErrorMsg(id);
+    	this.errorMsg.setText(info);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                	if (id == GetLastErrorMsg()) SetErrorMsgNull();
+                	if (id == getLastErrorMsg()) setErrorMsgNull();
                 });
             }
         };

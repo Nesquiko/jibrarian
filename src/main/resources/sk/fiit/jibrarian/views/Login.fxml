@@ -15,37 +15,37 @@
             <Font name="System Bold" size="32.0" />
          </font>
       </Label>
-      <TextField fx:id="Email" layoutX="150.0" layoutY="140.0" prefHeight="56.0" prefWidth="500.0" promptText="email" style="-fx-border-radius: 20 20 20 20; -fx-background-radius: 20 20 20 20;">
+      <TextField fx:id="email" layoutX="150.0" layoutY="140.0" prefHeight="56.0" prefWidth="500.0" promptText="email" style="-fx-border-radius: 20 20 20 20; -fx-background-radius: 20 20 20 20;">
          <font>
             <Font size="26.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="Password" layoutX="150.0" layoutY="240.0" prefHeight="56.0" prefWidth="500.0" promptText="password" style="-fx-border-radius: 20 20 20 20; -fx-background-radius: 20 20 20 20;">
+      <PasswordField fx:id="password" layoutX="150.0" layoutY="240.0" prefHeight="56.0" prefWidth="500.0" promptText="password" style="-fx-border-radius: 20 20 20 20; -fx-background-radius: 20 20 20 20;">
          <font>
             <Font size="26.0" />
          </font>
       </PasswordField>
-      <CheckBox fx:id="RememberMe" layoutX="150.0" layoutY="310.0" mnemonicParsing="false" styleClass="forgot-password-href" stylesheets="@style.css" text="Remember me" textFill="#969696" visible="false">
+      <CheckBox fx:id="rememberMe" layoutX="150.0" layoutY="310.0" mnemonicParsing="false" styleClass="forgot-password-href" stylesheets="@style.css" text="Remember me" textFill="#969696" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </CheckBox>
-      <Button fx:id="LogInButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#LogIn" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Log In" textFill="WHITE" textOverrun="CLIP">
+      <Button fx:id="logInButton" layoutX="150.0" layoutY="390.0" mnemonicParsing="false" onAction="#logIn" prefWidth="500.0" styleClass="user-auth-button" stylesheets="@style.css" text="Log In" textFill="WHITE" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>
       </Button>
-      <Label fx:id="ForgotPassword" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="517.0" layoutY="310.0" onMouseClicked="#RedirectForgotPassword" prefHeight="25.0" prefWidth="133.0" styleClass="forgot-password-href" stylesheets="@style.css" text="Forgot password" textAlignment="RIGHT" textFill="#969696" visible="false">
+      <Label fx:id="forgotPassword" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="517.0" layoutY="310.0" onMouseClicked="#redirectForgotPassword" prefHeight="25.0" prefWidth="133.0" styleClass="forgot-password-href" stylesheets="@style.css" text="Forgot password" textAlignment="RIGHT" textFill="#969696" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="SignUpButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#SignUp" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Sign Up" textFill="#969696" textOverrun="CLIP">
+      <Button fx:id="signUpButton" layoutX="150.0" layoutY="475.0" mnemonicParsing="false" onAction="#signUp" prefWidth="500.0" styleClass="user-auth-gray-button" stylesheets="@style.css" text="Sign Up" textFill="#969696" textOverrun="CLIP">
          <font>
             <Font size="32.0" />
          </font>
       </Button>
-      <Label fx:id="ErrorMsg" alignment="CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="360.0" prefHeight="25.0" prefWidth="500.0" text="    " textFill="RED">
+      <Label fx:id="errorMsg" alignment="CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="360.0" prefHeight="25.0" prefWidth="500.0" text="    " textFill="RED">
          <font>
             <Font size="16.0" />
          </font>
