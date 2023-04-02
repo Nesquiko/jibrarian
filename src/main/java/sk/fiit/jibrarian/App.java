@@ -18,12 +18,14 @@ import java.util.logging.Logger;
 public class App extends Application {
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private static Scene scene;
-
-
+    
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("views/user_auth"), 640, 480);
+        scene = new Scene(loadFXML("views/Login"), 800, 600);
+        //Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
+        //stage.getIcons().add(icon);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

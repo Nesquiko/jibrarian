@@ -38,18 +38,27 @@ public class LibraryCatalogController implements Initializable {
 
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
+<<<<<<< HEAD
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12);
+=======
+    private List<Item> getData() {
+        return catalogRepository.getItemPage(0, 12);
+>>>>>>> c705c339fcbd1ab4b0f69a0173afb682853093b2
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+<<<<<<< HEAD
         getCatalogPage(currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }
 
     public void getCatalogPage(Integer page) {
         List<Item> books = getData(page);
+=======
+        List<Item> books = getData();
+>>>>>>> c705c339fcbd1ab4b0f69a0173afb682853093b2
 
         int column = 0;
         int row = 0;

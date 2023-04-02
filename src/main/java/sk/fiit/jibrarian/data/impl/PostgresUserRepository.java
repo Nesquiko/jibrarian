@@ -19,8 +19,20 @@ public class PostgresUserRepository implements UserRepository {
     private static final Logger LOGGER = Logger.getLogger(PostgresUserRepository.class.getName());
     private final ConnectionPool connectionPool;
 
+    private User currentlyLoggedInUser;
+
     public PostgresUserRepository(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
+    }
+
+    @Override
+    public void saveCurrentlyLoggedInUser(User user) {
+        this.currentlyLoggedInUser = user;
+    }
+
+    @Override
+    public Optional<User> getCurrentlyLoggedInUser() {
+        return Optional.ofNullable(currentlyLoggedInUser);
     }
 
     @Override

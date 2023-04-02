@@ -2,9 +2,10 @@ package sk.fiit.jibrarian.data.impl;
 
 import sk.fiit.jibrarian.data.ConnectionPool;
 import sk.fiit.jibrarian.data.ReservationRepository;
+import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class PostgresReservationRepository implements ReservationRepository {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while checking reservations for user", e);
+            return;
         }
 
         try (
@@ -48,7 +50,7 @@ public class PostgresReservationRepository implements ReservationRepository {
         ) {
             statement.setObject(1, reservation.getId());
             statement.setObject(2, reservation.getUserId());
-            statement.setObject(3, reservation.getItemId());
+            statement.setObject(3, reservation.getItem().getId());
             statement.setObject(4, reservation.getUntil());
             statement.setObject(5, reservation.getDeletedAt());
             statement.executeUpdate();
@@ -62,19 +64,57 @@ public class PostgresReservationRepository implements ReservationRepository {
         try (
                 var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
-                        "select id, user_id, item_id, until, deleted_at from reservations where user_id = ? and deleted_at is null")
+                        """
+                                select
+                                    r.id,
+                                    r.user_id,
+                                    until,
+                                    deleted_at,
+                                    i.id,
+                                    i.title,
+                                    i.author,
+                                    i.description,
+                                    i.language,
+                                    i.genre,
+                                    i.isbn,
+                                    i.item_type,
+                                    i.pages,
+                                    i.total,
+                                    i.available,
+                                    i.reserved,
+                                    i.image
+                                from reservations r
+                                         join items i on r.item_id = i.id
+                                where user_id = ?
+                                  and deleted_at is null
+                                """)
         ) {
             statement.setObject(1, user.getId());
             var resultSet = statement.executeQuery();
             var reservations = new ArrayList<Reservation>();
             while (resultSet.next()) {
-                reservations.add(new Reservation(
-                        resultSet.getObject("id", UUID.class),
-                        resultSet.getObject("user_id", UUID.class),
-                        resultSet.getObject("item_id", UUID.class),
-                        resultSet.getObject("until", LocalDate.class),
-                        resultSet.getObject("deleted_at", LocalDateTime.class)
-                ));
+                var reservation = new Reservation();
+                var item = new Item();
+                reservation.setId(resultSet.getObject(1, UUID.class));
+                reservation.setUserId(resultSet.getObject(2, UUID.class));
+                reservation.setUntil(resultSet.getObject(3, LocalDate.class));
+                reservation.setDeletedAt(resultSet.getObject(4, LocalDateTime.class));
+                item.setId(resultSet.getObject(5, UUID.class));
+                item.setTitle(resultSet.getString(6));
+                item.setAuthor(resultSet.getString(7));
+                item.setDescription(resultSet.getString(8));
+                item.setLanguage(resultSet.getString(9));
+                item.setGenre(resultSet.getString(10));
+                item.setIsbn(resultSet.getString(11));
+                item.setItemType(ItemType.fromDbValue(resultSet.getString(12)));
+                item.setPages(resultSet.getInt(13));
+                item.setTotal(resultSet.getInt(14));
+                item.setAvailable(resultSet.getInt(15));
+                item.setReserved(resultSet.getInt(16));
+                item.setImage(resultSet.getBytes(17));
+
+                reservation.setItem(item);
+                reservations.add(reservation);
             }
             return reservations;
         } catch (SQLException e) {

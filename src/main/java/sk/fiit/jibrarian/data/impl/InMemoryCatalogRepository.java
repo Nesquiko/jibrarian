@@ -4,7 +4,6 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.User;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -71,7 +70,7 @@ public class InMemoryCatalogRepository implements CatalogRepository {
 
     @Override
     public Item returnItem(BorrowedItem borrowedItem) throws ItemNotFoundException {
-        var item = items.get(borrowedItem.getItemId());
+        var item = items.get(borrowedItem.getItem().getId());
         item.setAvailable(item.getAvailable() + 1);
         updateItem(item);
         borrowedItems.remove(borrowedItem.getId());
@@ -79,7 +78,6 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     }
 
     private BorrowedItem createNewBorrowedItem(Item item, User user, LocalDate until) {
-        return new BorrowedItem(UUID.randomUUID(), user.getId(), item.getId(), item.getTitle(), item.getAuthor(),
-                until);
+        return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until);
     }
 }

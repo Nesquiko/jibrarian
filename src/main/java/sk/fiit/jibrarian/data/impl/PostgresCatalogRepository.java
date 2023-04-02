@@ -6,7 +6,6 @@ import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,11 +32,10 @@ public class PostgresCatalogRepository implements CatalogRepository {
                 var connWrapper = connectionPool.getConnWrapper();
                 var statement = connWrapper.getConnection().prepareStatement(
                         """
-                                insert into items (id, title, author, description, language, genre, isbn, item_type, pages, total, available,
-                                                   reserved, image)
+                                insert into items (id, title, author, description, language, genre, isbn, item_type,
+                                    pages, total, available, reserved, image)
                                 values (?, ?, ?, ?, ?, ?, ?, ?::item_type, ?, ?, ?, ?, ?);
-                                     """)
-
+                                        """)
         ) {
             statement.setObject(1, item.getId());
             statement.setString(2, item.getTitle());
@@ -142,13 +140,11 @@ public class PostgresCatalogRepository implements CatalogRepository {
             connWrapper.getConnection().setAutoCommit(false);
             var borrowedItem = new BorrowedItem();
             borrowedItem.setId(UUID.randomUUID());
-            borrowedItem.setItemId(item.getId());
+            borrowedItem.setItem(item);
             borrowedItem.setUserId(user.getId());
             borrowedItem.setUntil(until);
-            borrowedItem.setTitle(item.getTitle());
-            borrowedItem.setAuthor(item.getAuthor());
             insertBorrowedItem.setObject(1, borrowedItem.getId());
-            insertBorrowedItem.setObject(2, borrowedItem.getItemId());
+            insertBorrowedItem.setObject(2, borrowedItem.getItem().getId());
             insertBorrowedItem.setObject(3, borrowedItem.getUserId());
             insertBorrowedItem.setObject(4, until);
             executeUpdateOrRollback(connWrapper.getConnection(), insertBorrowedItem);
@@ -157,6 +153,8 @@ public class PostgresCatalogRepository implements CatalogRepository {
             executeUpdateOrRollback(connWrapper.getConnection(), updateItem);
             connWrapper.getConnection().commit();
             connWrapper.getConnection().setAutoCommit(true);
+            item.setAvailable(item.getAvailable() - 1);
+            item.setReserved(item.getReserved() + 1);
             return borrowedItem;
         } catch (SQLException e) {
             if ("23514".equals(e.getSQLState())) {
@@ -176,27 +174,50 @@ public class PostgresCatalogRepository implements CatalogRepository {
                         """
                                 select
                                     bi.id,
-                                    bi.item_id,
                                     bi.user_id,
                                     bi.until,
+                                    i.id,
                                     i.title,
-                                    i.author
+                                    i.author,
+                                    i.description,
+                                    i.language,
+                                    i.genre,
+                                    i.isbn,
+                                    i.item_type,
+                                    i.pages,
+                                    i.total,
+                                    i.available,
+                                    i.reserved,
+                                    i.image
                                 from borrowed_items bi
                                          join items i on bi.item_id = i.id
                                 where user_id = ?
-                                 """)
+                                """)
         ) {
             var borrowedItems = new ArrayList<BorrowedItem>();
             statement.setObject(1, user.getId());
             var resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 var borrowedItem = new BorrowedItem();
-                borrowedItem.setId(resultSet.getObject("id", UUID.class));
-                borrowedItem.setItemId(resultSet.getObject("item_id", UUID.class));
-                borrowedItem.setUserId(resultSet.getObject("user_id", UUID.class));
-                borrowedItem.setUntil(resultSet.getObject("until", LocalDate.class));
-                borrowedItem.setTitle(resultSet.getString("title"));
-                borrowedItem.setAuthor(resultSet.getString("author"));
+                var item = new Item();
+                borrowedItem.setId((UUID) resultSet.getObject(1));
+                borrowedItem.setUserId((UUID) resultSet.getObject(2));
+                borrowedItem.setUntil(resultSet.getObject(3, LocalDate.class));
+                item.setId((UUID) resultSet.getObject(4));
+                item.setTitle(resultSet.getString(5));
+                item.setAuthor(resultSet.getString(6));
+                item.setDescription(resultSet.getString(7));
+                item.setLanguage(resultSet.getString(8));
+                item.setGenre(resultSet.getString(9));
+                item.setIsbn(resultSet.getString(10));
+                item.setItemType(ItemType.fromDbValue(resultSet.getString(11)));
+                item.setPages(resultSet.getInt(12));
+                item.setTotal(resultSet.getInt(13));
+                item.setAvailable(resultSet.getInt(14));
+                item.setReserved(resultSet.getInt(15));
+                item.setImage(resultSet.getBytes(16));
+
+                borrowedItem.setItem(item);
                 borrowedItems.add(borrowedItem);
             }
             return borrowedItems;
@@ -231,16 +252,17 @@ public class PostgresCatalogRepository implements CatalogRepository {
             setAsDeleted.setObject(1, borrowedItem.getId());
             executeUpdateOrRollback(connWrapper.getConnection(), setAsDeleted);
 
-            updateItem.setObject(1, borrowedItem.getItemId());
+            updateItem.setObject(1, borrowedItem.getItem().getId());
             var resultSet = executeOrRollback(connWrapper.getConnection(), updateItem);
             if (resultSet.next()) {
                 Item item = readItem(resultSet);
                 connWrapper.getConnection().commit();
                 connWrapper.getConnection().setAutoCommit(true);
+                borrowedItem.setItem(item);
                 return item;
             }
-            LOGGER.log(Level.WARNING, "Item {0} not found", borrowedItem.getItemId());
-            throw new ItemNotFoundException(String.format("Item with id %s not found", borrowedItem.getItemId()));
+            LOGGER.log(Level.WARNING, "Item {0} not found", borrowedItem.getItem().getId());
+            throw new ItemNotFoundException(String.format("Item with id %s not found", borrowedItem.getItem().getId()));
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while returning item", e);
         }
