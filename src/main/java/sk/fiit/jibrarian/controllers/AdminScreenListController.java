@@ -79,7 +79,7 @@ public class AdminScreenListController implements Initializable {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
