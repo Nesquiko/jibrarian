@@ -71,4 +71,32 @@ class InMemoryUserRepositoryTest {
         assertEquals(1, admins.size());
         assertEquals(user, admins.get(0));
     }
+
+    @Test
+    void saveCurrentlyLoggedInUser() {
+        inMemoryUserRepository.saveCurrentlyLoggedInUser(user);
+        var loggedInUser = inMemoryUserRepository.getCurrentlyLoggedInUser();
+        assertTrue(loggedInUser.isPresent());
+        assertEquals(user, loggedInUser.get());
+    }
+
+
+    @Test
+    void getCurrentlyLoggedInUserNoneSaved() {
+        var loggedInUser = inMemoryUserRepository.getCurrentlyLoggedInUser();
+        assertTrue(loggedInUser.isEmpty());
+    }
+
+    @Test
+    void deleteUserNotFound() {
+        assertThrows(UserNotFound.class, () -> inMemoryUserRepository.deleteUser(user));
+    }
+
+    @Test
+    void deleteUserSuccessfully() throws AlreadyExistingUserException, UserNotFound {
+        inMemoryUserRepository.saveUser(user);
+        inMemoryUserRepository.deleteUser(user);
+        var userFromRepo = inMemoryUserRepository.getUserByEmail(user.getEmail());
+        assertTrue(userFromRepo.isEmpty());
+    }
 }
