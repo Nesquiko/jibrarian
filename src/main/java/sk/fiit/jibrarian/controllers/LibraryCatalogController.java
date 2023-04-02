@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -41,6 +40,7 @@ public class LibraryCatalogController implements Initializable {
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12);
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         getCatalogPage(currentPage);
