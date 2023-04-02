@@ -60,7 +60,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
     }
 
     @Override
-    public List<Item> getItemPage(Integer page, Integer pageSize) {
+    public Page getItemPage(Integer page, Integer pageSize) {
         try (
                 var connWrapper = connectionPool.getConnWrapper();
                 var statement = connWrapper.getConnection().prepareStatement(
@@ -69,21 +69,25 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                                 from items
                                 order by title
                                 limit ? offset ?;
-                                     """)
+                                     """);
+                var countStatement = connWrapper.getConnection().prepareStatement("select count(*) from items;")
         ) {
             statement.setInt(1, pageSize);
             statement.setInt(2, page * pageSize);
             var resultSet = statement.executeQuery();
-            var items = new ArrayList<Item>();
+            var itemPage = new ArrayList<Item>();
             while (resultSet.next()) {
                 var item = readItem(resultSet);
-                items.add(item);
+                itemPage.add(item);
             }
-            return items;
+            var countResultSet = countStatement.executeQuery();
+            countResultSet.next();
+            var total = countResultSet.getInt(1);
+            return new Page(page, pageSize, total, itemPage);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while getting item page", e);
         }
-        return Collections.emptyList();
+        return new Page(page, pageSize, 0, Collections.emptyList());
     }
 
     @Override
