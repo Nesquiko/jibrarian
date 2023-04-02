@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
+import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Role;
@@ -92,7 +92,7 @@ public class LoginController {
             return;
         }
         //if passwords match
-        else if (BCrypt.verifyer().verify(this.password.getText().toCharArray(), user.get().getPassHash()).verified == false) {
+        else if (UtilAuth.comparePassword(this.password.getText(), user.get().getPassHash()) == false) {
             setErrorMsg("Incorrect email or password...");
             getLog().info("User entered incorrect password");
             this.email.setText("");

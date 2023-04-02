@@ -6,8 +6,7 @@ import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PostgresCatalogRepository implements CatalogRepository {
+public class PostgresCatalogRepository extends DbTxHandler implements CatalogRepository {
     private static final Logger LOGGER = Logger.getLogger(PostgresCatalogRepository.class.getName());
     private final ConnectionPool connectionPool;
 
@@ -61,7 +60,7 @@ public class PostgresCatalogRepository implements CatalogRepository {
     }
 
     @Override
-    public List<Item> getItemPage(Integer page, Integer pageSize) {
+    public Page getItemPage(Integer page, Integer pageSize) {
         try (
                 var connWrapper = connectionPool.getConnWrapper();
                 var statement = connWrapper.getConnection().prepareStatement(
@@ -70,21 +69,25 @@ public class PostgresCatalogRepository implements CatalogRepository {
                                 from items
                                 order by title
                                 limit ? offset ?;
-                                     """)
+                                     """);
+                var countStatement = connWrapper.getConnection().prepareStatement("select count(*) from items;")
         ) {
             statement.setInt(1, pageSize);
             statement.setInt(2, page * pageSize);
             var resultSet = statement.executeQuery();
-            var items = new ArrayList<Item>();
+            var itemPage = new ArrayList<Item>();
             while (resultSet.next()) {
                 var item = readItem(resultSet);
-                items.add(item);
+                itemPage.add(item);
             }
-            return items;
+            var countResultSet = countStatement.executeQuery();
+            countResultSet.next();
+            var total = countResultSet.getInt(1);
+            return new Page(page, pageSize, total, itemPage);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while getting item page", e);
         }
-        return Collections.emptyList();
+        return new Page(page, pageSize, 0, Collections.emptyList());
     }
 
     @Override
@@ -285,23 +288,5 @@ public class PostgresCatalogRepository implements CatalogRepository {
         item.setReserved(resultSet.getInt("reserved"));
         item.setImage(resultSet.getBytes("image"));
         return item;
-    }
-
-    private void executeUpdateOrRollback(Connection connection, PreparedStatement statement) throws SQLException {
-        try {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
-    }
-
-    private ResultSet executeOrRollback(Connection connection, PreparedStatement statement) throws SQLException {
-        try {
-            return statement.executeQuery();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
     }
 }

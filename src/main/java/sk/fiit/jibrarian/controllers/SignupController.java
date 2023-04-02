@@ -8,7 +8,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.logging.Logger;
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +17,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
+import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.UserRepository.AlreadyExistingUserException;
@@ -64,11 +64,6 @@ public class SignupController {
         getLog().info("Opening login interface");
     }
     
-    public boolean emailValidityCheck(String Email){
-        String EmailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
-        return Email.matches(EmailRegex);
-    }
-    
     @FXML
     void signUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
         // sign up checking for formats & lengths
@@ -77,7 +72,7 @@ public class SignupController {
             getLog().warning("Invalid email address");
     		return;
         }
-        else if (emailValidityCheck(email.getText()) == false) {
+        else if (UtilAuth.emailValidityCheck(email.getText()) == false) {
         	setErrorMsg("Invalid email format...");
             getLog().warning("Invalid email address");
     		return;
@@ -94,7 +89,7 @@ public class SignupController {
         }
 
         //pushing new member into database
-        String hashedPass = BCrypt.withDefaults().hashToString(12, this.password.getText().toCharArray());
+        String hashedPass = UtilAuth.hashPassword(this.password.getText());
         User user = new User(UUID.randomUUID(), this.email.getText(), hashedPass, Role.MEMBER);
         try {
             getRepo().saveUser(user);

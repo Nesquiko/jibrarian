@@ -78,7 +78,11 @@ class PostgresCatalogRepositoryIT {
     @Test
     void saveItem() throws ItemAlreadyExistsException {
         postgresCatalogRepository.saveItem(item);
-        var items = postgresCatalogRepository.getItemPage(0, 10);
+        var page = postgresCatalogRepository.getItemPage(0, 10);
+        var items = page.items();
+        assertEquals(0, page.page());
+        assertEquals(10, page.pageSize());
+        assertEquals(1, page.total());
         assertEquals(1, items.size());
         assertEquals(item, items.get(0));
         assertArrayEquals(image, items.get(0).getImage());
@@ -89,9 +93,18 @@ class PostgresCatalogRepositoryIT {
         for (int i = 0; i < 20; i++) {
             postgresCatalogRepository.saveItem(createItem());
         }
-        var items = postgresCatalogRepository.getItemPage(0, 9);
+        var page = postgresCatalogRepository.getItemPage(0, 9);
+        var items = page.items();
+        assertEquals(0, page.page());
+        assertEquals(9, page.pageSize());
+        assertEquals(20, page.total());
         assertEquals(9, items.size());
-        items = postgresCatalogRepository.getItemPage(1, 9);
+
+        page = postgresCatalogRepository.getItemPage(1, 9);
+        items = page.items();
+        assertEquals(1, page.page());
+        assertEquals(9, page.pageSize());
+        assertEquals(20, page.total());
         assertEquals(9, items.size());
     }
 
@@ -105,7 +118,7 @@ class PostgresCatalogRepositoryIT {
         postgresCatalogRepository.saveItem(item);
         item.setTitle("new title");
         postgresCatalogRepository.updateItem(item);
-        var items = postgresCatalogRepository.getItemPage(0, 10);
+        var items = postgresCatalogRepository.getItemPage(0, 10).items();
         assertEquals(1, items.size());
         assertEquals(item, items.get(0));
     }

@@ -5,7 +5,10 @@ import javafx.scene.control.ButtonType;
 
 public class AlertDialog {
 
-    public static void showDialog(String message){
+    private AlertDialog() {
+    }
+
+    public static void showDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.NONE, message, ButtonType.OK);
         alert.showAndWait();
 
@@ -14,7 +17,7 @@ public class AlertDialog {
         }
     }
 
-    public static void showDialog(String message, Alert.AlertType alertType){
+    public static void showDialog(String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType, message, ButtonType.OK);
         alert.showAndWait();
 
