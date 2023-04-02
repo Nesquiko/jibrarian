@@ -15,15 +15,13 @@
 .toggle-button:disabled {
     -fx-opacity: 1;
 }
-<<<<<<< HEAD
 .button{
     -fx-background-color: transparent;
     -fx-opacity: 0.6;
 }
 .button:hover{
     -fx-opacity: 1;
-=======
-
+}
 .user-auth-button {
     -fx-background-color: #2E86AB;
     -fx-border-radius: 20 20 20 20;
@@ -49,5 +47,4 @@
 .forgot-password-href:hover {
     -fx-underline: 1;
     -fx-cursor: HAND;
->>>>>>> c705c339fcbd1ab4b0f69a0173afb682853093b2
 }
