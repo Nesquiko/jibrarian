@@ -18,6 +18,7 @@ import sk.fiit.jibrarian.model.Item;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static sk.fiit.jibrarian.controllers.UserAuthController.user;
@@ -34,8 +35,8 @@ public class LibraryCatalogController implements Initializable {
     private Button rightArrowBtn;
     private Integer currentPage = 0;
 
-
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
 
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
@@ -52,7 +53,8 @@ public class LibraryCatalogController implements Initializable {
 
         int column = 0;
         int row = 0;
-        rightArrowBtn.setVisible(books.size() >= 12);
+        System.out.println(totalPages);
+        rightArrowBtn.setVisible(!Objects.equals(currentPage, totalPages));
         leftArrowBtn.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
@@ -121,10 +123,8 @@ public class LibraryCatalogController implements Initializable {
 
     @FXML
     private void pageDecrement() {
-        if (currentPage > 0) {
-            libraryCatalog.getChildren().clear();
-            getCatalogPage(--currentPage);
-            catalogPageLabel.setText(String.valueOf(currentPage + 1));
-        }
+        libraryCatalog.getChildren().clear();
+        getCatalogPage(--currentPage);
+        catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }
 }
