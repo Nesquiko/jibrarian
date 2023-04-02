@@ -4,7 +4,6 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.User;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;

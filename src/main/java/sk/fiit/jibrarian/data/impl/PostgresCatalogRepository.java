@@ -6,7 +6,6 @@ import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
