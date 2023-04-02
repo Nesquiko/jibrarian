@@ -21,7 +21,10 @@ public interface CatalogRepository {
      * @param pageSize size of the page
      * @return page of items
      */
-    List<Item> getItemPage(Integer page, Integer pageSize);
+    Page getItemPage(Integer page, Integer pageSize);
+
+    record Page(Integer page, Integer pageSize, Integer total, List<Item> items) {
+    }
 
     /**
      * Updates stored item

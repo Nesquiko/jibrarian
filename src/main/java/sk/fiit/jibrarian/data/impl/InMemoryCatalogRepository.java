@@ -4,6 +4,7 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.User;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -27,15 +28,16 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     }
 
     @Override
-    public List<Item> getItemPage(Integer page, Integer pageSize) {
+    public Page getItemPage(Integer page, Integer pageSize) {
         var start = page * pageSize;
         var end = start + pageSize;
-        return items.values()
+        var itemPage = items.values()
                 .stream()
                 .sorted(Comparator.comparing(Item::getTitle))
                 .skip(start)
                 .limit(end)
                 .toList();
+        return new Page(page, pageSize, items.size(), itemPage);
     }
 
     @Override

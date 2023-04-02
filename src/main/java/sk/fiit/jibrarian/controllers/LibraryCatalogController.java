@@ -29,7 +29,7 @@ public class LibraryCatalogController implements Initializable {
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
     private List<Item> getData() {
-        return catalogRepository.getItemPage(0, 12);
+        return catalogRepository.getItemPage(0, 12).items();
     }
 
     @Override
