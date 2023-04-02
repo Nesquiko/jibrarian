@@ -99,6 +99,22 @@ public class PostgresUserRepository implements UserRepository {
     }
 
     @Override
+    public void deleteUser(User user) throws UserNotFound {
+        try (
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement(
+                        "delete from users where id = ?")
+        ) {
+            statement.setObject(1, user.getId());
+            int updated = statement.executeUpdate();
+            if (updated == 0)
+                throw new UserNotFound("User with id " + user.getId() + " not found");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error while deleting user", e);
+        }
+    }
+
+    @Override
     public List<User> getAllLibrarians() {
         try (
                 var connectionWrapper = connectionPool.getConnWrapper();

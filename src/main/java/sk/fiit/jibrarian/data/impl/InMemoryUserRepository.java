@@ -50,6 +50,15 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public void deleteUser(User user) throws UserNotFound {
+        if (!users.containsKey(user.getEmail())) {
+            LOGGER.log(Level.WARNING, "User with email {0} doesnt exist", user.getEmail());
+            throw new UserNotFound(String.format("User with id %s doesn't exist", user.getId()));
+        }
+        users.remove(user.getEmail());
+    }
+
+    @Override
     public List<User> getAllLibrarians() {
         return users.values().stream().filter(user -> user.getRole() == Role.LIBRARIAN).toList();
     }

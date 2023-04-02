@@ -22,8 +22,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("views/Login"), 800, 600);
-        //Image icon = new Image(getClass().getResourceAsStream("../views/icon.png"));
-        //stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

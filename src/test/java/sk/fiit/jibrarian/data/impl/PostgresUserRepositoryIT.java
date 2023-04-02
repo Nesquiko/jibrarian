@@ -123,4 +123,32 @@ class PostgresUserRepositoryIT {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void saveCurrentlyLoggedInUser() {
+        postgresUserRepository.saveCurrentlyLoggedInUser(user);
+        var loggedInUser = postgresUserRepository.getCurrentlyLoggedInUser();
+        assertTrue(loggedInUser.isPresent());
+        assertEquals(user, loggedInUser.get());
+    }
+
+    @Test
+    void getCurrentlyLoggedInUserNoneSaved() {
+        var loggedInUser = postgresUserRepository.getCurrentlyLoggedInUser();
+        assertTrue(loggedInUser.isEmpty());
+    }
+
+    @Test
+    void deleteUserNotFound() {
+        assertThrows(UserNotFound.class, () -> postgresUserRepository.deleteUser(user));
+    }
+
+    @Test
+    void deleteUser() throws AlreadyExistingUserException, UserNotFound {
+        user.setEmail("deleteUser-test");
+        postgresUserRepository.saveUser(user);
+        postgresUserRepository.deleteUser(user);
+        var userByEmail = postgresUserRepository.getUserByEmail(user.getEmail());
+        assertTrue(userByEmail.isEmpty());
+    }
 }

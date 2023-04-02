@@ -33,6 +33,11 @@ public interface UserRepository {
     void updateUser(User user) throws UserNotFound;
 
     /**
+     * Deletes user, if it doesn't exist, throws UserNotFound
+     */
+    void deleteUser(User user) throws UserNotFound;
+
+    /**
      * Returns all users which are librarians
      */
     List<User> getAllLibrarians();
