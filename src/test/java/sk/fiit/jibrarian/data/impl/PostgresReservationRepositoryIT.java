@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.ConnectionPool;
 import sk.fiit.jibrarian.data.ConnectionPool.ConnectionPoolBuilder;
 import sk.fiit.jibrarian.data.ReservationRepository.TooManyReservationsException;
@@ -57,42 +58,49 @@ class PostgresReservationRepositoryIT {
     }
 
     @Test
-    void saveReservation() throws TooManyReservationsException {
+    void saveReservation() throws TooManyReservationsException, ItemNotAvailableException {
         var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
-        postgresReservationRepository.saveReservation(reservation);
+        var savedItem = postgresReservationRepository.saveReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
         assertEquals(1, reservations.size());
-        assertEquals(reservation, reservations.get(0));
+        assertEquals(9, savedItem.getAvailable());
+        assertEquals(1, savedItem.getReserved());
     }
 
     @Test
-    void saveReservationTooManyReservations() throws TooManyReservationsException {
-        postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
-        postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
-        postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
-        assertThrows(TooManyReservationsException.class, () -> postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null)));
+    void saveReservationTooManyReservations() throws TooManyReservationsException, ItemNotAvailableException {
+        postgresReservationRepository.saveReservation(newReservation());
+        postgresReservationRepository.saveReservation(newReservation());
+        postgresReservationRepository.saveReservation(newReservation());
+        assertThrows(TooManyReservationsException.class,
+                () -> postgresReservationRepository.saveReservation(newReservation()));
     }
 
     @Test
-    void getReservationsForUserOnlyNotDeleted() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
-                LocalDate.now().plusDays(1), null);
-        var deletedReservation = new Reservation(UUID.randomUUID(), user.getId(), item,
-                LocalDate.now().plusDays(1), LocalDateTime.now().minusSeconds(1));
+    void saveReservationItemNotAvailable() {
+        item.setAvailable(0);
+        item.setReserved(10);
+        updateItemCounts(item);
+
+        assertThrows(ItemNotAvailableException.class,
+                () -> postgresReservationRepository.saveReservation(newReservation()));
+    }
+
+
+    @Test
+    void getReservationsForUserOnlyNotDeleted() throws TooManyReservationsException, ItemNotAvailableException {
+        var reservation = newReservation();
+        var deletedReservation = newReservation();
+        deletedReservation.setDeletedAt(LocalDateTime.now().minusSeconds(1));
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.saveReservation(deletedReservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
         assertEquals(1, reservations.size());
-        assertEquals(reservation, reservations.get(0));
     }
 
     @Test
-    void deleteReservation() throws TooManyReservationsException {
+    void deleteReservation() throws TooManyReservationsException, ItemNotAvailableException {
         var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
@@ -145,6 +153,33 @@ class PostgresReservationRepositoryIT {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void updateItemCounts(Item item) {
+        try (
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement(
+                        """
+                                update items set available = ?, reserved = ? where id = ?;
+                                        """
+                )
+        ) {
+            statement.setInt(1, item.getAvailable());
+            statement.setInt(2, item.getReserved());
+            statement.setObject(3, item.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Reservation newReservation() {
+        Reservation reservation = new Reservation();
+        reservation.setId(UUID.randomUUID());
+        reservation.setUserId(user.getId());
+        reservation.setItem(item);
+        reservation.setUntil(LocalDate.now().plusDays(1));
+        return reservation;
     }
 
     private static void clearDatabase() {
