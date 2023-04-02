@@ -2,11 +2,15 @@ package sk.fiit.jibrarian.data.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.ReservationRepository.TooManyReservationsException;
+import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,30 +20,45 @@ class InMemoryReservationRepositoryTest {
 
     private InMemoryReservationRepository inMemoryReservationRepository;
     private User user;
+    private Item item;
 
     @BeforeEach
     void setUp() {
         inMemoryReservationRepository = new InMemoryReservationRepository();
         user = new User(UUID.randomUUID(), "email", "passHash", Role.MEMBER);
+        item = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
+                100, 10, 10, 0, null);
 
     }
 
     @Test
-    void saveReservationSuccessfully() throws TooManyReservationsException {
-        Reservation reservation = new Reservation();
+    void saveReservationSuccessfully() throws TooManyReservationsException, ItemNotAvailableException {
+        Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
-        inMemoryReservationRepository.saveReservation(reservation);
+        var savedItem = inMemoryReservationRepository.saveReservation(reservation);
         assertEquals(1, inMemoryReservationRepository.getReservationsForUser(user).size());
+        assertEquals(item.getId(), savedItem.getId());
+        assertEquals(item.getAvailable() - 1, savedItem.getAvailable());
+        assertEquals(item.getReserved() + 1, savedItem.getReserved());
     }
 
     @Test
-    void saveReservationTooManyReservations() throws TooManyReservationsException {
-        Reservation reservation = new Reservation();
+    void saveReservationTooManyReservations() throws TooManyReservationsException, ItemNotAvailableException {
+        Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         inMemoryReservationRepository.saveReservation(reservation);
         inMemoryReservationRepository.saveReservation(reservation);
         inMemoryReservationRepository.saveReservation(reservation);
         assertThrows(TooManyReservationsException.class,
+                () -> inMemoryReservationRepository.saveReservation(reservation));
+    }
+
+    @Test
+    void saveReservationItemNotAvailable() {
+        Reservation reservation = newReservation();
+        reservation.setUserId(user.getId());
+        reservation.getItem().setAvailable(0);
+        assertThrows(ItemNotAvailableException.class,
                 () -> inMemoryReservationRepository.saveReservation(reservation));
     }
 
@@ -50,15 +69,15 @@ class InMemoryReservationRepositoryTest {
 
     @Test
     void deleteReservationDeleteUnknownReservation() {
-        Reservation reservation = new Reservation();
+        Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         inMemoryReservationRepository.deleteReservation(reservation);
         assertEquals(0, inMemoryReservationRepository.getReservationsForUser(user).size());
     }
 
     @Test
-    void deleteReservationSuccessfully() throws TooManyReservationsException {
-        Reservation reservation = new Reservation();
+    void deleteReservationSuccessfully() throws TooManyReservationsException, ItemNotAvailableException {
+        Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         inMemoryReservationRepository.saveReservation(reservation);
         assertEquals(1, inMemoryReservationRepository.getReservationsForUser(user).size());
@@ -66,4 +85,12 @@ class InMemoryReservationRepositoryTest {
         assertEquals(0, inMemoryReservationRepository.getReservationsForUser(user).size());
     }
 
+    private Reservation newReservation() {
+        Reservation reservation = new Reservation();
+        reservation.setId(UUID.randomUUID());
+        reservation.setUserId(user.getId());
+        reservation.setItem(item);
+        reservation.setUntil(LocalDate.now().plusDays(1));
+        return reservation;
+    }
 }

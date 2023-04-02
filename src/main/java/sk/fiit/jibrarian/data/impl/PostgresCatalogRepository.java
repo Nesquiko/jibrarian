@@ -6,8 +6,7 @@ import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
 import sk.fiit.jibrarian.model.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PostgresCatalogRepository implements CatalogRepository {
+public class PostgresCatalogRepository extends DbTxHandler implements CatalogRepository {
     private static final Logger LOGGER = Logger.getLogger(PostgresCatalogRepository.class.getName());
     private final ConnectionPool connectionPool;
 
@@ -285,23 +284,5 @@ public class PostgresCatalogRepository implements CatalogRepository {
         item.setReserved(resultSet.getInt("reserved"));
         item.setImage(resultSet.getBytes("image"));
         return item;
-    }
-
-    private void executeUpdateOrRollback(Connection connection, PreparedStatement statement) throws SQLException {
-        try {
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
-    }
-
-    private ResultSet executeOrRollback(Connection connection, PreparedStatement statement) throws SQLException {
-        try {
-            return statement.executeQuery();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        }
     }
 }
