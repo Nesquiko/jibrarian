@@ -16,6 +16,8 @@ import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
@@ -37,9 +39,11 @@ class PostgresCatalogRepositoryIT {
     private User user;
 
     @BeforeAll
-    static void setUpClass() throws SQLException, IOException {
-        image = Files.readAllBytes(Path.of(
-                Objects.requireNonNull(PostgresCatalogRepository.class.getResource("/book-cover.png")).getFile()));
+    static void setUpClass() throws SQLException, IOException, URISyntaxException {
+        URI uri = Objects.requireNonNull(PostgresCatalogRepositoryIT.class.getResource("/hitchhikers-guide-cover.png"))
+                .toURI();
+        Path path = Path.of(uri);
+        image = Files.readAllBytes(path);
         connectionPool = new ConnectionPoolBuilder()
                 .setHost("localhost")
                 .setPort(42069)
@@ -121,14 +125,10 @@ class PostgresCatalogRepositoryIT {
         item.setAvailable(1);
         postgresCatalogRepository.saveItem(item);
         var borrowedItem = postgresCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
-        assertEquals(item.getTitle(), borrowedItem.getTitle());
-        assertEquals(item.getAuthor(), borrowedItem.getAuthor());
-
-        var items = postgresCatalogRepository.getItemPage(0, 10);
-        assertEquals(1, items.size());
-        assertEquals(0, items.get(0).getAvailable());
-        assertEquals(1, items.get(0).getTotal());
-        assertEquals(1, items.get(0).getReserved());
+        var borrowedItemItem = borrowedItem.getItem();
+        assertEquals(0, borrowedItemItem.getAvailable());
+        assertEquals(1, borrowedItemItem.getTotal());
+        assertEquals(1, borrowedItemItem.getReserved());
     }
 
     @Test
@@ -138,26 +138,26 @@ class PostgresCatalogRepositoryIT {
         var items = postgresCatalogRepository.getBorrowedItemsForUser(user);
         assertEquals(1, items.size());
         assertEquals(borrowedItem, items.get(0));
-        assertEquals(item.getTitle(), items.get(0).getTitle());
-        assertEquals(item.getAuthor(), items.get(0).getAuthor());
     }
 
     @Test
     void returnItem() throws ItemAlreadyExistsException, ItemNotAvailableException, ItemNotFoundException {
         postgresCatalogRepository.saveItem(item);
         var borrowedItem = postgresCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
+        var borrowedItemItem = borrowedItem.getItem();
         var returnedItem = postgresCatalogRepository.returnItem(borrowedItem);
         assertEquals(item.getTitle(), returnedItem.getTitle());
         assertEquals(item.getAuthor(), returnedItem.getAuthor());
-        assertEquals(item.getAvailable(), returnedItem.getAvailable());
+        assertEquals(borrowedItemItem.getAvailable() + 1, returnedItem.getAvailable());
         assertEquals(item.getTotal(), returnedItem.getTotal());
-        assertEquals(item.getReserved(), returnedItem.getReserved());
+        assertEquals(borrowedItemItem.getReserved() - 1, returnedItem.getReserved());
     }
 
     @Test
     void returnItemNotFound() {
         var borrowedItem = new BorrowedItem();
         borrowedItem.setId(UUID.randomUUID());
+        borrowedItem.setItem(item);
         assertThrows(ItemNotFoundException.class, () -> postgresCatalogRepository.returnItem(borrowedItem));
     }
 
@@ -187,7 +187,11 @@ class PostgresCatalogRepositoryIT {
         try (
                 var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection()
-                        .prepareStatement("delete from borrowed_items;delete from items; delete from users")
+                        .prepareStatement("""
+                                truncate table borrowed_items;
+                                truncate table items cascade;
+                                truncate table users cascade;
+                                """)
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {

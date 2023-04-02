@@ -58,7 +58,7 @@ class PostgresReservationRepositoryIT {
 
     @Test
     void saveReservation() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
@@ -69,20 +69,20 @@ class PostgresReservationRepositoryIT {
     @Test
     void saveReservationTooManyReservations() throws TooManyReservationsException {
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null));
         assertThrows(TooManyReservationsException.class, () -> postgresReservationRepository.saveReservation(
-                new Reservation(UUID.randomUUID(), user.getId(), item.getId(), LocalDate.now().plusDays(1), null)));
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(1), null)));
     }
 
     @Test
     void getReservationsForUserOnlyNotDeleted() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
-        var deletedReservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var deletedReservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), LocalDateTime.now().minusSeconds(1));
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.saveReservation(deletedReservation);
@@ -93,7 +93,7 @@ class PostgresReservationRepositoryIT {
 
     @Test
     void deleteReservation() throws TooManyReservationsException {
-        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item.getId(),
+        var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.deleteReservation(reservation);
@@ -104,8 +104,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveUser(User user) {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection()
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection()
                         .prepareStatement(
                                 "insert into users (id, email, pass_hash, role) values (?, ?, ?, ?::user_role)")
         ) {
@@ -121,8 +121,8 @@ class PostgresReservationRepositoryIT {
 
     private static void saveItem(Item item) {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection().prepareStatement(
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement(
                         """
                                 insert into items (id, title, author, description, language, genre, isbn, item_type,
                                     pages, total, available, reserved) values (?, ?, ?, ?, ?, ?, ?, ?::item_type, ?, ?, ?, ?);
@@ -149,9 +149,13 @@ class PostgresReservationRepositoryIT {
 
     private static void clearDatabase() {
         try (
-            var connectionWrapper = connectionPool.getConnWrapper();
-            var statement = connectionWrapper.getConnection()
-                        .prepareStatement("delete from reservations; delete from items; delete from users;")
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection()
+                        .prepareStatement("""
+                                truncate table reservations;
+                                truncate table items cascade;
+                                truncate table users cascade;
+                                """)
         ) {
             statement.executeUpdate();
         } catch (SQLException e) {
