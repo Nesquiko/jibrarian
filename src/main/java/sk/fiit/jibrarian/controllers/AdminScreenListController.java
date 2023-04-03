@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
 import java.net.URL;
+
 import java.util.List;
 import java.util.ResourceBundle;
 

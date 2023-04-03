@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenListController">
-         <top>
-            <BorderPane prefHeight="55.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+<AnchorPane prefHeight="444.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenListController">
+   <children>
+            <BorderPane layoutY="7.0" prefHeight="55.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <left>
                   <Label text="Knihovníci " BorderPane.alignment="CENTER">
                      <font>
@@ -29,7 +29,7 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#refreshClick" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color:: #f0ecec;" text="Refresh" textFill="WHITE">
+                        <Button mnemonicParsing="false" onAction="#refreshClick" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #f0ecec;" text="Refresh" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -41,12 +41,6 @@
                   </HBox>
                </right>
             </BorderPane>
-         </top>
-         <center>
-            <VBox fx:id="listOfUsers" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="348.0" prefWidth="597.0" spacing="20.0" BorderPane.alignment="TOP_LEFT">
-         <padding>
-            <Insets left="30.0" right="30.0" top="30.0" />
-         </padding>
-            </VBox>
-         </center>
-      </BorderPane>
+      <VBox fx:id="listOfUsers" prefHeight="200.0" prefWidth="282.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0" />
+   </children>
+</AnchorPane>
