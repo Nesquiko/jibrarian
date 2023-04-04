@@ -53,7 +53,7 @@ public class LibraryCatalogController implements Initializable {
 
         int column = 0;
         int row = 0;
-        System.out.println(totalPages);
+
         rightArrowBtn.setVisible(!Objects.equals(currentPage, totalPages));
         leftArrowBtn.setVisible(currentPage != 0);
         try {
