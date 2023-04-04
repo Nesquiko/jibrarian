@@ -35,6 +35,8 @@ public class BookModalLibrarianController {
     private Label bookTotal;
     private Item item;
 
+    private Stage stage;
+
 
     public void setData(Item item) {
         this.item = item;
@@ -50,13 +52,17 @@ public class BookModalLibrarianController {
     @FXML
     public void takeIn(){
         var viewName = "../views/librarian_take_in.fxml";
-        showScreen(viewName);
+        FXMLLoader fxmlLoader = showScreen(viewName);
+        LibrarianTakeInController takeInController = fxmlLoader.getController();
+        takeInController.setData(item);
     }
 
     @FXML
     public void giveOut(){
         var viewName = "../views/librarian_give_out.fxml";
-        showScreen(viewName);
+        FXMLLoader fxmlLoader = showScreen(viewName);
+        LibrarianGiveOutController giveOutController = fxmlLoader.getController();
+        giveOutController.setData(item);
     }
     @FXML
     public void editItem(){
@@ -64,7 +70,7 @@ public class BookModalLibrarianController {
         showScreen(viewName);
     }
 
-    public void showScreen(String viewName){
+    public FXMLLoader showScreen(String viewName){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
         Parent root;
 
@@ -73,10 +79,11 @@ public class BookModalLibrarianController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
+        return fxmlLoader;
     }
 
 }
