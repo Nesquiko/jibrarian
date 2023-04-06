@@ -1,30 +1,23 @@
 package sk.fiit.jibrarian.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BorrowedItem {
-
     private UUID id;
     private UUID userId;
-    private UUID itemId;
-    private String title;
-    private String author;
+    private Item item;
     private LocalDate until;
-    private ItemStatus status;
 
     public BorrowedItem() {
     }
 
-    public BorrowedItem(UUID id, UUID userId, UUID itemId, String title, String author, LocalDate until,
-                        ItemStatus status) {
+    public BorrowedItem(UUID id, UUID userId, Item item, LocalDate until) {
         this.id = id;
         this.userId = userId;
-        this.itemId = itemId;
-        this.title = title;
-        this.author = author;
+        this.item = item;
         this.until = until;
-        this.status = status;
     }
 
     public UUID getId() {
@@ -43,28 +36,12 @@ public class BorrowedItem {
         this.userId = userId;
     }
 
-    public UUID getItemId() {
-        return itemId;
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemId(UUID itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public LocalDate getUntil() {
@@ -75,11 +52,27 @@ public class BorrowedItem {
         this.until = until;
     }
 
-    public ItemStatus getStatus() {
-        return status;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BorrowedItem item1 = (BorrowedItem) o;
+        return id.equals(item1.id) && userId.equals(item1.userId) && item.equals(item1.item) && until.equals(
+                item1.until);
     }
 
-    public void setStatus(ItemStatus status) {
-        this.status = status;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, item, until);
+    }
+
+    @Override
+    public String toString() {
+        return "BorrowedItem{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", item=" + item.toString() +
+                ", until=" + until +
+                '}';
     }
 }

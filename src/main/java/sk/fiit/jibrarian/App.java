@@ -5,20 +5,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private static Scene scene;
-
+    
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("views/user_auth"), 640, 480);
+        scene = new Scene(loadFXML("views/Login"), 800, 600);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -37,7 +42,13 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            RepositoryFactory.initializeEnvironment();
+        } catch (EnvironmentSetupException e) {
+            LOGGER.log(Level.SEVERE, "Failed to initialize environment", e);
+            System.exit(1);
+        }
+
         launch();
     }
-
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="447.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.BookModalUserController">
+    <children>
+      <Button fx:id="reserveButton" layoutX="303.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" stylesheets="@book_modal_styles.css" text="Reserve" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font></Button>
+            <Label fx:id="bookTitle" layoutX="26.0" layoutY="21.0" prefHeight="31.0" prefWidth="182.0" text="Book Title" wrapText="true">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+              <Label fx:id="bookAvailable" layoutX="35.0" layoutY="181.0" text="Available:" wrapText="true" />
+              <Label fx:id="bookReserved" layoutX="117.0" layoutY="181.0" text="Reserved:" wrapText="true" />
+                           <Label fx:id="bookTotal" layoutX="194.0" layoutY="181.0" text="Total:" wrapText="true" />
+          <ImageView fx:id="bookImg" fitHeight="150.0" fitWidth="179.0" layoutX="303.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                  <Image url="@book.png" />
+              </image>
+          </ImageView>
+      <Label fx:id="description" layoutX="26.0" layoutY="59.0" prefHeight="115.0" prefWidth="199.0" />
+    </children>
+</AnchorPane>

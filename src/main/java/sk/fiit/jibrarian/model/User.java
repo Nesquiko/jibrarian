@@ -1,5 +1,6 @@
 package sk.fiit.jibrarian.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -48,5 +49,28 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && email.equals(user.email) && passHash.equals(user.passHash) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, passHash, role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", passHash='" + passHash + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

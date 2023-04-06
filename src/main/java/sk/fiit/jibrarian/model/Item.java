@@ -1,5 +1,6 @@
 package sk.fiit.jibrarian.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Item {
@@ -10,29 +11,33 @@ public class Item {
     private String description;
     private String language;
     private String genre;
+    private String isbn;
     private ItemType itemType;
     private Integer pages;
     private Integer total;
     private Integer available;
     private Integer reserved;
 
+    private byte[] image;
+
     public Item() {
     }
 
-    public Item(UUID id, String title, String author, String description, String language, String genre,
-                ItemType itemType,
-                Integer pages, Integer total, Integer available, Integer reserved) {
+    public Item(UUID id, String title, String author, String description, String language, String genre, String isbn,
+                ItemType itemType, Integer pages, Integer total, Integer available, Integer reserved, byte[] image) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.description = description;
         this.language = language;
         this.genre = genre;
+        this.isbn = isbn;
         this.itemType = itemType;
         this.pages = pages;
         this.total = total;
         this.available = available;
         this.reserved = reserved;
+        this.image = image;
     }
 
     public UUID getId() {
@@ -83,6 +88,14 @@ public class Item {
         this.genre = genre;
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
     public ItemType getItemType() {
         return itemType;
     }
@@ -121,5 +134,48 @@ public class Item {
 
     public void setReserved(Integer reserved) {
         this.reserved = reserved;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return id.equals(item.id) && title.equals(item.title) && author.equals(item.author) && description.equals(
+                item.description) && language.equals(item.language) && genre.equals(item.genre) && isbn.equals(
+                item.isbn) && itemType == item.itemType && pages.equals(item.pages) && total.equals(
+                item.total) && available.equals(item.available) && reserved.equals(item.reserved);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, description, language, genre, isbn, itemType, pages, total, available,
+                reserved);
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", language='" + language + '\'' +
+                ", genre='" + genre + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", itemType=" + itemType +
+                ", pages=" + pages +
+                ", total=" + total +
+                ", available=" + available +
+                ", reserved=" + reserved +
+                '}';
     }
 }
