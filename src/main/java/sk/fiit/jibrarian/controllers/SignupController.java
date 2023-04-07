@@ -3,7 +3,6 @@ package sk.fiit.jibrarian.controllers;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -17,8 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.UtilAuth;
@@ -29,12 +26,6 @@ import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 public class SignupController {
-
-    @FXML
-    private ImageView enLocal;
-
-    @FXML
-    private ImageView skLocal;
 
     @FXML
     private Label label;
@@ -75,28 +66,31 @@ public class SignupController {
     void cancel(ActionEvent event) throws IOException { //loads back the login stage
     	App.setRoot("views/Login");
         getLog().info("Opening login interface");
+        LoginController controller = App.getLoader().getController();
+        controller.switchLocals();
     }
     
     @FXML
     void signUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle()); //localization
         // sign up checking for formats & lengths
 		if (email.getText().length() < 8) {
-        	setErrorMsg("Email has to have at least 8 characters...");
+        	setErrorMsg(rs.getString("invalid_email_length"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (UtilAuth.emailValidityCheck(email.getText()) == false) {
-        	setErrorMsg("Invalid email format...");
+        	setErrorMsg(rs.getString("invalid_email_format"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (password.getText().length() < 8) {
-        	setErrorMsg("Password has to have at least 8 characters...");
+        	setErrorMsg(rs.getString("invalid_password_length"));
             getLog().warning("Invalid password");
         	return;
         }
         else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
-        	setErrorMsg("Passwords do not match...");
+        	setErrorMsg(rs.getString("confirm_password_failure"));
             getLog().warning("Passwords do not match");
         	return;
         }
@@ -107,13 +101,13 @@ public class SignupController {
         try {
             getRepo().saveUser(user);
         } catch (AlreadyExistingUserException error) {
-            setErrorMsg("User with this email already exists...");
+            setErrorMsg(rs.getString("user_exists"));
             getLog().warning("User with this email already exists");
             return;
         }
         getLog().info("User successfully created");
         setErrorMsgColor("#00c900");
-        setErrorMsg("You have succesfully signed in!");
+        setErrorMsg(rs.getString("signed_in"));
     }
     
     public void setErrorMsgColor(String color) {
@@ -148,26 +142,12 @@ public class SignupController {
         timer.schedule(task, 3000);
     }
 
-    @FXML
-    void switchToEN(MouseEvent event) {  //switch local to english
-        getLog().info("Setting local to EN");
-        Locale.setDefault(Locale.US);
-        switchLocals("sk.fiit.jibrarian.localization.default", Locale.getDefault());
-    }
-
-    @FXML
-    void switchToSK(MouseEvent event) {  //switch local to slovak
-        getLog().info("Setting local to SK");
-        Locale.setDefault(App.getSk());
-        switchLocals("sk.fiit.jibrarian.localization.default_sk_SK", Locale.getDefault());
-    }
-
-    void switchLocals(String local, Locale locale) { //switch labels from local change
-        ResourceBundle rs = ResourceBundle.getBundle(local, locale);
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         label.setText(rs.getString("signup"));
         password.setPromptText(rs.getString("password"));
         passwordConfirm.setPromptText(rs.getString("confirm_password"));
-        cancelButton.setText(rs.getString("signup"));
-        signUpButton.setText(rs.getString("login"));
+        cancelButton.setText(rs.getString("login"));
+        signUpButton.setText(rs.getString("signup"));
     }
 }

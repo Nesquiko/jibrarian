@@ -17,7 +17,9 @@ import java.util.logging.Logger;
  */
 public class App extends Application {
     private static final Locale LOCALE_SK = new Locale("sk", "SK");
+    private static final String RESOURCE_BUNDLE = "sk.fiit.jibrarian.localization.strings";
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+    private static FXMLLoader loader;
     private static Scene scene;
     
     @Override
@@ -34,6 +36,7 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        loader = fxmlLoader;
         return fxmlLoader.load();
     }
 
@@ -44,6 +47,14 @@ public class App extends Application {
 
     public static Locale getSk() {
         return LOCALE_SK;
+    }
+
+    public static String getResourceBundle() {
+        return RESOURCE_BUNDLE;
+    }
+
+    public static FXMLLoader getLoader() {
+        return loader;
     }
 
     public static void main(String[] args) {
