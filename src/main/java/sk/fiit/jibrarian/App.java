@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
-
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +42,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
         try {
             RepositoryFactory.initializeEnvironment();
         } catch (EnvironmentSetupException e) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -15,8 +16,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
+import sk.fiit.jibrarian.Localization;
 import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -25,6 +29,15 @@ import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 public class SignupController {
+
+    @FXML
+    private ImageView enLocal;
+
+    @FXML
+    private ImageView skLocal;
+
+    @FXML
+    private Label label;
 
     @FXML
     private Button cancelButton;
@@ -135,4 +148,30 @@ public class SignupController {
         timer.schedule(task, 3000);
     }
 
+    @FXML
+    void switchToEN(MouseEvent event) {  //switch local to english
+    	if (Localization.getLocal() == "src.main.resources.default") return;
+        else {
+            Localization.setLocal("src.main.resources.default");
+            switchLocals();
+
+        }
+    }
+
+    @FXML
+    void switchToSK(MouseEvent event) {  //switch local to slovak
+    	if (Localization.getLocal() == "src.main.resources.default_sk_SK") return;
+        else {
+            Localization.setLocal("src.main.resources.default_sk_SK");
+            switchLocals();
+        }
+    }
+
+    void switchLocals() {
+        ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal());
+            label.setText(rs.getString("login"));
+            password.setPromptText(rs.getString("password"));
+            cancelButton.setText(rs.getString("login"));
+            signUpButton.setText(rs.getString("signup"));
+    }
 }

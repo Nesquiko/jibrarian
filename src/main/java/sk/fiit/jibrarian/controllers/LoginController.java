@@ -2,11 +2,14 @@ package sk.fiit.jibrarian.controllers;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,15 +18,26 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
+import sk.fiit.jibrarian.Localization;
 import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Role;
 
 public class LoginController {
+
+    @FXML
+    private Label label;
+
+    @FXML
+    private ImageView enLocal;
+
+    @FXML
+    private ImageView skLocal;
 
     @FXML
     private TextField email;
@@ -157,4 +171,32 @@ public class LoginController {
         timer.schedule(task, 3000);
     }
 
+    @FXML
+    void switchToEN(MouseEvent event) {  //switch local to english
+        getLog().info("Setting local to EN");
+    	if (Localization.getLocal() == "sk.fiit.jibrarian.localization.default") return;
+        else {
+            Localization.setLocal("sk.fiit.jibrarian.localization.default");
+            switchLocals(Locale.getDefault());
+
+        }
+    }
+
+    @FXML
+    void switchToSK(MouseEvent event) {  //switch local to slovak
+        getLog().info("Setting local to SK");
+    	if (Localization.getLocal() == "sk.fiit.jibrarian.localization.default_sk_SK") return;
+        else {
+            Localization.setLocal("sk.fiit.jibrarian.localization.default_sk_SK");
+            switchLocals(Localization.getLocaleSk());
+        }
+    }
+
+    void switchLocals(Locale local) {
+        ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal(), local);
+        label.setText(rs.getString("login"));
+        password.setPromptText(rs.getString("password"));
+        logInButton.setText(rs.getString("login"));
+        signUpButton.setText(rs.getString("signup"));
+    }
 }
