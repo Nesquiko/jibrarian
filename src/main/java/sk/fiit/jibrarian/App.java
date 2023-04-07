@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * JavaFX App
  */
 public class App extends Application {
+    private static final Locale LOCALE_SK = new Locale("sk", "SK");
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private static Scene scene;
     
@@ -39,6 +40,10 @@ public class App extends Application {
     public static void maximizeScreen() { // Method Maximizes Screen
         Stage stage = (Stage) scene.getWindow();
         stage.setMaximized(true);
+    }
+
+    public static Locale getSk() {
+        return LOCALE_SK;
     }
 
     public static void main(String[] args) {

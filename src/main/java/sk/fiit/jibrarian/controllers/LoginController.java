@@ -21,7 +21,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
-import sk.fiit.jibrarian.Localization;
 import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
@@ -173,19 +172,19 @@ public class LoginController {
     @FXML
     void switchToEN(MouseEvent event) {  //switch local to english
         getLog().info("Setting local to EN");
-        Localization.setLocal("sk.fiit.jibrarian.localization.default");
-        switchLocals(Locale.getDefault());
+        Locale.setDefault(Locale.US);
+        switchLocals("sk.fiit.jibrarian.localization.default", Locale.getDefault());
     }
 
     @FXML
     void switchToSK(MouseEvent event) {  //switch local to slovak
         getLog().info("Setting local to SK");
-        Localization.setLocal("sk.fiit.jibrarian.localization.default_sk_SK");
-        switchLocals(Localization.getLocaleSk());
+        Locale.setDefault(App.getSk());
+        switchLocals("sk.fiit.jibrarian.localization.default_sk_SK", Locale.getDefault());
     }
 
-    void switchLocals(Locale local) { //switch labels from local change
-        ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal(), local);
+    void switchLocals(String local, Locale locale) { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(local, locale);
         label.setText(rs.getString("login"));
         password.setPromptText(rs.getString("password"));
         logInButton.setText(rs.getString("login"));
