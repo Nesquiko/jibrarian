@@ -2,7 +2,6 @@ package sk.fiit.jibrarian.controllers;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -174,25 +173,18 @@ public class LoginController {
     @FXML
     void switchToEN(MouseEvent event) {  //switch local to english
         getLog().info("Setting local to EN");
-    	if (Localization.getLocal() == "sk.fiit.jibrarian.localization.default") return;
-        else {
-            Localization.setLocal("sk.fiit.jibrarian.localization.default");
-            switchLocals(Locale.getDefault());
-
-        }
+        Localization.setLocal("sk.fiit.jibrarian.localization.default");
+        switchLocals(Locale.getDefault());
     }
 
     @FXML
     void switchToSK(MouseEvent event) {  //switch local to slovak
         getLog().info("Setting local to SK");
-    	if (Localization.getLocal() == "sk.fiit.jibrarian.localization.default_sk_SK") return;
-        else {
-            Localization.setLocal("sk.fiit.jibrarian.localization.default_sk_SK");
-            switchLocals(Localization.getLocaleSk());
-        }
+        Localization.setLocal("sk.fiit.jibrarian.localization.default_sk_SK");
+        switchLocals(Localization.getLocaleSk());
     }
 
-    void switchLocals(Locale local) {
+    void switchLocals(Locale local) { //switch labels from local change
         ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal(), local);
         label.setText(rs.getString("login"));
         password.setPromptText(rs.getString("password"));

@@ -3,6 +3,7 @@ package sk.fiit.jibrarian.controllers;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -150,28 +151,23 @@ public class SignupController {
 
     @FXML
     void switchToEN(MouseEvent event) {  //switch local to english
-    	if (Localization.getLocal() == "src.main.resources.default") return;
-        else {
-            Localization.setLocal("src.main.resources.default");
-            switchLocals();
-
-        }
+        getLog().info("Setting local to EN");
+        Localization.setLocal("sk.fiit.jibrarian.localization.default");
+        switchLocals(Locale.getDefault());
     }
 
     @FXML
     void switchToSK(MouseEvent event) {  //switch local to slovak
-    	if (Localization.getLocal() == "src.main.resources.default_sk_SK") return;
-        else {
-            Localization.setLocal("src.main.resources.default_sk_SK");
-            switchLocals();
-        }
+        getLog().info("Setting local to SK");
+        Localization.setLocal("sk.fiit.jibrarian.localization.default_sk_SK");
+        switchLocals(Localization.getLocaleSk());
     }
 
-    void switchLocals() {
-        ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal());
-            label.setText(rs.getString("login"));
-            password.setPromptText(rs.getString("password"));
-            cancelButton.setText(rs.getString("login"));
-            signUpButton.setText(rs.getString("signup"));
+    void switchLocals(Locale local) { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(Localization.getLocal(), local);
+        label.setText(rs.getString("login"));
+        password.setPromptText(rs.getString("password"));
+        cancelButton.setText(rs.getString("login"));
+        signUpButton.setText(rs.getString("signup"));
     }
 }
