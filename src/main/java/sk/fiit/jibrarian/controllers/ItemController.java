@@ -10,6 +10,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static sk.fiit.jibrarian.controllers.UserAuthController.user;
+
 public class ItemController {
     @FXML
     private Label bookAuthor;
@@ -29,9 +31,19 @@ public class ItemController {
         this.item = item;
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
-        bookAvailable.setText("Available: " + item.getAvailable().toString());
-        bookReserved.setText("Reserved: " + item.getReserved().toString());
-        bookTotal.setText("Total: " + item.getTotal().toString());
+
+        if (user.getRole().toString().equals("MEMBER")){
+            bookAvailable.setText("Available: " + item.getAvailable().toString());
+
+            bookReserved.setVisible(false);
+            bookTotal.setVisible(false);
+        }
+        else {
+            bookAvailable.setText("Available: " + item.getAvailable().toString());
+            bookReserved.setText("Reserved: " + item.getReserved().toString());
+            bookTotal.setText("Total: " + item.getTotal().toString());
+        }
+
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);
         Image image = new Image(is);
