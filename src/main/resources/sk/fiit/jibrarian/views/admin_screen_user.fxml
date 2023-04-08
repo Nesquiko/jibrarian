@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
+<AnchorPane prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="55.0">
          <children>
-            <Label fx:id="userId" prefHeight="40.0" prefWidth="363.0" text="User">
+            <Label fx:id="userId" prefHeight="40.0" prefWidth="214.0" text="User">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -20,10 +25,27 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Button fx:id="removeButton" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #f0ecec; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #bab7b7;" text="Delete">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
+               <children>
+                  <RadioButton fx:id="rButton1" mnemonicParsing="false" onAction="#setAdmin" text="Admin">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="radio" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rButton2" mnemonicParsing="false" onAction="#setLibrarian" text="Librarian" toggleGroup="$radio" />
+                  <RadioButton fx:id="rButton3" mnemonicParsing="false" onAction="#SetUser" text="User" toggleGroup="$radio" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" right="10.0" top="5.0" />
+               </padding>
+            </VBox>
+            <Button fx:id="removeButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteUser" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #f0ecec; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #bab7b7;" text="Delete">
                <HBox.margin>
-                  <Insets />
+                  <Insets right="5.0" />
                </HBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </Button>
          </children>
       </HBox>
