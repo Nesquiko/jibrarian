@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -29,9 +30,13 @@ public class AdminScreenUserController {
     private RadioButton rButton2;
     @FXML
     private RadioButton rButton3;
+    @FXML
+    private AnchorPane pane;
 
     User user;
     public void setData(User user) {
+
+        pane.getStylesheets().add("../views/style.css");
         this.user=user;
         userId.setText(user.getEmail());
         if(user.getRole()==ADMIN){
@@ -55,6 +60,9 @@ public class AdminScreenUserController {
         removeButton.setVisible(false);
         userId.setTextFill(Paint.valueOf("Red"));
         userRepository.deleteUser(user);
+        rButton1.setVisible(false);
+        rButton2.setVisible(false);
+        rButton3.setVisible(false);
     }
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);

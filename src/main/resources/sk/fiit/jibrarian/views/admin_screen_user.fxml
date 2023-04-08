@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
+<AnchorPane fx:id="pane" prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="55.0">
          <children>
@@ -39,7 +39,7 @@
                   <Insets bottom="5.0" right="10.0" top="5.0" />
                </padding>
             </VBox>
-            <Button fx:id="removeButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteUser" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #f0ecec; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #bab7b7;" text="Delete">
+            <Button fx:id="removeButton" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteUser" prefHeight="28.0" prefWidth="133.0" style="-fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #bab7b7;" stylesheets="@admin.css" text="Delete">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>

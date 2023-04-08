@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import javafx.scene.layout.VBox;
@@ -26,11 +27,16 @@ public class AdminScreenListController implements Initializable {
     public UserRepository userRepository = RepositoryFactory.getUserRepository();
     @FXML
     private VBox listOfUsers = null;
+    @FXML
+    Label roleLabel;
+
+    private int selected = 2;
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+
         loadList();
     }
 
@@ -49,7 +55,17 @@ public class AdminScreenListController implements Initializable {
 //                e.printStackTrace();
 //            }
 //       }
-        return userRepository.getAllLibrarians();
+        if (selected==1){
+            return userRepository.getAllAdmins();
+        }
+        else if (selected == 2){
+            return userRepository.getAllLibrarians();
+        }
+        else {
+            System.out.println("not working yet");
+            return null;
+        }
+
     }
 
     private void loadList(){
@@ -86,6 +102,24 @@ public class AdminScreenListController implements Initializable {
     }
 
     public void refreshClick(ActionEvent actionEvent) {
+        loadList();
+    }
+
+    public void getAdmin(ActionEvent actionEvent) {
+        selected = 1;
+        roleLabel.setText("Admins");
+        loadList();
+    }
+
+    public void getLibrarian(ActionEvent actionEvent) {
+        roleLabel.setText("Librarians");
+        selected = 2;
+        loadList();
+    }
+
+    public void getUser(ActionEvent actionEvent) {
+        roleLabel.setText("Users");
+        selected = 3;
         loadList();
     }
 }
