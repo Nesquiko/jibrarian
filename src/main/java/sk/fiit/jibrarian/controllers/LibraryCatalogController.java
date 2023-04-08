@@ -13,17 +13,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static sk.fiit.jibrarian.controllers.UserAuthController.user;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class LibraryCatalogController implements Initializable {
+    private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
     @FXML
     private GridPane libraryCatalog;
     @FXML
@@ -34,8 +37,10 @@ public class LibraryCatalogController implements Initializable {
     private Button rightArrowBtn;
     private Integer currentPage = 0;
 
+    private User user;
 
-    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
@@ -43,6 +48,13 @@ public class LibraryCatalogController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        var optUser = userRepository.getCurrentlyLoggedInUser();
+        if (optUser.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "User is not logged in");
+            return;
+        }
+        user = optUser.get();
+
         getCatalogPage(currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }
