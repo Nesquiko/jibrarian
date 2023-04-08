@@ -1,6 +1,8 @@
+import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemAlreadyExistsException;
 import sk.fiit.jibrarian.data.ConnectionPool;
@@ -60,12 +62,12 @@ class LocalDBSetupTest {
     }
 
     private final List<User> users = List.of(
-            new User(UUID.randomUUID(), "member1@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "member2@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "member3@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "librarian1@jibrarian.sk", "hash", Role.LIBRARIAN),
-            new User(UUID.randomUUID(), "librarian2@jibrarian.sk", "hash", Role.LIBRARIAN),
-            new User(UUID.randomUUID(), "admin@jibrarian.sk", "hash", Role.ADMIN)
+            new User(UUID.randomUUID(), "member1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "member2@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "member3@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "librarian1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.LIBRARIAN),
+            new User(UUID.randomUUID(), "librarian2@jibrarian.sk", UtilAuth.hashPassword("123"), Role.LIBRARIAN),
+            new User(UUID.randomUUID(), "admin@jibrarian.sk", UtilAuth.hashPassword("123"), Role.ADMIN)
     );
 
     private List<Item> items() throws URISyntaxException, IOException {
