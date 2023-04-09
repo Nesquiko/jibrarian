@@ -19,6 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookModalUserController {
     @FXML
@@ -38,7 +40,16 @@ public class BookModalUserController {
     private User user;
 
     public ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
+
     private UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private static final Logger LOGGER = Logger.getLogger(BookModalUserController.class.getName());
+
+    @FunctionalInterface
+    public interface OnSuccessfulReserve {
+        void refreshData();
+    }
+
+    private OnSuccessfulReserve onSuccessfulReserve;
 
     public void onReserveButtonClicked() {
         Reservation reservation = new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(2), null);
@@ -46,11 +57,13 @@ public class BookModalUserController {
         try{
             Item updatedItem = reservationRepository.saveReservation(reservation);
 
-
+            item.setReserved(updatedItem.getReserved());
+            item.setAvailable(updatedItem.getAvailable());
+            bookAvailable.setText("Available: " + updatedItem.getAvailable().toString());
+            onSuccessfulReserve.refreshData();
 
             reserveLabel.setText("Rezervácia prebehla úspešne");
             reserveLabel.setStyle("-fx-text-fill: green");
-            System.out.println(reservationRepository.getReservationsForUser(user));
         }
         catch (ReservationRepository.TooManyReservationsException e){
             AlertDialog.showDialog("prilis vela rezervacii");
@@ -61,9 +74,16 @@ public class BookModalUserController {
 
     }
 
-    public void setData(Item item) {
-        user = userRepository.getUserByEmail("member1@jibrarian.sk").get();
+    public void setData(Item item, OnSuccessfulReserve onSuccessfulReserve) {
+        var optUser = userRepository.getCurrentlyLoggedInUser();
+        if (optUser.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "User is not logged in");
+            return;
+        }
+        user = optUser.get();
         this.item = item;
+        this.onSuccessfulReserve = onSuccessfulReserve;
+
         bookTitle.setText(item.getTitle());
         description.setText(item.getDescription());
         bookAvailable.setText("Available: " + item.getAvailable().toString());

@@ -5,12 +5,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.Role;
+import sk.fiit.jibrarian.model.User;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static sk.fiit.jibrarian.controllers.UserAuthController.user;
+
 
 public class ItemController {
     @FXML
@@ -27,12 +29,12 @@ public class ItemController {
     private Label bookTotal;
     private Item item;
 
-    public void setData(Item item) throws IOException {
+    public void setData(Item item, User user) throws IOException {
         this.item = item;
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
 
-        if (user.getRole().toString().equals("MEMBER")){
+        if (user.getRole().equals(Role.MEMBER)){
             bookAvailable.setText("Available: " + item.getAvailable().toString());
 
             bookReserved.setVisible(false);
