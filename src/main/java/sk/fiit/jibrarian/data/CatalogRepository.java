@@ -7,7 +7,7 @@ import sk.fiit.jibrarian.model.User;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface CatalogRepository {
+public interface  CatalogRepository {
 
     /**
      * Persists item, if item already exists, throws ItemAlreadyExistsException
