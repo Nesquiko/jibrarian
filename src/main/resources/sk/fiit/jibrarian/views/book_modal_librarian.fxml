@@ -20,7 +20,7 @@
                 <Image url="@book.png" />
             </image>
         </ImageView>
-        <Label fx:id="description" layoutX="26.0" layoutY="59.0" prefHeight="72.0" prefWidth="199.0" />
+        <Label fx:id="description" layoutX="26.0" layoutY="59.0" prefHeight="72.0" prefWidth="199.0" wrapText="true" />
       <Button fx:id="giveOutButton" layoutX="26.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="199.0" style="-fx-background-color: orange;" text="Give out" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="12.0" />
