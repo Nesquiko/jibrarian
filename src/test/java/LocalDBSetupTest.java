@@ -62,7 +62,7 @@ class LocalDBSetupTest {
     }
 
     private final List<User> users = List.of(
-            new User(UUID.randomUUID(), "member1@jibrarian.sk", UtilAuth.hashPassword("12345678"), Role.MEMBER),
+            new User(UUID.randomUUID(), "member1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
             new User(UUID.randomUUID(), "member2@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
             new User(UUID.randomUUID(), "member3@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
             new User(UUID.randomUUID(), "librarian1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.LIBRARIAN),
