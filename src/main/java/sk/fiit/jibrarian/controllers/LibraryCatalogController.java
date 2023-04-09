@@ -13,16 +13,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
-
-import static sk.fiit.jibrarian.controllers.UserAuthController.user;
-
 
 public class LibraryCatalogController implements Initializable {
     @FXML
@@ -38,14 +38,20 @@ public class LibraryCatalogController implements Initializable {
     public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
 
+    public UserRepository userRepo = RepositoryFactory.getUserRepository();
+
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
     }
+
+    private User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         getCatalogPage(currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
+        user = userRepo.getCurrentlyLoggedInUser().get();
+        System.out.println(user);
     }
 
     public void getCatalogPage(Integer page) {
@@ -73,7 +79,7 @@ public class LibraryCatalogController implements Initializable {
 
                 anchorPane.setOnMouseClicked(mouseEvent -> {
                     String viewName = "";
-                    String role = user.getRole().toString();
+                    String role = String.valueOf(user.getRole());
                     switch (role) {
                         case ("MEMBER") -> viewName = "../views/book_modal_user.fxml";
                         case ("LIBRARIAN") -> viewName = "../views/book_modal_librarian.fxml";
