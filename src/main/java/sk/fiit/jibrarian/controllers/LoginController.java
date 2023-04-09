@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
+import java.util.Locale;
 import java.util.Random;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.App;
@@ -24,6 +27,15 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Role;
 
 public class LoginController {
+
+    @FXML
+    private Label label;
+
+    @FXML
+    private ImageView enLocal;
+
+    @FXML
+    private ImageView skLocal;
 
     @FXML
     private TextField email;
@@ -80,12 +92,13 @@ public class LoginController {
 
     @FXML
     void logIn(ActionEvent event) throws SQLException, IOException, ConnectException {	//user login
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle()); //localization
         //getting user
         var user = getRepo().getUserByEmail(this.email.getText());
 
         //If there are no users with this email
         if (user.isPresent() == false) {
-            setErrorMsg("Incorrect email or password...");
+            setErrorMsg(rs.getString("incorrect_login"));
             getLog().info("User was not found");
             this.email.setText("");
             this.password.setText("");
@@ -93,7 +106,7 @@ public class LoginController {
         }
         //if passwords match
         else if (UtilAuth.comparePassword(this.password.getText(), user.get().getPassHash()) == false) {
-            setErrorMsg("Incorrect email or password...");
+            setErrorMsg(rs.getString("incorrect_login"));
             getLog().info("User entered incorrect password");
             this.email.setText("");
             this.password.setText("");
@@ -107,7 +120,7 @@ public class LoginController {
         else if (userRole == Role.LIBRARIAN) switchToLibrarianScreen();
         else if (userRole == Role.ADMIN) switchToAdminScreen();
         else {
-            setErrorMsg("Something went wrong...");
+            setErrorMsg(rs.getString("error"));
             getLog().severe("Role not found");
         }
 
@@ -117,6 +130,8 @@ public class LoginController {
     void signUp(ActionEvent event) throws IOException { //redirect to sign up window
         getLog().info("Opening registration interface");
         App.setRoot("views/SignUp");
+        SignupController controller = App.getLoader().getController();
+        controller.switchLocals();
     }
     
     @FXML
@@ -157,4 +172,25 @@ public class LoginController {
         timer.schedule(task, 3000);
     }
 
+    @FXML
+    void switchToEN(MouseEvent event) {  //switch local to english
+        getLog().info("Setting local to EN");
+        Locale.setDefault(Locale.US);
+        switchLocals();
+    }
+
+    @FXML
+    void switchToSK(MouseEvent event) {  //switch local to slovak
+        getLog().info("Setting local to SK");
+        Locale.setDefault(App.getSk());
+        switchLocals();
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        label.setText(rs.getString("login"));
+        password.setPromptText(rs.getString("password"));
+        logInButton.setText(rs.getString("login"));
+        signUpButton.setText(rs.getString("signup"));
+    }
 }
