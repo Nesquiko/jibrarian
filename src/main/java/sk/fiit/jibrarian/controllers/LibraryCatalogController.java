@@ -20,11 +20,13 @@ import sk.fiit.jibrarian.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class LibraryCatalogController implements Initializable {
+    private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
     @FXML
     private GridPane libraryCatalog;
     @FXML
@@ -35,23 +37,28 @@ public class LibraryCatalogController implements Initializable {
     private Button rightArrowBtn;
     private Integer currentPage = 0;
 
-    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
-    private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
+    private User user;
 
-    public UserRepository userRepo = RepositoryFactory.getUserRepository();
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+
+    private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
 
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
     }
 
-    private User user;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        var optUser = userRepository.getCurrentlyLoggedInUser();
+        if (optUser.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "User is not logged in");
+            return;
+        }
+        user = optUser.get();
+
         getCatalogPage(currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
-        user = userRepo.getCurrentlyLoggedInUser().get();
-        System.out.println(user);
     }
 
     public void getCatalogPage(Integer page) {
@@ -60,7 +67,7 @@ public class LibraryCatalogController implements Initializable {
         int column = 0;
         int row = 0;
 
-        rightArrowBtn.setVisible(!Objects.equals(currentPage, totalPages));
+        rightArrowBtn.setVisible(currentPage != totalPages);
         leftArrowBtn.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
