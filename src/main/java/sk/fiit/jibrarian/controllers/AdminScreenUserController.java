@@ -36,7 +36,6 @@ public class AdminScreenUserController {
     User user;
     public void setData(User user) {
 
-        pane.getStylesheets().add("../views/style.css");
         this.user=user;
         userId.setText(user.getEmail());
         if(user.getRole()==ADMIN){
