@@ -3,6 +3,7 @@ package sk.fiit.jibrarian.data.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
+import sk.fiit.jibrarian.data.ReservationRepository.ItemAlreadyReservedException;
 import sk.fiit.jibrarian.data.ReservationRepository.TooManyReservationsException;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
@@ -32,7 +33,8 @@ class InMemoryReservationRepositoryTest {
     }
 
     @Test
-    void saveReservationSuccessfully() throws TooManyReservationsException, ItemNotAvailableException {
+    void saveReservationSuccessfully() throws TooManyReservationsException, ItemNotAvailableException,
+            ItemAlreadyReservedException {
         Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         var savedItem = inMemoryReservationRepository.saveReservation(reservation);
@@ -43,14 +45,19 @@ class InMemoryReservationRepositoryTest {
     }
 
     @Test
-    void saveReservationTooManyReservations() throws TooManyReservationsException, ItemNotAvailableException {
+    void saveReservationTooManyReservations()
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         inMemoryReservationRepository.saveReservation(reservation);
+        reservation = newReservationWithNewItem();
         inMemoryReservationRepository.saveReservation(reservation);
+        reservation = newReservationWithNewItem();
         inMemoryReservationRepository.saveReservation(reservation);
+
+        Reservation finalReservation = reservation;
         assertThrows(TooManyReservationsException.class,
-                () -> inMemoryReservationRepository.saveReservation(reservation));
+                () -> inMemoryReservationRepository.saveReservation(finalReservation));
     }
 
     @Test
@@ -59,6 +66,16 @@ class InMemoryReservationRepositoryTest {
         reservation.setUserId(user.getId());
         reservation.getItem().setAvailable(0);
         assertThrows(ItemNotAvailableException.class,
+                () -> inMemoryReservationRepository.saveReservation(reservation));
+    }
+
+    @Test
+    void saveReservationItemAlreadyReserved()
+            throws ItemAlreadyReservedException, ItemNotAvailableException, TooManyReservationsException {
+        Reservation reservation = newReservation();
+        reservation.setUserId(user.getId());
+        inMemoryReservationRepository.saveReservation(reservation);
+        assertThrows(ItemAlreadyReservedException.class,
                 () -> inMemoryReservationRepository.saveReservation(reservation));
     }
 
@@ -76,7 +93,8 @@ class InMemoryReservationRepositoryTest {
     }
 
     @Test
-    void deleteReservationSuccessfully() throws TooManyReservationsException, ItemNotAvailableException {
+    void deleteReservationSuccessfully()
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         Reservation reservation = newReservation();
         reservation.setUserId(user.getId());
         inMemoryReservationRepository.saveReservation(reservation);
@@ -90,6 +108,17 @@ class InMemoryReservationRepositoryTest {
         reservation.setId(UUID.randomUUID());
         reservation.setUserId(user.getId());
         reservation.setItem(item);
+        reservation.setUntil(LocalDate.now().plusDays(1));
+        return reservation;
+    }
+
+    private Reservation newReservationWithNewItem() {
+        var newItem = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn",
+                ItemType.BOOK, 100, 10, 10, 0, null);
+        Reservation reservation = new Reservation();
+        reservation.setId(UUID.randomUUID());
+        reservation.setUserId(user.getId());
+        reservation.setItem(newItem);
         reservation.setUntil(LocalDate.now().plusDays(1));
         return reservation;
     }

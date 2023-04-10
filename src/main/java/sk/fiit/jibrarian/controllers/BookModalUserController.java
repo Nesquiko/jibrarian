@@ -69,6 +69,9 @@ public class BookModalUserController {
             AlertDialog.showDialog("prilis vela rezervacii");
         } catch (CatalogRepository.ItemNotAvailableException e) {
             AlertDialog.showDialog("nie je dostupna");
+        } catch (ReservationRepository.ItemAlreadyReservedException e) {
+            // TODO Juro, sem daj nieco co povie ze uz je rezervovana
+            throw new RuntimeException(e);
         }
 
 
