@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PostgresReservationRepositoryIT {
@@ -123,6 +124,7 @@ class PostgresReservationRepositoryIT {
         postgresReservationRepository.deleteReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
         assertEquals(0, reservations.size());
+        assertNotNull(reservation.getDeletedAt());
     }
 
 

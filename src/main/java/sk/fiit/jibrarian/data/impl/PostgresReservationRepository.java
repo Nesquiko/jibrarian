@@ -183,13 +183,23 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
     @Override
     public void deleteReservation(Reservation reservation) {
         try (
-                var connectionWrapper = connectionPool.getConnWrapper();
-                var statement = connectionWrapper.getConnection().prepareStatement(
+                var connWrapper = connectionPool.getConnWrapper();
+                var updateItemCount = connWrapper.getConnection().prepareStatement(
+                        "update items set available = available + 1, reserved = reserved - 1 where id = ?");
+                var setReservationAsDeleted = connWrapper.getConnection().prepareStatement(
                         "update reservations set deleted_at = ? where id = ?")
         ) {
-            statement.setObject(1, LocalDateTime.now());
-            statement.setObject(2, reservation.getId());
-            statement.executeUpdate();
+            connWrapper.getConnection().setAutoCommit(false);
+            updateItemCount.setObject(1, reservation.getItem().getId());
+            executeUpdateOrRollback(connWrapper.getConnection(), updateItemCount);
+
+            setReservationAsDeleted.setObject(1, LocalDateTime.now());
+            setReservationAsDeleted.setObject(2, reservation.getId());
+            executeUpdateOrRollback(connWrapper.getConnection(), setReservationAsDeleted);
+
+            connWrapper.getConnection().commit();
+            connWrapper.getConnection().setAutoCommit(true);
+            reservation.setDeletedAt(LocalDateTime.now());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while deleting reservation", e);
         }
