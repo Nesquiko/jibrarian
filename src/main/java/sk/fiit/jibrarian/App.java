@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
-
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +16,10 @@ import java.util.logging.Logger;
  * JavaFX App
  */
 public class App extends Application {
+    private static final Locale LOCALE_SK = new Locale("sk", "SK");
+    private static final String RESOURCE_BUNDLE = "sk.fiit.jibrarian.localization.strings";
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+    private static FXMLLoader loader;
     private static Scene scene;
     
     @Override
@@ -33,6 +36,7 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        loader = fxmlLoader;
         return fxmlLoader.load();
     }
 
@@ -41,7 +45,20 @@ public class App extends Application {
         stage.setMaximized(true);
     }
 
+    public static Locale getSk() {
+        return LOCALE_SK;
+    }
+
+    public static String getResourceBundle() {
+        return RESOURCE_BUNDLE;
+    }
+
+    public static FXMLLoader getLoader() {
+        return loader;
+    }
+
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
         try {
             RepositoryFactory.initializeEnvironment();
         } catch (EnvironmentSetupException e) {

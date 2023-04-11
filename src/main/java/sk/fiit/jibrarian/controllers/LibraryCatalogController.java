@@ -15,6 +15,7 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class LibraryCatalogController implements Initializable {
                 AnchorPane anchorPane = loader.load();
 
                 ItemController itemController = loader.getController();
-                itemController.setData(book);
+                itemController.setData(book, user);
 
                 if (column == 3) {
                     column = 0;
@@ -84,12 +85,12 @@ public class LibraryCatalogController implements Initializable {
                 }
                 libraryCatalog.add(anchorPane, column++, row);
 
-                anchorPane.setOnMouseClicked(mouseEvent -> {
+                anchorPane.setOnMouseClicked(mouseEvent -> { //zobrazenie modalu po kliknuti na knihu
                     String viewName = "";
-                    String role = String.valueOf(user.getRole());
+                    Role role = user.getRole();
                     switch (role) {
-                        case ("MEMBER") -> viewName = "../views/book_modal_user.fxml";
-                        case ("LIBRARIAN") -> viewName = "../views/book_modal_librarian.fxml";
+                        case MEMBER -> viewName = "../views/book_modal_user.fxml";
+                        case LIBRARIAN -> viewName = "../views/book_modal_librarian.fxml";
                     }
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
                     Parent root;
@@ -105,13 +106,13 @@ public class LibraryCatalogController implements Initializable {
                             Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
 
                     switch (role) {
-                        case ("MEMBER") -> {
+                        case MEMBER -> {
                             BookModalUserController bookModalUserController =
                                     fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
                             bookModalUserController.setData(
-                                    book); //posleme data do BookModal controllera, ktory je vlastne v novom okne
+                                    book, () -> getCatalogPage(currentPage)); //posleme data do BookModal controllera, ktory je vlastne v novom okne
                         }
-                        case ("LIBRARIAN") -> {
+                        case LIBRARIAN -> {
                             BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
                             bookModalLibrarianController.setData(book);
                         }

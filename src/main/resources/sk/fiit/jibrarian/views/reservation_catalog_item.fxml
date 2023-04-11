@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.ItemController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.ReservationCatalogItemController">
     <children>
         <HBox alignment="CENTER" prefHeight="150.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="166.0" prefWidth="289.0">
                     <children>
-                        <Label fx:id="bookTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="255.0" text="Book Title" wrapText="true">
+                        <Label fx:id="bookTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="66.0" prefWidth="255.0" text="Book Title" wrapText="true">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -27,17 +27,7 @@
                         </Label>
                         <HBox alignment="CENTER" prefHeight="66.0" prefWidth="176.0">
                             <children>
-                                <Label fx:id="bookAvailable" text="Available:" wrapText="true">
-                                    <HBox.margin>
-                                        <Insets left="5.0" right="10.0" />
-                                    </HBox.margin>
-                                </Label>
-                                <Label fx:id="bookReserved" text="Reserved:" wrapText="true">
-                                    <HBox.margin>
-                                        <Insets left="5.0" right="10.0" />
-                                    </HBox.margin>
-                                </Label>
-                                <Label fx:id="bookTotal" text="Total:" wrapText="true">
+                                <Label fx:id="reservedUntilLabel">
                                     <HBox.margin>
                                         <Insets left="5.0" right="10.0" />
                                     </HBox.margin>
