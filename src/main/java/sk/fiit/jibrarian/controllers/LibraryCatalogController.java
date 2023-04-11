@@ -17,7 +17,6 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;

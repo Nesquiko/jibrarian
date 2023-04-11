@@ -68,4 +68,10 @@ public class UserScreenController implements Initializable {
         bp.setCenter(root);
     }
 
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        libBtn.setText(rs.getString("libBtn"));
+        borrowBtn.setText(rs.getString("borrowBtn"));
+    }
+
 }

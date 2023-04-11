@@ -5,8 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import sk.fiit.jibrarian.AlertDialog;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.ReservationRepository;
@@ -14,10 +14,10 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,22 +53,23 @@ public class BookModalUserController {
 
     public void onReserveButtonClicked() {
         Reservation reservation = new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(2), null);
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
 
         try{
             Item updatedItem = reservationRepository.saveReservation(reservation);
 
             item.setReserved(updatedItem.getReserved());
             item.setAvailable(updatedItem.getAvailable());
-            bookAvailable.setText("Available: " + updatedItem.getAvailable().toString());
+            bookAvailable.setText(rs.getString("available") + ": " + updatedItem.getAvailable().toString());
             onSuccessfulReserve.refreshData();
 
-            reserveLabel.setText("Rezervácia prebehla úspešne");
+            reserveLabel.setText(rs.getString("confirmReservation"));
             reserveLabel.setStyle("-fx-text-fill: green");
         }
-        catch (ReservationRepository.TooManyReservationsException e){
-            AlertDialog.showDialog("prilis vela rezervacii");
+        catch (ReservationRepository.TooManyReservationsException e) {
+            AlertDialog.showDialog(rs.getString("tooManyReservations"));
         } catch (CatalogRepository.ItemNotAvailableException e) {
-            AlertDialog.showDialog("nie je dostupna");
+            AlertDialog.showDialog(rs.getString("notAvailable"));
         }
 
 
@@ -86,7 +87,10 @@ public class BookModalUserController {
 
         bookTitle.setText(item.getTitle());
         description.setText(item.getDescription());
-        bookAvailable.setText("Available: " + item.getAvailable().toString());
+        
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
+        reserveButton.setText(rs.getString("reserve"));
 
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);

@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import sk.fiit.jibrarian.App;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,6 +23,8 @@ public class LibrarianScreenController implements Initializable {
     private ToggleButton libBtn, addBookBtn, borrowBtn;
 
     private String whoAmI;
+
+    private FXMLLoader loader;
 
     /*private User user;
 
@@ -54,6 +55,8 @@ public class LibrarianScreenController implements Initializable {
     @FXML
     public void add_book(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_add_book_screen.fxml");
+        AddBookController controller = loader.getController();
+        controller.switchLocals();
         addBookBtn.setDisable(true);
         libBtn.setDisable(false);
         borrowBtn.setDisable(false);
@@ -80,7 +83,7 @@ public class LibrarianScreenController implements Initializable {
         Parent root = null;
         try {
             URL fxmlLocation = getClass().getResource(part);
-            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
         } catch (IOException error) {
@@ -89,6 +92,13 @@ public class LibrarianScreenController implements Initializable {
 
         bp.setCenter(root);
 
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        libBtn.setText(rs.getString("libBtn"));
+        borrowBtn.setText(rs.getString("borrowBtn"));
+        addBookBtn.setText(rs.getString("addBookBtn"));
     }
 
 }
