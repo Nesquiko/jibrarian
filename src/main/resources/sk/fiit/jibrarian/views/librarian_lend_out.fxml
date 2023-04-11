@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.LibrarianGiveOutController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.LibrarianLendOutController">
     <children>
         <VBox alignment="CENTER" layoutX="-7.0" layoutY="-8.0" prefHeight="600.0" prefWidth="800.0">
             <children>
@@ -49,6 +49,14 @@
                         <Insets bottom="30.0" />
                     </VBox.margin>
                 </HBox>
+            <Label text="Reader's email:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="200.0" />
+               </VBox.margin>
+            </Label>
                 <TextField fx:id="readersEmail" maxWidth="300.0" prefHeight="35.0" promptText="Reader's email">
                     <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -57,14 +65,9 @@
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="reservationCode" maxWidth="300.0" prefHeight="35.0" promptText="Reservation code">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </TextField>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#giveOut" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: RED; -fx-text-fill: WHITE;" text="Give Out">
+                        <Button mnemonicParsing="false" onAction="#lendOut" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: RED; -fx-text-fill: WHITE;" text="Lend Book">
                             <HBox.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </HBox.margin>

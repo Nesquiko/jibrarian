@@ -59,14 +59,14 @@ public class BookModalLibrarianController {
 
     @FXML
     public void giveOut(){
-        var viewName = "../views/librarian_give_out.fxml";
+        var viewName = "../views/librarian_lend_out.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName);
-        LibrarianGiveOutController giveOutController = fxmlLoader.getController();
+        LibrarianLendOutController giveOutController = fxmlLoader.getController();
         giveOutController.setData(item);
     }
     @FXML
     public void editItem(){
-        var viewName = "../views/librarian_give_out.fxml";
+        var viewName = "../views/librarian_lend_out.fxml";
         showScreen(viewName);
     }
 

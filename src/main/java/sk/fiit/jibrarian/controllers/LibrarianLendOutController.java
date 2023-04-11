@@ -1,17 +1,13 @@
 package sk.fiit.jibrarian.controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.model.Item;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class LibrarianGiveOutController{
+public class LibrarianLendOutController {
 
     @FXML
     private Label availableLabel;
@@ -50,7 +46,7 @@ public class LibrarianGiveOutController{
     }
 
     @FXML
-    void giveOut() {
+    void lendOut() {
 
     }
 }
