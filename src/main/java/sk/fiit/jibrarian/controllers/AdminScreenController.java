@@ -6,10 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import sk.fiit.jibrarian.App;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +20,8 @@ public class AdminScreenController implements Initializable {
     private BorderPane bp;
     @FXML
     private ToggleButton libBtn, addBookBtn, dashboardBtn;
+
+    private FXMLLoader loader;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,6 +43,8 @@ public class AdminScreenController implements Initializable {
     @FXML
     public void add_book(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_add_book_screen.fxml");
+        AddBookController controller = loader.getController();
+        controller.switchLocals();
         addBookBtn.setDisable(true);
         libBtn.setDisable(false);
         dashboardBtn.setDisable(false);
@@ -52,8 +54,9 @@ public class AdminScreenController implements Initializable {
 
     @FXML
     public void admin_dashboard(ActionEvent actionEvent) {
-
         loadScreenPart("../views/admin_screen_list.fxml");
+        AdminScreenListController controller = loader.getController();
+        controller.switchLocals();
         dashboardBtn.setDisable(true);
         libBtn.setDisable(false);
         addBookBtn.setDisable(false);
@@ -70,7 +73,7 @@ public class AdminScreenController implements Initializable {
         Parent root = null;
         try {
             URL fxmlLocation = getClass().getResource(part);
-            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
         } catch (IOException error) {
@@ -78,5 +81,12 @@ public class AdminScreenController implements Initializable {
         }
 
         bp.setCenter(root);
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        libBtn.setText(rs.getString("libBtn"));
+        dashboardBtn.setText(rs.getString("dashboardBtn"));
+        addBookBtn.setText(rs.getString("addBookBtn"));
     }
 }
