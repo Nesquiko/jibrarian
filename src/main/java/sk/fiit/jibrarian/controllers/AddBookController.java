@@ -10,11 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +22,6 @@ import java.nio.file.Files;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.UUID;
-
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static sk.fiit.jibrarian.AlertDialog.showDialog;
@@ -58,7 +57,7 @@ public class AddBookController implements Initializable {
     @FXML
     private TextField isbnInput;
     @FXML
-    private Label titleLabel, authorLabel, languageLabel, totalPagesLabel, descriptionLabel, isbnLabel, itemTypeLabel,
+    private Label titleLabel, authorLabel, quantityLabel, languageLabel, totalPagesLabel, descriptionLabel, isbnLabel, itemTypeLabel,
             genreLabel;
     @FXML
     private ComboBox<String> itemTypeInput;
@@ -104,7 +103,9 @@ public class AddBookController implements Initializable {
             newBook.setImage(imageBytes);
             catalogRepository.saveItem(newBook);
             clearFields();
-            showDialog("BOOK ADDED SUCCESSFULLY", INFORMATION);
+            
+            ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+            showDialog(rs.getString("bookAdded"), INFORMATION);
         }
     }
 
@@ -125,14 +126,15 @@ public class AddBookController implements Initializable {
     }
 
     private boolean checkInputs() {
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         if (titleInput.getText().isEmpty() || authorInput.getText().isEmpty() || totalPagesInput.getText()
                 .isEmpty() || (Integer.parseInt(totalPagesInput.getText()) < 1 || Integer.parseInt(
                 totalPagesInput.getText()) > 9999) || languageInput.getText().isEmpty() || descriptionInput.getText()
                 .isEmpty() || genreInput.getSelectionModel().getSelectedItem().equals("Not Set")) {
-            showDialog("Fill all fields.", ERROR);
+            showDialog(rs.getString("fillAllFields"), ERROR);
             return false;
         } else if (chosenImageFile == null) {
-            showDialog("Please select Book Cover Image.", ERROR);
+            showDialog(rs.getString("chooseImage"), ERROR);
             return false;
         }
         return true;
@@ -213,6 +215,21 @@ public class AddBookController implements Initializable {
         descriptionInput.clear();
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../views/choose.png")));
         chosenBookImage.setImage(img);
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        titleLabel.setText(rs.getString("title"));
+        authorLabel.setText(rs.getString("author"));
+        quantityLabel.setText(rs.getString("quantity"));
+        languageLabel.setText(rs.getString("language"));
+        totalPagesLabel.setText(rs.getString("totalPages"));
+        descriptionLabel.setText(rs.getString("description"));
+        isbnLabel.setText(rs.getString("isbn"));
+        itemTypeLabel.setText(rs.getString("itemType"));
+        genreLabel.setText(rs.getString("genre"));
+        addBookButton.setText(rs.getString("addBookBtn"));
+        cancelButton.setText(rs.getString("cancelBtn"));
     }
 
 }

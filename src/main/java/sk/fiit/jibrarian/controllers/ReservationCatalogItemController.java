@@ -4,15 +4,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
-import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
 public class ReservationCatalogItemController {
     @FXML
@@ -35,7 +35,8 @@ public class ReservationCatalogItemController {
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
 
-        reservedUntilLabel.setText("Reserved until: " + reservation.getUntil().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        reservedUntilLabel.setText(rs.getString("reservedUntil") + ": " + reservation.getUntil().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);

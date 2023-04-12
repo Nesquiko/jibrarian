@@ -4,22 +4,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
-
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.User;
-
 import java.io.IOException;
 import java.net.URL;
-
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -28,7 +27,11 @@ public class AdminScreenListController implements Initializable {
     @FXML
     private VBox listOfUsers = null;
     @FXML
-    Label roleLabel;
+    private Label roleLabel;
+    @FXML
+    RadioButton LibrarianLabel, UserLabel, AdminLabel;
+    @FXML
+    private Button modifyBtn, refreshBtn;
 
     private int selected = 2;
 
@@ -55,7 +58,7 @@ public class AdminScreenListController implements Initializable {
 //                e.printStackTrace();
 //            }
 //       }
-        if (selected==1){
+        if (selected == 1){
             return userRepository.getAllAdmins();
         }
         else if (selected == 2){
@@ -68,10 +71,10 @@ public class AdminScreenListController implements Initializable {
 
     }
 
-    private void loadList(){
+    private void loadList() {
         listOfUsers.getChildren().clear();
         List<User> users = getData();
-        for (int i=0; i<users.size();i++){
+        for (int i=0; i < users.size();i++) {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("../views/admin_screen_user.fxml"));
@@ -79,6 +82,7 @@ public class AdminScreenListController implements Initializable {
                 User user = users.get(i);
                 AdminScreenUserController adminScreenUserController = loader.getController();
                 adminScreenUserController.setData(user);
+                adminScreenUserController.switchLocals();
                 listOfUsers.getChildren().add(anchorPane);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -92,6 +96,8 @@ public class AdminScreenListController implements Initializable {
         Parent root;
         try {
             root = fxmlLoader.load();
+            AddLibrarianModalAdminController controller = fxmlLoader.getController();
+            controller.switchLocals();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -107,19 +113,32 @@ public class AdminScreenListController implements Initializable {
 
     public void getAdmin(ActionEvent actionEvent) {
         selected = 1;
-        roleLabel.setText("Admins");
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        roleLabel.setText(rs.getString("admins"));
         loadList();
     }
 
     public void getLibrarian(ActionEvent actionEvent) {
-        roleLabel.setText("Librarians");
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        roleLabel.setText(rs.getString("librarians"));
         selected = 2;
         loadList();
     }
 
     public void getUser(ActionEvent actionEvent) {
-        roleLabel.setText("Users");
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        roleLabel.setText(rs.getString("users"));
         selected = 3;
         loadList();
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        roleLabel.setText(rs.getString("librarians"));
+        AdminLabel.setText(rs.getString("adminLabel"));
+        LibrarianLabel.setText(rs.getString("librarianLabel"));
+        UserLabel.setText(rs.getString("userLabel"));
+        modifyBtn.setText(rs.getString("modifyBtn"));
+        refreshBtn.setText(rs.getString("refreshBtn"));
     }
 }
