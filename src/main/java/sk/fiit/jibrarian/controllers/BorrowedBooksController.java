@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.ReservationRepository;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -50,10 +51,12 @@ public class BorrowedBooksController implements Initializable {
 
 
         List<Reservation> reservations = reservationRepository.getReservationsForUser(user);
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        reservationsTextLabel.setText(rs.getString("reservations"));
 
         if (reservations.isEmpty()) {
             reservationsTextLabel.setVisible(false);
-            reservationStatusLabel.setText("No reservations yet");
+            reservationStatusLabel.setText(rs.getString("noReservations"));
             return;
         }
 

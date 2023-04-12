@@ -43,6 +43,7 @@ public class App extends Application {
     public static void maximizeScreen() { // Method Maximizes Screen
         Stage stage = (Stage) scene.getWindow();
         stage.setMaximized(true);
+        stage.setResizable(true);
     }
 
     public static Locale getSk() {

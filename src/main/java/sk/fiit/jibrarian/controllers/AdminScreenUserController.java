@@ -7,14 +7,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
-
 import static sk.fiit.jibrarian.model.Role.ADMIN;
 import static sk.fiit.jibrarian.model.Role.LIBRARIAN;
 import static sk.fiit.jibrarian.model.Role.MEMBER;
+
+import java.util.ResourceBundle;
 
 
 public class AdminScreenUserController {
@@ -36,19 +38,19 @@ public class AdminScreenUserController {
     User user;
     public void setData(User user) {
 
-        this.user=user;
+        this.user = user;
         userId.setText(user.getEmail());
-        if(user.getRole()==ADMIN){
+        if(user.getRole() == ADMIN) {
             rButton1.setSelected(true);
             rButton2.setSelected(false);
             rButton3.setSelected(false);
         }
-        else if (user.getRole()==LIBRARIAN){
+        else if (user.getRole() == LIBRARIAN) {
             rButton1.setSelected(false);
             rButton2.setSelected(true);
             rButton3.setSelected(false);
         }
-        else{
+        else {
             rButton1.setSelected(false);
             rButton2.setSelected(false);
             rButton3.setSelected(true);
@@ -85,5 +87,13 @@ public class AdminScreenUserController {
         } catch (UserRepository.UserNotFound e) {
             e.printStackTrace();
         }
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        removeButton.setText(rs.getString("delete"));
+        rButton1.setText(rs.getString("adminLabel"));
+        rButton2.setText(rs.getString("librarianLabel"));
+        rButton3.setText(rs.getString("userLabel"));
     }
 }
