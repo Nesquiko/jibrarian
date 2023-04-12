@@ -20,11 +20,19 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public Item saveReservation(Reservation reservation)
-            throws TooManyReservationsException, ItemNotAvailableException {
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         if (reservations.containsKey(reservation.getUserId())
                 && (reservations.get(reservation.getUserId()).size() >= 3)) {
             LOGGER.log(Level.WARNING, "User with id {0} has too many reservations", reservation.getUserId());
             throw new TooManyReservationsException("User has too many reservations");
+        }
+
+        if (reservations.containsKey(reservation.getUserId())
+                && reservations.get(reservation.getUserId()).stream()
+                .anyMatch(r -> r.getItem().getId().equals(reservation.getItem().getId()))) {
+            LOGGER.log(Level.WARNING, "User with id {0} has already reserved item with id {1}",
+                    new Object[]{reservation.getUserId(), reservation.getItem().getId()});
+            throw new ItemAlreadyReservedException("User has already reserved this item");
         }
 
         var item = reservation.getItem();

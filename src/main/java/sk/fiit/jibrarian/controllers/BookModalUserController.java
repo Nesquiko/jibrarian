@@ -70,6 +70,9 @@ public class BookModalUserController {
             AlertDialog.showDialog(rs.getString("tooManyReservations"));
         } catch (CatalogRepository.ItemNotAvailableException e) {
             AlertDialog.showDialog(rs.getString("notAvailable"));
+        } catch (ReservationRepository.ItemAlreadyReservedException e) {
+            // TODO Juro, sem daj nieco co povie ze uz je rezervovana
+            throw new RuntimeException(e);
         }
 
 
