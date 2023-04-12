@@ -13,8 +13,10 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
+
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -37,6 +39,7 @@ public class BorrowedBooksController implements Initializable {
     private Label reservationStatusLabel;
 
     private static final Logger LOGGER = Logger.getLogger(BorrowedBooksController.class.getName());
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         var optUser = userRepository.getCurrentlyLoggedInUser();
@@ -51,7 +54,7 @@ public class BorrowedBooksController implements Initializable {
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         reservationsTextLabel.setText(rs.getString("reservations"));
 
-        if (reservations.isEmpty()){
+        if (reservations.isEmpty()) {
             reservationsTextLabel.setVisible(false);
             reservationStatusLabel.setText(rs.getString("noReservations"));
             return;
@@ -61,6 +64,11 @@ public class BorrowedBooksController implements Initializable {
         int row = 0;
         try {
             for (Reservation reservation : reservations) {
+                if (reservation.getUntil().isAfter(LocalDate.now())) {
+                    reservationRepository.deleteReservation(reservation);
+                    continue;
+                }
+
                 Item book = reservation.getItem();
 
                 FXMLLoader loader = new FXMLLoader();

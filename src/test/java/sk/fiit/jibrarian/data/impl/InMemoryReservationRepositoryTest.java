@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InMemoryReservationRepositoryTest {
@@ -101,6 +102,7 @@ class InMemoryReservationRepositoryTest {
         assertEquals(1, inMemoryReservationRepository.getReservationsForUser(user).size());
         inMemoryReservationRepository.deleteReservation(reservation);
         assertEquals(0, inMemoryReservationRepository.getReservationsForUser(user).size());
+        assertNotNull(reservation.getDeletedAt());
     }
 
     private Reservation newReservation() {
