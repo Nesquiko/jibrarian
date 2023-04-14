@@ -4,17 +4,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.data.CatalogRepository;
+import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
 
 import java.io.IOException;
 
+import static sk.fiit.jibrarian.AlertDialog.confirmationDialog;
+
+
 public class BookModalLibrarianController {
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     @FXML
     public Label description;
     @FXML
@@ -22,7 +29,7 @@ public class BookModalLibrarianController {
     @FXML
     public Button takeInButton;
     @FXML
-    public Button editButton;
+    private Button deleteBookButton;
     @FXML
     private Label bookAvailable;
     @FXML
@@ -65,9 +72,12 @@ public class BookModalLibrarianController {
         giveOutController.setData(item);
     }
     @FXML
-    public void editItem(){
-        var viewName = "../views/librarian_lend_out.fxml";
-        showScreen(viewName);
+    public void deleteItem(){
+        boolean delete = confirmationDialog("Are you sure you want to delete this book?", Alert.AlertType.CONFIRMATION);
+        if(delete){
+            // delete book
+            return;
+        }
     }
 
     public FXMLLoader showScreen(String viewName){

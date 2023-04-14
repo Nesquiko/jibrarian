@@ -67,7 +67,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Button>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#cancelButton" prefHeight="40.0" prefWidth="130.0" text="Cancel">
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#closeWindow" prefHeight="40.0" prefWidth="130.0" text="Cancel">
                             <HBox.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </HBox.margin>

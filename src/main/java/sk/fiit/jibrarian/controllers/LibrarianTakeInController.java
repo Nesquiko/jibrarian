@@ -1,16 +1,26 @@
 package sk.fiit.jibrarian.controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.data.CatalogRepository;
+import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.data.UserRepository;
+import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
+import sk.fiit.jibrarian.model.User;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class LibrarianTakeInController{
+import static sk.fiit.jibrarian.AlertDialog.showDialog;
 
+public class LibrarianTakeInController {
+
+    private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
     @FXML
     private Label availableLabel;
 
@@ -21,23 +31,52 @@ public class LibrarianTakeInController{
     private Label titleLabel;
 
     @FXML
-    private Label totalLabel;
+    private TextField readersEmail;
 
-    public void setData(Item item){
-        titleLabel.setText(item.getTitle());
-        availableLabel.setText("Available: "+ item.getAvailable().toString());
-        reservedLabel.setText("Reserved: "+ item.getReserved().toString());
-        totalLabel.setText("Total: "+ item.getTotal().toString());
-    }
     @FXML
-    private void cancelButton() {
+    private Label totalLabel;
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private Item item;
+
+    public void setData(Item item) {
+        this.item = item;
+        titleLabel.setText(item.getTitle());
+        availableLabel.setText("Available: " + item.getAvailable().toString());
+        reservedLabel.setText("Reserved: " + item.getReserved().toString());
+        totalLabel.setText("Total: " + item.getTotal().toString());
+    }
+
+    @FXML
+    void closeWindow() {
         Stage stage = (Stage) availableLabel.getScene().getWindow();
         stage.close();
     }
 
-
     @FXML
-    private void takeInButton() {
-
+    private void takeInButton() throws CatalogRepository.ItemNotFoundException {
+        String userEmail = readersEmail.getText();
+        var optUser = userRepository.getUserByEmail(userEmail);
+        if (optUser.isEmpty()) {
+            LOGGER.log(Level.WARNING, "Entered user doesn't exist.");
+            showDialog("Entered user doesn't exist!", Alert.AlertType.ERROR);
+            return;
+        } else {
+            User user = optUser.get();
+            List<BorrowedItem> borrowedItemList = catalogRepository.getBorrowedItemsForUser(user);
+            for (BorrowedItem bItem : borrowedItemList) {
+                if (bItem.getItem().getId().equals(item.getId())) {
+                    catalogRepository.returnItem(bItem);
+                    item.setAvailable(item.getAvailable() + 1);
+                    item.setReserved(item.getAvailable() - 1);
+                    catalogRepository.updateItem(item);
+                    showDialog("Book " + item.getTitle() + " successfully returned from user " + userEmail + ".",
+                            Alert.AlertType.INFORMATION);
+                    closeWindow();
+                    return;
+                }
+            }
+            showDialog("Entered user didn't lend out this book.", Alert.AlertType.ERROR);
+        }
     }
 }
