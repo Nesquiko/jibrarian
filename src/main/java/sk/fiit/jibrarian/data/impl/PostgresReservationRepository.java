@@ -28,7 +28,7 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
 
     @Override
     public Item saveReservation(Reservation reservation)
-            throws TooManyReservationsException, ItemNotAvailableException {
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         try (
                 var connectionWrapper = connectionPool.getConnWrapper();
                 var statement = connectionWrapper.getConnection().prepareStatement(
@@ -40,6 +40,26 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
                 LOGGER.log(Level.WARNING, "User {0} has too many reservations", reservation.getUserId());
                 throw new TooManyReservationsException(
                         String.format("User %s has too many reservations", reservation.getUserId()));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error while checking reservations for user", e);
+            return reservation.getItem();
+        }
+
+        try (
+                var connectionWrapper = connectionPool.getConnWrapper();
+                var statement = connectionWrapper.getConnection().prepareStatement(
+                        "select count(*) from reservations where user_id = ? and item_id = ? and deleted_at is null")
+        ) {
+            statement.setObject(1, reservation.getUserId());
+            statement.setObject(2, reservation.getItem().getId());
+            var resultSet = statement.executeQuery();
+            if (resultSet.next() && (resultSet.getInt(1) > 0)) {
+                LOGGER.log(Level.WARNING, "User {0} has already reserved item {1}",
+                        new Object[]{reservation.getUserId(), reservation.getItem().getId()});
+                throw new ItemAlreadyReservedException(
+                        String.format("User %s has already reserved item %s", reservation.getUserId(),
+                                reservation.getItem().getId()));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while checking reservations for user", e);
@@ -163,13 +183,23 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
     @Override
     public void deleteReservation(Reservation reservation) {
         try (
-                var connectionWrapper = connectionPool.getConnWrapper();
-                var statement = connectionWrapper.getConnection().prepareStatement(
+                var connWrapper = connectionPool.getConnWrapper();
+                var updateItemCount = connWrapper.getConnection().prepareStatement(
+                        "update items set available = available + 1, reserved = reserved - 1 where id = ?");
+                var setReservationAsDeleted = connWrapper.getConnection().prepareStatement(
                         "update reservations set deleted_at = ? where id = ?")
         ) {
-            statement.setObject(1, LocalDateTime.now());
-            statement.setObject(2, reservation.getId());
-            statement.executeUpdate();
+            connWrapper.getConnection().setAutoCommit(false);
+            updateItemCount.setObject(1, reservation.getItem().getId());
+            executeUpdateOrRollback(connWrapper.getConnection(), updateItemCount);
+
+            setReservationAsDeleted.setObject(1, LocalDateTime.now());
+            setReservationAsDeleted.setObject(2, reservation.getId());
+            executeUpdateOrRollback(connWrapper.getConnection(), setReservationAsDeleted);
+
+            connWrapper.getConnection().commit();
+            connWrapper.getConnection().setAutoCommit(true);
+            reservation.setDeletedAt(LocalDateTime.now());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while deleting reservation", e);
         }

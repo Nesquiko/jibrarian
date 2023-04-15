@@ -1,5 +1,6 @@
 package sk.fiit.jibrarian.controllers;
 
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.Item;
 
 import java.io.IOException;
@@ -49,9 +51,11 @@ public class BookModalLibrarianController {
         this.item = item;
         bookTitle.setText(item.getTitle());
         description.setText(item.getDescription());
-        bookAvailable.setText("Available: " + item.getAvailable().toString());
-        bookReserved.setText("Reserved: " + item.getReserved().toString());
-        bookTotal.setText("Total: " + item.getTotal().toString());
+
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
+        bookReserved.setText(rs.getString("reserved") + ": " + item.getReserved().toString());
+        bookTotal.setText(rs.getString("total") + ": " + item.getTotal().toString());
         Image img = new Image(getClass().getResourceAsStream("../views/book.png"));
         bookImg.setImage(img);
     }

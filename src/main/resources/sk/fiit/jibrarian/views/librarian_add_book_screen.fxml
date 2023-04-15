@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AddBookController">
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AddBookController">
     <right>
         <VBox alignment="CENTER" prefHeight="700.0" prefWidth="474.0" BorderPane.alignment="CENTER">
             <children>
@@ -68,20 +68,20 @@
                             </ImageView>
                             <HBox alignment="CENTER" prefHeight="69.0" prefWidth="324.0">
                                 <children>
-                                    <Button fx:id="addBookButton" mnemonicParsing="false" onMouseClicked="#addBookToDB" prefHeight="40.0" prefWidth="100.0" text="Add Book">
-                                        <HBox.margin>
-                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                        </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                                    </Button>
                                     <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#clearFields" prefHeight="40.0" prefWidth="100.0" text="Cancel">
                                         <HBox.margin>
                                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                         </HBox.margin>
                                  <font>
                                     <Font size="14.0" />
+                                 </font>
+                                    </Button>
+                                    <Button fx:id="addBookButton" mnemonicParsing="false" onMouseClicked="#addBookToDB" prefHeight="40.0" prefWidth="135.0" text="Add Publication">
+                                        <HBox.margin>
+                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                        </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
                                  </font>
                                     </Button>
                                 </children>

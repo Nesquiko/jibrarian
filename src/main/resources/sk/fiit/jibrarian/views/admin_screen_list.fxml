@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="444.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenListController">
+<AnchorPane prefHeight="444.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenListController">
     <children>
         <BorderPane layoutY="7.0" prefHeight="60.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
@@ -31,21 +31,21 @@
                       </Label>
                   <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                      <children>
-                        <RadioButton mnemonicParsing="false" onAction="#getAdmin" text="Admin">
+                        <RadioButton fx:id="AdminLabel" mnemonicParsing="false" onAction="#getAdmin" text="Admin">
                            <toggleGroup>
                               <ToggleGroup fx:id="radio" />
                            </toggleGroup></RadioButton>
-                        <RadioButton mnemonicParsing="false" onAction="#getLibrarian" selected="true" text="Librarian" toggleGroup="$radio" />
-                        <RadioButton mnemonicParsing="false" onAction="#getUser" text="User" toggleGroup="$radio" />
+                        <RadioButton fx:id="LibrarianLabel" mnemonicParsing="false" onAction="#getLibrarian" selected="true" text="Librarian" toggleGroup="$radio" />
+                        <RadioButton fx:id="UserLabel" mnemonicParsing="false" onAction="#getUser" text="User" toggleGroup="$radio" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             </left>
             <right>
-                <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="166.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
+                <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#addClick" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Modify" textFill="WHITE">
+                        <Button fx:id="modifyBtn" mnemonicParsing="false" onAction="#addClick" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Modify" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
@@ -53,7 +53,7 @@
                                 <Insets />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#refreshClick" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #f0ecec;" text="Refresh" textFill="WHITE">
+                        <Button fx:id="refreshBtn" mnemonicParsing="false" onAction="#refreshClick" prefWidth="90.0" style="-fx-background-color: #2e86ab; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10; -fx-border-color: #f0ecec;" text="Refresh" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>

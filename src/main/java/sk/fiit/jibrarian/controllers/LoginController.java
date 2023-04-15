@@ -76,18 +76,25 @@ public class LoginController {
         getLog().info("Opening user interface");
         App.setRoot("views/user_screen");
         App.maximizeScreen();
+        UserScreenController controller = App.getLoader().getController();
+        controller.switchLocals();
+        
     }
 
     public void switchToLibrarianScreen() throws IOException {
         getLog().info("Opening librarian interface");
         App.setRoot("views/librarian_screen");
         App.maximizeScreen();
+        LibrarianScreenController controller = App.getLoader().getController();
+        controller.switchLocals();
     }
 
     public void switchToAdminScreen() throws IOException {
         getLog().info("Opening admin interface");
         App.setRoot("views/admin_screen");
         App.maximizeScreen();
+        AdminScreenController controller = App.getLoader().getController();
+        controller.switchLocals();
     }
 
     @FXML

@@ -6,6 +6,7 @@ import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,11 +21,19 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public Item saveReservation(Reservation reservation)
-            throws TooManyReservationsException, ItemNotAvailableException {
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         if (reservations.containsKey(reservation.getUserId())
                 && (reservations.get(reservation.getUserId()).size() >= 3)) {
             LOGGER.log(Level.WARNING, "User with id {0} has too many reservations", reservation.getUserId());
             throw new TooManyReservationsException("User has too many reservations");
+        }
+
+        if (reservations.containsKey(reservation.getUserId())
+                && reservations.get(reservation.getUserId()).stream()
+                .anyMatch(r -> r.getItem().getId().equals(reservation.getItem().getId()))) {
+            LOGGER.log(Level.WARNING, "User with id {0} has already reserved item with id {1}",
+                    new Object[]{reservation.getUserId(), reservation.getItem().getId()});
+            throw new ItemAlreadyReservedException("User has already reserved this item");
         }
 
         var item = reservation.getItem();
@@ -42,13 +51,30 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public List<Reservation> getReservationsForUser(User user) {
-        return reservations.getOrDefault(user.getId(), Collections.emptyList());
+        return reservations.getOrDefault(user.getId(), Collections.emptyList())
+                .stream().filter(r -> r.getDeletedAt() == null).toList();
     }
 
     @Override
     public void deleteReservation(Reservation reservation) {
-        if (reservations.containsKey(reservation.getUserId()))
-            reservations.get(reservation.getUserId()).remove(reservation);
+        if (!reservations.containsKey(reservation.getUserId()))
+            return;
+
+        var usersReservations = reservations.get(reservation.getUserId());
+        if (!usersReservations.contains(reservation))
+            return;
+
+        var toBeDeleted = usersReservations.stream()
+                .filter(r -> r.getId().equals(reservation.getId()))
+                .findFirst()
+                .orElseThrow();
+
+        var item = toBeDeleted.getItem();
+        var newReserved = item.getReserved() - 1;
+        var newAvailable = item.getAvailable() + 1;
+        item.setReserved(newReserved);
+        item.setAvailable(newAvailable);
+        toBeDeleted.setDeletedAt(LocalDateTime.now());
     }
 
     private Item newUpdatedItem(Item item, int newReserved, int newAvailable) {
