@@ -42,6 +42,8 @@ public class LibraryCatalogController implements Initializable {
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
+    private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
+
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
     }
@@ -64,7 +66,8 @@ public class LibraryCatalogController implements Initializable {
 
         int column = 0;
         int row = 0;
-        rightArrowBtn.setVisible(books.size() >= 12);
+
+        rightArrowBtn.setVisible(currentPage != totalPages);
         leftArrowBtn.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
@@ -133,10 +136,8 @@ public class LibraryCatalogController implements Initializable {
 
     @FXML
     private void pageDecrement() {
-        if (currentPage > 0) {
-            libraryCatalog.getChildren().clear();
-            getCatalogPage(--currentPage);
-            catalogPageLabel.setText(String.valueOf(currentPage + 1));
-        }
+        libraryCatalog.getChildren().clear();
+        getCatalogPage(--currentPage);
+        catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }
 }
