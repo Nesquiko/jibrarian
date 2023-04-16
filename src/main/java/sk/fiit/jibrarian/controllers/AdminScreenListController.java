@@ -68,7 +68,7 @@ public class AdminScreenListController implements Initializable {
 
     }
 
-    private void loadList(){
+    public void loadList(){
         listOfUsers.getChildren().clear();
         List<User> users = getData();
         for (int i=0; i<users.size();i++){
@@ -78,7 +78,7 @@ public class AdminScreenListController implements Initializable {
                 AnchorPane anchorPane = loader.load();
                 User user = users.get(i);
                 AdminScreenUserController adminScreenUserController = loader.getController();
-                adminScreenUserController.setData(user);
+                adminScreenUserController.setData(user, this);
                 listOfUsers.getChildren().add(anchorPane);
             } catch (IOException e) {
                 e.printStackTrace();

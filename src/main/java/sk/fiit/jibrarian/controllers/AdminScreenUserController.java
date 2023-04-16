@@ -32,11 +32,11 @@ public class AdminScreenUserController {
     private RadioButton rButton3;
     @FXML
     private AnchorPane pane;
-
+    AdminScreenListController adminScreenListController;
     User user;
-    public void setData(User user) {
-
+    public void setData(User user, AdminScreenListController adminScreenListController) {
         this.user=user;
+        this.adminScreenListController = adminScreenListController;
         userId.setText(user.getEmail());
         if(user.getRole()==ADMIN){
             rButton1.setSelected(true);
@@ -62,6 +62,7 @@ public class AdminScreenUserController {
         rButton1.setVisible(false);
         rButton2.setVisible(false);
         rButton3.setVisible(false);
+        adminScreenListController.loadList();
     }
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);
