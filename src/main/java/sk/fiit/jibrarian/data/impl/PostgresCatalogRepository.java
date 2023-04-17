@@ -136,7 +136,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                 var updateItem = connWrapper.getConnection().prepareStatement(
                         """
                                 update items
-                                set available = available - 1, reserved = reserved + 1
+                                set available = available - 1, borrowed = borrowed + 1
                                 where id = ?;
                                      """)
         ) {
@@ -157,7 +157,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
             connWrapper.getConnection().commit();
             connWrapper.getConnection().setAutoCommit(true);
             item.setAvailable(item.getAvailable() - 1);
-            item.setReserved(item.getReserved() + 1);
+            item.setBorrowed(item.getBorrowed() + 1);
             return borrowedItem;
         } catch (SQLException e) {
             if ("23514".equals(e.getSQLState())) {
@@ -191,6 +191,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                                     i.total,
                                     i.available,
                                     i.reserved,
+                                    i.borrowed,
                                     i.image
                                 from borrowed_items bi
                                          join items i on bi.item_id = i.id
@@ -218,7 +219,8 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                 item.setTotal(resultSet.getInt(13));
                 item.setAvailable(resultSet.getInt(14));
                 item.setReserved(resultSet.getInt(15));
-                item.setImage(resultSet.getBytes(16));
+                item.setBorrowed(resultSet.getInt(16));
+                item.setImage(resultSet.getBytes(17));
 
                 borrowedItem.setItem(item);
                 borrowedItems.add(borrowedItem);
@@ -244,10 +246,10 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                         """
                                 update items
                                 set available = available + 1,
-                                    reserved  = reserved - 1
+                                    borrowed = borrowed - 1
                                 where id = ?
                                 returning id, title, author, description, language, genre, isbn, item_type,
-                                    pages, total, available, reserved, image;
+                                    pages, total, available, reserved, borrowed, image;
                                      """)
 
         ) {
@@ -286,6 +288,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
         item.setTotal(resultSet.getInt("total"));
         item.setAvailable(resultSet.getInt("available"));
         item.setReserved(resultSet.getInt("reserved"));
+        item.setBorrowed(resultSet.getInt("borrowed"));
         item.setImage(resultSet.getBytes("image"));
         return item;
     }

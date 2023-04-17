@@ -18,13 +18,16 @@ public class Item {
     private Integer available;
     private Integer reserved;
 
+    private Integer borrowed;
+
     private byte[] image;
 
     public Item() {
     }
 
     public Item(UUID id, String title, String author, String description, String language, String genre, String isbn,
-                ItemType itemType, Integer pages, Integer total, Integer available, Integer reserved, byte[] image) {
+                ItemType itemType, Integer pages, Integer total, Integer available, Integer reserved, Integer borrowed,
+                byte[] image) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -37,6 +40,7 @@ public class Item {
         this.total = total;
         this.available = available;
         this.reserved = reserved;
+        this.borrowed = borrowed;
         this.image = image;
     }
 
@@ -144,6 +148,14 @@ public class Item {
         this.image = image;
     }
 
+    public Integer getBorrowed() {
+        return borrowed;
+    }
+
+    public void setBorrowed(Integer borrowed) {
+        this.borrowed = borrowed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,13 +164,14 @@ public class Item {
         return id.equals(item.id) && title.equals(item.title) && author.equals(item.author) && description.equals(
                 item.description) && language.equals(item.language) && genre.equals(item.genre) && isbn.equals(
                 item.isbn) && itemType == item.itemType && pages.equals(item.pages) && total.equals(
-                item.total) && available.equals(item.available) && reserved.equals(item.reserved);
+                item.total) && available.equals(item.available) && reserved.equals(item.reserved) && borrowed.equals(
+                item.borrowed);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, title, author, description, language, genre, isbn, itemType, pages, total, available,
-                reserved);
+                reserved, borrowed);
     }
 
     @Override
@@ -176,6 +189,7 @@ public class Item {
                 ", total=" + total +
                 ", available=" + available +
                 ", reserved=" + reserved +
+                ", borrowed=" + borrowed +
                 '}';
     }
 }
