@@ -96,6 +96,6 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     }
 
     private BorrowedItem createNewBorrowedItem(Item item, User user, LocalDate until) {
-        return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until);
+        return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until, null);
     }
 }

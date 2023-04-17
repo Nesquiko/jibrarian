@@ -195,7 +195,7 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
                                     i.image
                                 from borrowed_items bi
                                          join items i on bi.item_id = i.id
-                                where user_id = ?
+                                where user_id = ? and bi.deleted_at is null
                                 """)
         ) {
             var borrowedItems = new ArrayList<BorrowedItem>();
