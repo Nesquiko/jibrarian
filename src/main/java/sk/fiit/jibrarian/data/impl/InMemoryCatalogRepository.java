@@ -57,6 +57,7 @@ public class InMemoryCatalogRepository implements CatalogRepository {
             throw new ItemNotAvailableException(String.format("Item with id %s not available", item.getId()));
         }
         itemToBorrow.setAvailable(itemToBorrow.getAvailable() - 1);
+        itemToBorrow.setBorrowed(itemToBorrow.getBorrowed() + 1);
         var borrowedItem = createNewBorrowedItem(itemToBorrow, user, until);
         borrowedItems.put(borrowedItem.getId(), borrowedItem);
         return borrowedItem;
@@ -74,6 +75,7 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     public Item returnItem(BorrowedItem borrowedItem) throws ItemNotFoundException {
         var item = items.get(borrowedItem.getItem().getId());
         item.setAvailable(item.getAvailable() + 1);
+        item.setBorrowed(item.getBorrowed() - 1);
         updateItem(item);
         borrowedItems.remove(borrowedItem.getId());
         return item;

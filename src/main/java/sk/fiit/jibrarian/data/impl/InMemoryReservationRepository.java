@@ -91,6 +91,7 @@ public class InMemoryReservationRepository implements ReservationRepository {
                 item.getTotal(),
                 newAvailable,
                 newReserved,
+                item.getBorrowed(),
                 item.getImage()
         );
     }

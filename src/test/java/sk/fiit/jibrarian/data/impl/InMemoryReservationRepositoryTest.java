@@ -29,7 +29,7 @@ class InMemoryReservationRepositoryTest {
         inMemoryReservationRepository = new InMemoryReservationRepository();
         user = new User(UUID.randomUUID(), "email", "passHash", Role.MEMBER);
         item = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                100, 10, 10, 0, null);
+                100, 10, 10, 0, 0, null);
 
     }
 
@@ -116,7 +116,7 @@ class InMemoryReservationRepositoryTest {
 
     private Reservation newReservationWithNewItem() {
         var newItem = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn",
-                ItemType.BOOK, 100, 10, 10, 0, null);
+                ItemType.BOOK, 100, 10, 10, 0, 0, null);
         Reservation reservation = new Reservation();
         reservation.setId(UUID.randomUUID());
         reservation.setUserId(user.getId());

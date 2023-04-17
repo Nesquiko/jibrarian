@@ -54,7 +54,7 @@ class PostgresReservationRepositoryIT {
         clearDatabase();
         user = new User(UUID.randomUUID(), "email", "passHash", Role.MEMBER);
         item = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                100, 10, 10, 0, null);
+                100, 10, 10, 0, 0, null);
         saveUser(user);
         saveItem(item);
     }
@@ -202,7 +202,7 @@ class PostgresReservationRepositoryIT {
 
     private Reservation newReservationWithNewItem() {
         var newItem = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn",
-                ItemType.BOOK, 100, 10, 10, 0, null);
+                ItemType.BOOK, 100, 10, 10, 0, 0, null);
         saveItem(newItem);
         Reservation reservation = new Reservation();
         reservation.setId(UUID.randomUUID());

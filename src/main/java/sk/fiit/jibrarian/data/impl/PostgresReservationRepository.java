@@ -139,6 +139,7 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
                                     i.total,
                                     i.available,
                                     i.reserved,
+                                    i.borrowed,
                                     i.image
                                 from reservations r
                                          join items i on r.item_id = i.id
@@ -168,7 +169,8 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
                 item.setTotal(resultSet.getInt(14));
                 item.setAvailable(resultSet.getInt(15));
                 item.setReserved(resultSet.getInt(16));
-                item.setImage(resultSet.getBytes(17));
+                item.setReserved(resultSet.getInt(17));
+                item.setImage(resultSet.getBytes(18));
 
                 reservation.setItem(item);
                 reservations.add(reservation);
@@ -220,6 +222,7 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
                 item.getTotal(),
                 newAvailable,
                 newReserved,
+                item.getBorrowed(),
                 item.getImage()
         );
     }

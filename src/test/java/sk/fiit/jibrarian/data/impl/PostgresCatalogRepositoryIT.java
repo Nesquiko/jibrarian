@@ -141,7 +141,8 @@ class PostgresCatalogRepositoryIT {
         var borrowedItemItem = borrowedItem.getItem();
         assertEquals(0, borrowedItemItem.getAvailable());
         assertEquals(1, borrowedItemItem.getTotal());
-        assertEquals(1, borrowedItemItem.getReserved());
+        assertEquals(0, borrowedItemItem.getReserved());
+        assertEquals(1, borrowedItemItem.getBorrowed());
     }
 
     @Test
@@ -155,15 +156,16 @@ class PostgresCatalogRepositoryIT {
 
     @Test
     void returnItem() throws ItemAlreadyExistsException, ItemNotAvailableException, ItemNotFoundException {
+        var expectedAvailable = item.getAvailable();
+
         postgresCatalogRepository.saveItem(item);
         var borrowedItem = postgresCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
-        var borrowedItemItem = borrowedItem.getItem();
         var returnedItem = postgresCatalogRepository.returnItem(borrowedItem);
         assertEquals(item.getTitle(), returnedItem.getTitle());
         assertEquals(item.getAuthor(), returnedItem.getAuthor());
-        assertEquals(borrowedItemItem.getAvailable() + 1, returnedItem.getAvailable());
+        assertEquals(expectedAvailable, returnedItem.getAvailable());
         assertEquals(item.getTotal(), returnedItem.getTotal());
-        assertEquals(borrowedItemItem.getReserved() - 1, returnedItem.getReserved());
+        assertEquals(0, returnedItem.getBorrowed());
     }
 
     @Test
@@ -176,7 +178,7 @@ class PostgresCatalogRepositoryIT {
 
     private static Item createItem() {
         return new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                100, 10, 10, 0, image);
+                100, 10, 10, 0, 0, image);
     }
 
     private static void saveUser(User user) {
