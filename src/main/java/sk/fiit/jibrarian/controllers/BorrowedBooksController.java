@@ -64,7 +64,7 @@ public class BorrowedBooksController implements Initializable {
         int row = 0;
         try {
             for (Reservation reservation : reservations) {
-                if (reservation.getUntil().isAfter(LocalDate.now())) {
+                if (LocalDate.now().isAfter(reservation.getUntil())) {
                     reservationRepository.deleteReservation(reservation);
                     continue;
                 }
