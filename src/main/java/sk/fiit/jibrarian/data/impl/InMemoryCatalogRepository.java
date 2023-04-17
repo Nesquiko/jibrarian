@@ -79,6 +79,20 @@ public class InMemoryCatalogRepository implements CatalogRepository {
         return item;
     }
 
+    @Override
+    public void deleteItem(Item item) throws ItemNotFoundException, ItemIsBorrowedException {
+        if (!items.containsKey(item.getId())) {
+            LOGGER.log(Level.WARNING, "Item with id {0} not found", item.getId());
+            throw new ItemNotFoundException(String.format("Item with id %s not found", item.getId()));
+        }
+        if (borrowedItems.values().stream()
+                .anyMatch(borrowedItem -> borrowedItem.getItem().getId().equals(item.getId()))) {
+            LOGGER.log(Level.WARNING, "Item with id {0} is borrowed", item.getId());
+            throw new ItemIsBorrowedException(String.format("Item with id %s is borrowed", item.getId()));
+        }
+        items.remove(item.getId());
+    }
+
     private BorrowedItem createNewBorrowedItem(Item item, User user, LocalDate until) {
         return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until);
     }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemAlreadyExistsException;
+import sk.fiit.jibrarian.data.CatalogRepository.ItemIsBorrowedException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotFoundException;
 import sk.fiit.jibrarian.data.ConnectionPool;
@@ -172,6 +173,27 @@ class PostgresCatalogRepositoryIT {
         borrowedItem.setId(UUID.randomUUID());
         borrowedItem.setItem(item);
         assertThrows(ItemNotFoundException.class, () -> postgresCatalogRepository.returnItem(borrowedItem));
+    }
+
+    @Test
+    void deleteItemItemNotFound() {
+        assertThrows(ItemNotFoundException.class, () -> postgresCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemItemIsBorrowed() throws ItemAlreadyExistsException, ItemNotAvailableException {
+        postgresCatalogRepository.saveItem(item);
+        postgresCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
+        assertThrows(ItemIsBorrowedException.class, () -> postgresCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemSuccessfully()
+            throws ItemAlreadyExistsException, ItemNotFoundException, ItemIsBorrowedException {
+        postgresCatalogRepository.saveItem(item);
+        postgresCatalogRepository.deleteItem(item);
+        var items = postgresCatalogRepository.getItemPage(0, 1).items();
+        assertEquals(0, items.size());
     }
 
     private static Item createItem() {
