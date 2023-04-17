@@ -274,6 +274,29 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
         return null;
     }
 
+    @Override
+    public void deleteItem(Item item) throws ItemNotFoundException, ItemIsBorrowedException {
+        try (
+                var connWrapper = connectionPool.getConnWrapper();
+                var deleteItem = connWrapper.getConnection().prepareStatement("delete from items where id = ?;");
+        ) {
+            deleteItem.setObject(1, item.getId());
+            var updated = deleteItem.executeUpdate();
+            if (updated == 0) {
+                LOGGER.log(Level.WARNING, "Item {0} not found", item.getId());
+                throw new ItemNotFoundException(String.format("Item with id %s not found", item.getId()));
+            }
+
+        } catch (SQLException e) {
+            if ("23503".equals(e.getSQLState())) {
+                LOGGER.log(Level.WARNING, "Item {0} is borrowed", item.getId());
+                throw new ItemIsBorrowedException(String.format("Item with id %s is borrowed", item.getId()));
+            }
+            LOGGER.log(Level.SEVERE, "Error while deleting item", e);
+        }
+    }
+
+
     private Item readItem(ResultSet resultSet) throws SQLException {
         var item = new Item();
         item.setId(resultSet.getObject("id", UUID.class));

@@ -3,6 +3,7 @@ package sk.fiit.jibrarian.data.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemAlreadyExistsException;
+import sk.fiit.jibrarian.data.CatalogRepository.ItemIsBorrowedException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotFoundException;
 import sk.fiit.jibrarian.model.Item;
@@ -130,6 +131,27 @@ class InMemoryCatalogRepositoryTest {
         var items = inMemoryCatalogRepository.getItemPage(0, 1).items();
         assertEquals(expectedAvailable, items.get(0).getAvailable());
         assertEquals(0, items.get(0).getBorrowed());
+    }
+
+    @Test
+    void deleteItemItemNotFound() {
+        assertThrows(ItemNotFoundException.class, () -> inMemoryCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemItemIsBorrowed() throws ItemAlreadyExistsException, ItemNotAvailableException {
+        inMemoryCatalogRepository.saveItem(item);
+        inMemoryCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
+        assertThrows(ItemIsBorrowedException.class, () -> inMemoryCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemSuccessfully()
+            throws ItemAlreadyExistsException, ItemNotFoundException, ItemIsBorrowedException {
+        inMemoryCatalogRepository.saveItem(item);
+        inMemoryCatalogRepository.deleteItem(item);
+        var items = inMemoryCatalogRepository.getItemPage(0, 1).items();
+        assertEquals(0, items.size());
     }
 
     private Item createItem(String title) {
