@@ -72,7 +72,6 @@ public class BookModalUserController {
             AlertDialog.showDialog(rs.getString("notAvailable"));
         } catch (ReservationRepository.ItemAlreadyReservedException e) {
             AlertDialog.showDialog(rs.getString("sameReservationError"));
-            throw new RuntimeException(e);
         }
 
 
