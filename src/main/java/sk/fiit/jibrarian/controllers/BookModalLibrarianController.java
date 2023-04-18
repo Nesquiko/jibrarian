@@ -1,8 +1,5 @@
 package sk.fiit.jibrarian.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,12 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
-import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.Item;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ResourceBundle;
 
 import static sk.fiit.jibrarian.AlertDialog.confirmationDialog;
 import static sk.fiit.jibrarian.AlertDialog.showDialog;
@@ -34,8 +34,6 @@ public class BookModalLibrarianController {
     @FXML
     public Button takeInButton;
     @FXML
-    private Button deleteBookButton;
-    @FXML
     private Label bookAvailable;
     @FXML
     private ImageView bookImg;
@@ -46,8 +44,6 @@ public class BookModalLibrarianController {
     @FXML
     private Label bookTotal;
     private Item item;
-
-    private Stage stage;
 
     @FunctionalInterface
     public interface OnSuccessfulAction {
@@ -75,7 +71,7 @@ public class BookModalLibrarianController {
     }
 
     @FXML
-    public void takeIn(){
+    public void takeIn() {
         var viewName = "../views/librarian_take_in.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName);
         LibrarianTakeInController takeInController = fxmlLoader.getController();
@@ -84,17 +80,18 @@ public class BookModalLibrarianController {
     }
 
     @FXML
-    public void giveOut(){
+    public void giveOut() {
         var viewName = "../views/librarian_lend_out.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName);
         LibrarianLendOutController giveOutController = fxmlLoader.getController();
         giveOutController.setData(item, onSuccessfulAction);
         closeWindow();
     }
+
     @FXML
     public void deleteItem() throws CatalogRepository.ItemIsBorrowedException, CatalogRepository.ItemNotFoundException {
         boolean delete = confirmationDialog("Are you sure you want to delete this book?", Alert.AlertType.CONFIRMATION);
-        if(delete){
+        if (delete) {
             catalogRepository.deleteItem(item);
             onSuccessfulAction.refreshData();
             showDialog("Item successfully deleted.", Alert.AlertType.CONFIRMATION);
@@ -105,10 +102,9 @@ public class BookModalLibrarianController {
     void closeWindow() {
         Stage stage = (Stage) takeInButton.getScene().getWindow();
         stage.close();
-//        onSuccessfulAction.refreshData();
     }
 
-    public FXMLLoader showScreen(String viewName){
+    public FXMLLoader showScreen(String viewName) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
         Parent root;
 
@@ -117,7 +113,7 @@ public class BookModalLibrarianController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        stage = new Stage();
+        Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();

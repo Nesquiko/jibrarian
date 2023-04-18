@@ -2,7 +2,6 @@ package sk.fiit.jibrarian.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -26,13 +25,6 @@ public class LibrarianLendOutController {
     private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
     @FXML
     private Label availableLabel;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button giveOutButton;
-
     @FXML
     private TextField readersEmail;
 
@@ -46,25 +38,21 @@ public class LibrarianLendOutController {
     private Label totalLabel;
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private final ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
-
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     private Item item;
 
-//    @FunctionalInterface
-//    public interface OnSuccessfulAction {
-//        void refreshData();
-//    }
 
     private OnSuccessfulAction onSuccessfulAction;
 
-    public void setData(Item item, OnSuccessfulAction onSuccessfulAction){
+    public void setData(Item item, OnSuccessfulAction onSuccessfulAction) {
         this.item = item;
         this.onSuccessfulAction = onSuccessfulAction;
         titleLabel.setText(item.getTitle());
-        availableLabel.setText("Available: "+ item.getAvailable().toString());
-        reservedLabel.setText("Reserved: "+ item.getReserved().toString());
-        totalLabel.setText("Total: "+ item.getTotal().toString());
+        availableLabel.setText("Available: " + item.getAvailable().toString());
+        reservedLabel.setText("Reserved: " + item.getReserved().toString());
+        totalLabel.setText("Total: " + item.getTotal().toString());
     }
+
     @FXML
     void closeWindow() {
         Stage stage = (Stage) availableLabel.getScene().getWindow();
@@ -72,24 +60,25 @@ public class LibrarianLendOutController {
     }
 
     @FXML
-    public void lendOut() throws CatalogRepository.ItemNotAvailableException, CatalogRepository.ItemNotFoundException {
+    public void lendOut() throws CatalogRepository.ItemNotAvailableException {
         String userEmail = readersEmail.getText();
         var optUser = userRepository.getUserByEmail(userEmail);
-        if(optUser.isEmpty()){
+        if (optUser.isEmpty()) {
             LOGGER.log(Level.WARNING, "Entered user doesn't exist.");
             showDialog("Entered user doesn't exist!", Alert.AlertType.ERROR);
-            return;
-        }else {
+
+        } else {
             User user = optUser.get();
             List<Reservation> userReservations = reservationRepository.getReservationsForUser(user);
-            for(Reservation reservation: userReservations){
-                if (reservation.getItem().getId().equals(item.getId())){
+            for (Reservation reservation : userReservations) {
+                if (reservation.getItem().getId().equals(item.getId())) {
                     LocalDate until = (LocalDate.now()).plusDays(14);
                     reservationRepository.deleteReservation(reservation);
                     catalogRepository.lendItem(item, user, until);
                     onSuccessfulAction.refreshData();
-                    showDialog("Book "+item.getTitle()+" successfully lent out to user "+userEmail+".", Alert.AlertType.INFORMATION);
                     closeWindow();
+                    showDialog("Book " + item.getTitle() + " successfully lent out to user " + userEmail + ".",
+                            Alert.AlertType.INFORMATION);
                     return;
                 }
             }

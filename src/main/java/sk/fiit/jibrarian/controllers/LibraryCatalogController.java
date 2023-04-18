@@ -17,9 +17,11 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,8 +68,8 @@ public class LibraryCatalogController implements Initializable {
 
         int column = 0;
         int row = 0;
-
-        rightArrowBtn.setVisible(currentPage != totalPages);
+        libraryCatalog.getChildren().clear();
+        rightArrowBtn.setVisible(!Objects.equals(currentPage, totalPages));
         leftArrowBtn.setVisible(currentPage != 0);
         try {
             for (Item book : books) {
@@ -108,19 +110,16 @@ public class LibraryCatalogController implements Initializable {
                         case MEMBER -> {
                             BookModalUserController bookModalUserController =
                                     fxmlLoader.getController();  //ziskame BookModal controller cez fxmlLoader
-                            bookModalUserController.setData(
-                                    book, () -> getCatalogPage(currentPage)); //posleme data do BookModal controllera, ktory je vlastne v novom okne
+                            bookModalUserController.setData(book, () -> getCatalogPage(
+                                    currentPage)); //posleme data do BookModal controllera, ktory je vlastne v novom okne
                         }
                         case LIBRARIAN -> {
                             BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
-                            bookModalLibrarianController.setData(
-                                    book, () -> getCatalogPage(currentPage));
+                            bookModalLibrarianController.setData(book, () -> getCatalogPage(currentPage));
                         }
                     }
                     stage.show();
                 });
-
-
             }
 
         } catch (IOException exception) {
@@ -130,14 +129,12 @@ public class LibraryCatalogController implements Initializable {
 
     @FXML
     private void pageIncrement() {
-        libraryCatalog.getChildren().clear();
         getCatalogPage(++currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }
 
     @FXML
     private void pageDecrement() {
-        libraryCatalog.getChildren().clear();
         getCatalogPage(--currentPage);
         catalogPageLabel.setText(String.valueOf(currentPage + 1));
     }

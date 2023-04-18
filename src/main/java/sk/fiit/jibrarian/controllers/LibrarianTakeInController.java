@@ -40,13 +40,7 @@ public class LibrarianTakeInController {
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     private Item item;
 
-//    @FunctionalInterface
-//    public interface OnSuccessfulAction {
-//        void refreshData();
-//    }
-
     private OnSuccessfulAction onSuccessfulAction;
-
 
 
     public void setData(Item item, OnSuccessfulAction onSuccessfulAction) {
@@ -77,10 +71,10 @@ public class LibrarianTakeInController {
             for (BorrowedItem bItem : borrowedItemList) {
                 if (bItem.getItem().getId().equals(item.getId())) {
                     catalogRepository.returnItem(bItem);
+                    closeWindow();
                     onSuccessfulAction.refreshData();
                     showDialog("Book " + item.getTitle() + " successfully returned from user " + userEmail + ".",
                             Alert.AlertType.INFORMATION);
-                    closeWindow();
                     return;
                 }
             }
