@@ -113,7 +113,8 @@ public class LibraryCatalogController implements Initializable {
                         }
                         case LIBRARIAN -> {
                             BookModalLibrarianController bookModalLibrarianController = fxmlLoader.getController();
-                            bookModalLibrarianController.setData(book);
+                            bookModalLibrarianController.setData(
+                                    book, () -> getCatalogPage(currentPage));
                         }
                     }
                     stage.show();

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.controllers.BookModalLibrarianController.OnSuccessfulAction;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.ReservationRepository;
@@ -49,8 +50,16 @@ public class LibrarianLendOutController {
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     private Item item;
 
-    public void setData(Item item){
+//    @FunctionalInterface
+//    public interface OnSuccessfulAction {
+//        void refreshData();
+//    }
+
+    private OnSuccessfulAction onSuccessfulAction;
+
+    public void setData(Item item, OnSuccessfulAction onSuccessfulAction){
         this.item = item;
+        this.onSuccessfulAction = onSuccessfulAction;
         titleLabel.setText(item.getTitle());
         availableLabel.setText("Available: "+ item.getAvailable().toString());
         reservedLabel.setText("Reserved: "+ item.getReserved().toString());
@@ -63,7 +72,7 @@ public class LibrarianLendOutController {
     }
 
     @FXML
-    void lendOut() throws CatalogRepository.ItemNotAvailableException, CatalogRepository.ItemNotFoundException {
+    public void lendOut() throws CatalogRepository.ItemNotAvailableException, CatalogRepository.ItemNotFoundException {
         String userEmail = readersEmail.getText();
         var optUser = userRepository.getUserByEmail(userEmail);
         if(optUser.isEmpty()){
@@ -76,11 +85,9 @@ public class LibrarianLendOutController {
             for(Reservation reservation: userReservations){
                 if (reservation.getItem().getId().equals(item.getId())){
                     LocalDate until = (LocalDate.now()).plusDays(14);
-                    catalogRepository.lendItem(item, user, until);
                     reservationRepository.deleteReservation(reservation);
-                    item.setReserved(item.getReserved() - 1);
-                    item.setAvailable(item.getAvailable() + 1);
-                    catalogRepository.updateItem(item);
+                    catalogRepository.lendItem(item, user, until);
+                    onSuccessfulAction.refreshData();
                     showDialog("Book "+item.getTitle()+" successfully lent out to user "+userEmail+".", Alert.AlertType.INFORMATION);
                     closeWindow();
                     return;

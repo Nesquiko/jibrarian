@@ -12,6 +12,12 @@
             <list>
               <option value="clean" />
               <option value="javafx:run@debug" />
+              <option value="-Denv=db" />
+              <option value="-Ddb.host=localhost" />
+              <option value="-Ddb.port=42069" />
+              <option value="-Ddb.name=jibrarian" />
+              <option value="-Ddb.user=jibrarian" />
+              <option value="-Ddb.password=password" />
             </list>
           </option>
           <option name="pomFileName" />

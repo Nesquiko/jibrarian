@@ -1,5 +1,7 @@
 package sk.fiit.jibrarian.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +22,7 @@ import sk.fiit.jibrarian.model.Item;
 import java.io.IOException;
 
 import static sk.fiit.jibrarian.AlertDialog.confirmationDialog;
+import static sk.fiit.jibrarian.AlertDialog.showDialog;
 
 
 public class BookModalLibrarianController {
@@ -46,8 +49,15 @@ public class BookModalLibrarianController {
 
     private Stage stage;
 
+    @FunctionalInterface
+    public interface OnSuccessfulAction {
+        void refreshData();
+    }
 
-    public void setData(Item item) {
+    private OnSuccessfulAction onSuccessfulAction;
+
+
+    public void setData(Item item, OnSuccessfulAction onSuccessfulAction) {
         this.item = item;
         bookTitle.setText(item.getTitle());
         description.setText(item.getDescription());
@@ -56,8 +66,12 @@ public class BookModalLibrarianController {
         bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
         bookReserved.setText(rs.getString("reserved") + ": " + item.getReserved().toString());
         bookTotal.setText(rs.getString("total") + ": " + item.getTotal().toString());
-        Image img = new Image(getClass().getResourceAsStream("../views/book.png"));
-        bookImg.setImage(img);
+
+        byte[] byteArrayImage = item.getImage();
+        InputStream is = new ByteArrayInputStream(byteArrayImage);
+        Image image = new Image(is);
+        bookImg.setImage(image);
+        this.onSuccessfulAction = onSuccessfulAction;
     }
 
     @FXML
@@ -65,7 +79,8 @@ public class BookModalLibrarianController {
         var viewName = "../views/librarian_take_in.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName);
         LibrarianTakeInController takeInController = fxmlLoader.getController();
-        takeInController.setData(item);
+        takeInController.setData(item, onSuccessfulAction);
+        closeWindow();
     }
 
     @FXML
@@ -73,15 +88,24 @@ public class BookModalLibrarianController {
         var viewName = "../views/librarian_lend_out.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName);
         LibrarianLendOutController giveOutController = fxmlLoader.getController();
-        giveOutController.setData(item);
+        giveOutController.setData(item, onSuccessfulAction);
+        closeWindow();
     }
     @FXML
-    public void deleteItem(){
+    public void deleteItem() throws CatalogRepository.ItemIsBorrowedException, CatalogRepository.ItemNotFoundException {
         boolean delete = confirmationDialog("Are you sure you want to delete this book?", Alert.AlertType.CONFIRMATION);
         if(delete){
-            // delete book
-            return;
+            catalogRepository.deleteItem(item);
+            onSuccessfulAction.refreshData();
+            showDialog("Item successfully deleted.", Alert.AlertType.CONFIRMATION);
         }
+    }
+
+    @FXML
+    void closeWindow() {
+        Stage stage = (Stage) takeInButton.getScene().getWindow();
+        stage.close();
+//        onSuccessfulAction.refreshData();
     }
 
     public FXMLLoader showScreen(String viewName){
