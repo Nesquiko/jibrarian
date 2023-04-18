@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class RepositoryFactory {
     private static final Logger LOGGER = Logger.getLogger(RepositoryFactory.class.getName());
-    private static final String ENVIRONMENT_PROPERTY = "env";
+    private static final String ENVIRONMENT_PROPERTY = "db";
     private static final String IN_MEMORY_ENVIRONMENT = "in-memory";
     private static final String DB_ENVIRONMENT = "db";
     private static final String DB_HOST_PROP = "db.host";
@@ -47,7 +47,7 @@ public class RepositoryFactory {
         var env = System.getProperty(ENVIRONMENT_PROPERTY);
         if (Objects.isNull(env)) {
             LOGGER.log(Level.INFO, "No environment specified, using in-memory environment");
-            env = IN_MEMORY_ENVIRONMENT;
+            env = "db";
         }
 
         switch (env) {
@@ -118,11 +118,11 @@ public class RepositoryFactory {
 
 
     private static ConnectionPool connectToDb() throws SQLException, EnvironmentSetupException {
-        var host = System.getProperty(DB_HOST_PROP);
-        var port = System.getProperty(DB_PORT_PROP);
-        var dbName = System.getProperty(DB_NAME_PROP);
-        var user = System.getProperty(DB_USER_PROP);
-        var password = System.getProperty(DB_PASSWORD_PROP);
+        var host = "localhost";
+        var port = "42069";
+        var dbName = "jibrarian";
+        var user = "jibrarian";
+        var password = "password";
 
         if (Objects.isNull(host))
             throw new EnvironmentSetupException("No db host specified");

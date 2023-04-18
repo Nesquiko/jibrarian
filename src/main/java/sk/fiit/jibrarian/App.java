@@ -9,8 +9,10 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.XMLFormatter;
 
 /**
  * JavaFX App
@@ -46,6 +48,12 @@ public class App extends Application {
         stage.setResizable(true);
     }
 
+    public static void minimizeScreen() { // Method Minimizes Screen
+        Stage stage = (Stage) scene.getWindow();
+        stage.setMaximized(false);
+        stage.setResizable(false);
+    }
+
     public static Locale getSk() {
         return LOCALE_SK;
     }
@@ -58,7 +66,10 @@ public class App extends Application {
         return loader;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        FileHandler fileHandler = new FileHandler("logs.xml");
+        fileHandler.setFormatter(new XMLFormatter());
+        LOGGER.addHandler(fileHandler);
         Locale.setDefault(Locale.US);
         try {
             RepositoryFactory.initializeEnvironment();
