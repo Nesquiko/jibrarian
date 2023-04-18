@@ -36,6 +36,8 @@ public class LibrarianLendOutController {
 
     @FXML
     private Label totalLabel;
+    @FXML
+    private Label borrowedLabel;
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private final ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
@@ -51,6 +53,7 @@ public class LibrarianLendOutController {
         availableLabel.setText("Available: " + item.getAvailable().toString());
         reservedLabel.setText("Reserved: " + item.getReserved().toString());
         totalLabel.setText("Total: " + item.getTotal().toString());
+        borrowedLabel.setText("Borrowed: " + item.getBorrowed().toString());
     }
 
     @FXML

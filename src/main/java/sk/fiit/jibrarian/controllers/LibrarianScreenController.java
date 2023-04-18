@@ -66,7 +66,7 @@ public class LibrarianScreenController implements Initializable {
 
     @FXML
     public void borrowed_books(ActionEvent actionEvent) {
-        loadScreenPart("../views/librarian_borrowed_books_screen.fxml");
+        loadScreenPart("../views/borrowed_books.fxml");
         borrowBtn.setDisable(true);
         libBtn.setDisable(false);
         addBookBtn.setDisable(false);

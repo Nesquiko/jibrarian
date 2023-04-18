@@ -30,6 +30,8 @@ public class LibrarianTakeInController {
 
     @FXML
     private Label titleLabel;
+    @FXML
+    private Label borrowedLabel;
 
     @FXML
     private TextField readersEmail;
@@ -45,11 +47,12 @@ public class LibrarianTakeInController {
 
     public void setData(Item item, OnSuccessfulAction onSuccessfulAction) {
         this.item = item;
+        this.onSuccessfulAction = onSuccessfulAction;
         titleLabel.setText(item.getTitle());
         availableLabel.setText("Available: " + item.getAvailable().toString());
         reservedLabel.setText("Reserved: " + item.getReserved().toString());
         totalLabel.setText("Total: " + item.getTotal().toString());
-        this.onSuccessfulAction = onSuccessfulAction;
+        borrowedLabel.setText("Borrowed: " + item.getBorrowed().toString());
     }
 
     @FXML
