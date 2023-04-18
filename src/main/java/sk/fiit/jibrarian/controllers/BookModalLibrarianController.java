@@ -90,8 +90,6 @@ public class BookModalLibrarianController {
         bookBorrowed.setText(rs.getString("borrowed") + ": " + item.getBorrowed().toString());
         bookTotal.setText(rs.getString("total") + ": " + item.getTotal().toString());
 
-        onSuccessfulAction.refreshData();
-
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);
         Image image = new Image(is);
@@ -141,6 +139,7 @@ public class BookModalLibrarianController {
             bookBorrowed.setText(rs.getString("borrowed") + ": " + updatedItem.getBorrowed().toString());
             bookTotal.setText(rs.getString("total") + ": " + updatedItem.getTotal().toString());
 
+            onSuccessfulAction.refreshData();
             reserveLabel.setText(rs.getString("confirmReservation"));
             reserveLabel.setStyle("-fx-text-fill: green");
         } catch (ReservationRepository.TooManyReservationsException e) {
