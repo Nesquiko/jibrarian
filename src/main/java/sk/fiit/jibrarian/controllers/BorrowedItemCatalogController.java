@@ -5,18 +5,20 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.App;
+import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-public class ReservationCatalogItemController {
+public class BorrowedItemCatalogController {
     @FXML
-    public Label reservedUntilLabel;
+    public Label borrowedUntilLabel;
     @FXML
     public Label bookAuthor;
     @FXML
@@ -26,17 +28,18 @@ public class ReservationCatalogItemController {
 
     private Item item;
 
-    private Reservation reservation;
+    private BorrowedItem borrowedItem;
 
-    public void setData(Item item, Reservation reservation) throws IOException {
+    public void setData(Item item, BorrowedItem borrowedItem) throws IOException {
         this.item = item;
-        this.reservation = reservation;
+        this.borrowedItem = borrowedItem;
 
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
 
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
-        reservedUntilLabel.setText(rs.getString("reservedUntil") + ": " + reservation.getUntil().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        borrowedUntilLabel.setText(rs.getString("borrowedUntil") + ": " + borrowedItem.getUntil().format(
+                DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
         byte[] byteArrayImage = item.getImage();
         InputStream is = new ByteArrayInputStream(byteArrayImage);
@@ -44,4 +47,3 @@ public class ReservationCatalogItemController {
         bookImg.setImage(image);
     }
 }
-
