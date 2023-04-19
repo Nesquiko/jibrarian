@@ -100,7 +100,7 @@ public class BookModalLibrarianController {
     @FXML
     public void takeIn() {
         var viewName = "../views/librarian_take_in.fxml";
-        FXMLLoader fxmlLoader = showScreen(viewName);
+        FXMLLoader fxmlLoader = showScreen(viewName, "Take in book Screen");
         LibrarianTakeInController takeInController = fxmlLoader.getController();
         takeInController.setData(item, onSuccessfulAction);
         closeWindow();
@@ -109,7 +109,7 @@ public class BookModalLibrarianController {
     @FXML
     public void giveOut() {
         var viewName = "../views/librarian_lend_out.fxml";
-        FXMLLoader fxmlLoader = showScreen(viewName);
+        FXMLLoader fxmlLoader = showScreen(viewName, "Lend Out book Screen");
         LibrarianLendOutController giveOutController = fxmlLoader.getController();
         giveOutController.setData(item, onSuccessfulAction);
         closeWindow();
@@ -164,7 +164,7 @@ public class BookModalLibrarianController {
         stage.close();
     }
 
-    public FXMLLoader showScreen(String viewName) {
+    public FXMLLoader showScreen(String viewName, String title) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
         Parent root;
 
@@ -175,6 +175,7 @@ public class BookModalLibrarianController {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.setTitle(title);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
         return fxmlLoader;
