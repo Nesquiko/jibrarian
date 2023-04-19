@@ -1,16 +1,19 @@
 package sk.fiit.jibrarian.controllers;
 
-import javafx.event.ActionEvent;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 import sk.fiit.jibrarian.App;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,17 +25,13 @@ public class LibrarianScreenController implements Initializable {
     @FXML
     private ToggleButton libBtn, addBookBtn, borrowBtn;
 
-    private String whoAmI;
-
     private FXMLLoader loader;
 
-    /*private User user;
+    private boolean playedFirstTime = false;
 
-    public void setUser(User user) {
-        this.user = user;
-        this.user.setRole(user.getRole());
-        loadScreenPart("../views/library_catalog_screen.fxml");
-    }*/
+    private String lastPart;
+
+    private Parent root;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -42,7 +41,7 @@ public class LibrarianScreenController implements Initializable {
     }
 
     @FXML
-    public void library(ActionEvent actionEvent) {
+    public void library() {
         loadScreenPart("../views/library_catalog_screen.fxml");
         libBtn.setDisable(true);
         addBookBtn.setDisable(false);
@@ -53,10 +52,8 @@ public class LibrarianScreenController implements Initializable {
     }
 
     @FXML
-    public void add_book(ActionEvent actionEvent) {
+    public void add_book() {
         loadScreenPart("../views/librarian_add_book_screen.fxml");
-        AddBookController controller = loader.getController();
-        controller.switchLocals();
         addBookBtn.setDisable(true);
         libBtn.setDisable(false);
         borrowBtn.setDisable(false);
@@ -65,7 +62,7 @@ public class LibrarianScreenController implements Initializable {
     }
 
     @FXML
-    public void borrowed_books(ActionEvent actionEvent) {
+    public void borrowed_books() {
         loadScreenPart("../views/borrowed_books.fxml");
         borrowBtn.setDisable(true);
         libBtn.setDisable(false);
@@ -80,18 +77,62 @@ public class LibrarianScreenController implements Initializable {
     }
 
     private void loadScreenPart(String part) {
-        Parent root = null;
-        try {
-            URL fxmlLocation = getClass().getResource(part);
-            loader = new FXMLLoader(fxmlLocation);
-            root = loader.load();
 
-        } catch (IOException error) {
-            Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+        if (playedFirstTime) {
+            int swipe = -2000;
+            if (lastPart != null) {
+                if (swipeLeft(part)) {
+                    swipe = swipe * (-1);
+                }
+            }
+            this.lastPart = part;
+            TranslateTransition tt = new TranslateTransition();
+            AtomicBoolean played = new AtomicBoolean(false);
+            tt.setDuration(Duration.millis(400));
+            tt.setNode(root);
+            tt.setByX(swipe);
+            int finalSwipe = swipe;
+            tt.setOnFinished(v -> {
+                if (!played.get()) {
+                    root = null;
+                    played.set(true);
+                    try {
+                        URL fxmlLocation = getClass().getResource(part);
+                        loader = new FXMLLoader(fxmlLocation);
+                        root = loader.load();
+
+                    } catch (IOException error) {
+                        Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+                    }
+                    bp.setCenter(root);
+                    root.setTranslateX(finalSwipe * (-1));
+                    tt.setNode(root);
+                    tt.setByX(finalSwipe);
+                    tt.play();
+                }
+            });
+            tt.play();
+        } else {
+            playedFirstTime = true;
+            root = null;
+            try {
+                URL fxmlLocation = getClass().getResource(part);
+                loader = new FXMLLoader(fxmlLocation);
+                root = loader.load();
+
+            } catch (IOException error) {
+                Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+            }
+            bp.setCenter(root);
         }
+    }
 
-        bp.setCenter(root);
-
+    private boolean swipeLeft(String part) {
+        return switch (lastPart) {
+            case "../views/borrowed_books.fxml" -> true;
+            case "../views/librarian_add_book_screen.fxml" -> part.equals("../views/library_catalog_screen.fxml");
+            default -> false;
+        };
     }
 
     public void switchLocals() { //switch labels from local change

@@ -116,12 +116,19 @@ public class BookModalLibrarianController {
     }
 
     @FXML
-    public void deleteItem() throws CatalogRepository.ItemIsBorrowedException, CatalogRepository.ItemNotFoundException {
+    public void deleteItem() {
         boolean delete = confirmationDialog("Are you sure you want to delete this book?", Alert.AlertType.CONFIRMATION);
         if (delete) {
-            catalogRepository.deleteItem(item);
-            onSuccessfulAction.refreshData();
-            showDialog("Item successfully deleted.", Alert.AlertType.CONFIRMATION);
+            try {
+                catalogRepository.deleteItem(item);
+                onSuccessfulAction.refreshData();
+                closeWindow();
+                showDialog("Item successfully deleted.", Alert.AlertType.CONFIRMATION);
+            } catch (CatalogRepository.ItemNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (CatalogRepository.ItemIsBorrowedException e) {
+                showDialog("Item is borrowed and couldn't be deleted.", Alert.AlertType.ERROR);
+            }
         }
     }
 

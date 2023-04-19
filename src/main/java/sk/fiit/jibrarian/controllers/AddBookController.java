@@ -70,6 +70,8 @@ public class AddBookController implements Initializable {
         SpinnerValueFactory<Integer> valueFactory = //
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
         quantityInput.setValueFactory(valueFactory);
+        isbnLabel.setVisible(false);
+        isbnInput.setVisible(false);
         setListeners();
     }
 
@@ -213,6 +215,13 @@ public class AddBookController implements Initializable {
         authorInput.clear();
         languageInput.clear();
         descriptionInput.clear();
+        SpinnerValueFactory<Integer> valueFactory = //
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+        quantityInput.setValueFactory(valueFactory);
+        isbnInput.clear();
+        itemTypeInput.getSelectionModel().selectFirst();
+        genreInput.getSelectionModel().selectFirst();
+        totalPagesInput.clear();
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../views/choose.png")));
         chosenBookImage.setImage(img);
     }

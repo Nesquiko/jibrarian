@@ -1,5 +1,6 @@
 package sk.fiit.jibrarian.controllers;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -23,6 +25,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +47,7 @@ public class LibraryCatalogController implements Initializable {
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private Integer totalPages = (int) Math.ceil(catalogRepository.getItemPage(0, 12).total() / 12);
+    private Integer totalPages = (int) Math.floor(catalogRepository.getItemPage(0, 12).total() / 12.01);
 
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
@@ -129,13 +132,42 @@ public class LibraryCatalogController implements Initializable {
 
     @FXML
     private void pageIncrement() {
-        getCatalogPage(++currentPage);
-        catalogPageLabel.setText(String.valueOf(currentPage + 1));
+        TranslateTransition tt = new TranslateTransition();
+        AtomicBoolean played = new AtomicBoolean(false);
+        tt.setDuration(Duration.millis(300));
+        tt.setByX(-1920);
+        tt.setNode(libraryCatalog);
+        tt.setAutoReverse(true);
+        tt.setOnFinished(v -> {
+            if(!played.get()){
+                getCatalogPage(++currentPage);
+                catalogPageLabel.setText(String.valueOf(currentPage + 1));
+                libraryCatalog.setTranslateX(1920);
+                played.set(true);
+                tt.setByX(-1920);
+                tt.play();
+            }
+        });
+        tt.play();
     }
 
     @FXML
     private void pageDecrement() {
-        getCatalogPage(--currentPage);
-        catalogPageLabel.setText(String.valueOf(currentPage + 1));
+        TranslateTransition tt = new TranslateTransition();
+        AtomicBoolean played = new AtomicBoolean(false);
+        tt.setDuration(Duration.millis(400));
+        tt.setByX(1920);
+        tt.setNode(libraryCatalog);
+        tt.setOnFinished(v -> {
+            if(!played.get()){
+                getCatalogPage(--currentPage);
+                catalogPageLabel.setText(String.valueOf(currentPage + 1));
+                played.set(true);
+                libraryCatalog.setTranslateX(-1920);
+                tt.setByX(1920);
+                tt.play();
+            }
+        });
+        tt.play();
     }
 }
