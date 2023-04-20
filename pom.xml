@@ -89,6 +89,12 @@
                             <options>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=localhost:8000
                                 </option>
+                                <option>-Denv=${env}</option>
+                                <option>-Ddb.host=${db.host}</option>
+                                <option>-Ddb.port=${db.port}</option>
+                                <option>-Ddb.name=${db.name}</option>
+                                <option>-Ddb.user=${db.user}</option>
+                                <option>-Ddb.password=${db.password}</option>
                             </options>
                         </configuration>
                     </execution>
