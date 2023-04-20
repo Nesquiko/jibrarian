@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
+import sk.fiit.jibrarian.model.User;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
