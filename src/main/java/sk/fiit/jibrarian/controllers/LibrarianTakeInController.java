@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sk.fiit.jibrarian.controllers.BookModalLibrarianController.OnSuccessfulAction;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -29,6 +30,8 @@ public class LibrarianTakeInController {
 
     @FXML
     private Label titleLabel;
+    @FXML
+    private Label borrowedLabel;
 
     @FXML
     private TextField readersEmail;
@@ -39,12 +42,17 @@ public class LibrarianTakeInController {
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     private Item item;
 
-    public void setData(Item item) {
+    private OnSuccessfulAction onSuccessfulAction;
+
+
+    public void setData(Item item, OnSuccessfulAction onSuccessfulAction) {
         this.item = item;
+        this.onSuccessfulAction = onSuccessfulAction;
         titleLabel.setText(item.getTitle());
         availableLabel.setText("Available: " + item.getAvailable().toString());
         reservedLabel.setText("Reserved: " + item.getReserved().toString());
         totalLabel.setText("Total: " + item.getTotal().toString());
+        borrowedLabel.setText("Borrowed: " + item.getBorrowed().toString());
     }
 
     @FXML
@@ -60,19 +68,16 @@ public class LibrarianTakeInController {
         if (optUser.isEmpty()) {
             LOGGER.log(Level.WARNING, "Entered user doesn't exist.");
             showDialog("Entered user doesn't exist!", Alert.AlertType.ERROR);
-            return;
         } else {
             User user = optUser.get();
             List<BorrowedItem> borrowedItemList = catalogRepository.getBorrowedItemsForUser(user);
             for (BorrowedItem bItem : borrowedItemList) {
                 if (bItem.getItem().getId().equals(item.getId())) {
                     catalogRepository.returnItem(bItem);
-                    item.setAvailable(item.getAvailable() + 1);
-                    item.setReserved(item.getAvailable() - 1);
-                    catalogRepository.updateItem(item);
+                    closeWindow();
+                    onSuccessfulAction.refreshData();
                     showDialog("Book " + item.getTitle() + " successfully returned from user " + userEmail + ".",
                             Alert.AlertType.INFORMATION);
-                    closeWindow();
                     return;
                 }
             }

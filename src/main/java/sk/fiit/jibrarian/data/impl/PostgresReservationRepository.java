@@ -202,6 +202,9 @@ public class PostgresReservationRepository extends DbTxHandler implements Reserv
             connWrapper.getConnection().commit();
             connWrapper.getConnection().setAutoCommit(true);
             reservation.setDeletedAt(LocalDateTime.now());
+            var item = reservation.getItem();
+            item.setAvailable(item.getAvailable() + 1);
+            item.setReserved(item.getReserved() - 1);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error while deleting reservation", e);
         }
