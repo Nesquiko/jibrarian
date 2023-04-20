@@ -108,7 +108,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#giveOut" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: forestgreen;" text="Give out" textFill="WHITE">
+                  <Button mnemonicParsing="false" onAction="#giveOut" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: forestgreen;" text="Lend book" textFill="WHITE">
                      <font>
                         <Font name="Arial Bold" size="18.0" />
                      </font>
