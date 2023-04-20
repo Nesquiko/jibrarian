@@ -278,6 +278,44 @@ public class PostgresCatalogRepository extends DbTxHandler implements CatalogRep
     public void deleteItem(Item item) throws ItemNotFoundException, ItemIsBorrowedException {
         try (
                 var connWrapper = connectionPool.getConnWrapper();
+                var checkIfBorrowed = connWrapper.getConnection().prepareStatement(
+                        """
+                                select count(*)
+                                from borrowed_items
+                                where item_id = ? and deleted_at is null;
+                                """);
+        ) {
+            checkIfBorrowed.setObject(1, item.getId());
+            var resultSet = checkIfBorrowed.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                LOGGER.log(Level.WARNING, "Item {0} is borrowed", item.getId());
+                throw new ItemIsBorrowedException(String.format("Item with id %s is borrowed", item.getId()));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error while deleting item", e);
+        }
+
+        try (
+                var connWrapper = connectionPool.getConnWrapper();
+                var checkIfReserved = connWrapper.getConnection().prepareStatement(
+                        """
+                                select count(*)
+                                from reservations
+                                where item_id = ? and deleted_at is null;
+                                """);
+        ) {
+            checkIfReserved.setObject(1, item.getId());
+            var resultSet = checkIfReserved.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                LOGGER.log(Level.WARNING, "Item {0} is reserved", item.getId());
+                throw new ItemIsBorrowedException(String.format("Item with id %s is reserved", item.getId()));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error while deleting item", e);
+        }
+
+        try (
+                var connWrapper = connectionPool.getConnWrapper();
                 var deleteItem = connWrapper.getConnection().prepareStatement("delete from items where id = ?;");
         ) {
             deleteItem.setObject(1, item.getId());
