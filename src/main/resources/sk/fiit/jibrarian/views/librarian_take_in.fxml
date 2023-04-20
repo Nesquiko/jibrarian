@@ -36,6 +36,14 @@
                                 <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
                             </HBox.margin>
                         </Label>
+                  <Label fx:id="borrowedLabel" text="Borrowed:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
                         <Label fx:id="totalLabel" text="Total:">
                             <font>
                                 <Font name="System Bold" size="18.0" />
@@ -49,6 +57,14 @@
                         <Insets bottom="50.0" />
                     </VBox.margin>
                 </HBox>
+            <Label text="Reader's email:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="200.0" />
+               </VBox.margin>
+            </Label>
                 <TextField fx:id="readersEmail" maxWidth="300.0" prefHeight="35.0" promptText="Reader's email">
                     <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

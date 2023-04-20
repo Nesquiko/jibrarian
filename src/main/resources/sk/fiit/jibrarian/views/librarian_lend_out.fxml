@@ -36,6 +36,14 @@
                                 <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
                             </HBox.margin>
                         </Label>
+                  <Label fx:id="borrowedLabel" text="Borrowed:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
                         <Label fx:id="totalLabel" text="Total:">
                             <font>
                                 <Font name="System Bold" size="18.0" />
