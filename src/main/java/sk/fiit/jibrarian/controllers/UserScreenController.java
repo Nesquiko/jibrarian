@@ -5,11 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import sk.fiit.jibrarian.App;
-
+import sk.fiit.jibrarian.UtilAuth;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,13 +25,19 @@ public class UserScreenController implements Initializable {
     private BorderPane bp;
     private FXMLLoader loader;
     @FXML
-    private ToggleButton libBtn, borrowBtn;
+    private ToggleButton libBtn, borrowBtn, logoutBtn;
+    @FXML
+    private Label email;
+  
     private boolean playedFirstTime = false;
 
     private String lastPart;
 
     private Parent root;
 
+    public Label getEmail() {
+        return email;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,7 +65,10 @@ public class UserScreenController implements Initializable {
 
     @FXML
     public void exit() throws IOException {
-        App.setRoot("views/user_auth");
+        App.setRoot("views/Login");
+        LoginController controller = App.getLoader().getController();
+        controller.switchLocals();
+        App.minimizeScreen();
     }
 
     private void loadScreenPart(String part) {
@@ -122,6 +132,8 @@ public class UserScreenController implements Initializable {
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         libBtn.setText(rs.getString("libBtn"));
         borrowBtn.setText(rs.getString("borrowBtn"));
+        logoutBtn.setText(rs.getString("logout"));
+        getEmail().setText(UtilAuth.getEmail());
     }
 
 }

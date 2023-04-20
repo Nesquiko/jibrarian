@@ -5,11 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import sk.fiit.jibrarian.App;
-
+import sk.fiit.jibrarian.UtilAuth;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +24,9 @@ public class LibrarianScreenController implements Initializable {
     @FXML
     private BorderPane bp;
     @FXML
-    private ToggleButton libBtn, addBookBtn, borrowBtn;
+    private ToggleButton libBtn, addBookBtn, borrowBtn, logoutBtn;
+    @FXML
+    private Label email;
 
     private FXMLLoader loader;
 
@@ -32,6 +35,10 @@ public class LibrarianScreenController implements Initializable {
     private String lastPart;
 
     private Parent root;
+
+    public Label getEmail() {
+        return email;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,7 +80,10 @@ public class LibrarianScreenController implements Initializable {
 
     @FXML
     public void exit() throws IOException {
-        App.setRoot("views/user_auth");
+        App.setRoot("views/Login");
+        LoginController controller = App.getLoader().getController();
+        controller.switchLocals();
+        App.minimizeScreen();
     }
 
     private void loadScreenPart(String part) {
@@ -140,6 +150,8 @@ public class LibrarianScreenController implements Initializable {
         libBtn.setText(rs.getString("libBtn"));
         borrowBtn.setText(rs.getString("borrowBtn"));
         addBookBtn.setText(rs.getString("addBookBtn"));
+        logoutBtn.setText(rs.getString("logout"));
+        getEmail().setText(UtilAuth.getEmail());
     }
 
 }
