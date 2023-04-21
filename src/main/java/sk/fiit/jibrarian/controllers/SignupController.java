@@ -75,21 +75,25 @@ public class SignupController {
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle()); //localization
         // sign up checking for formats & lengths
 		if (email.getText().length() < 8) {
+            setErrorMsgColor("#FF0000");
         	setErrorMsg(rs.getString("invalid_email_length"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (UtilAuth.emailValidityCheck(email.getText()) == false) {
+            setErrorMsgColor("#FF0000");
         	setErrorMsg(rs.getString("invalid_email_format"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (password.getText().length() < 8) {
+            setErrorMsgColor("#FF0000");
         	setErrorMsg(rs.getString("invalid_password_length"));
             getLog().warning("Invalid password");
         	return;
         }
         else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
+            setErrorMsgColor("#FF0000");
         	setErrorMsg(rs.getString("confirm_password_failure"));
             getLog().warning("Passwords do not match");
         	return;
@@ -101,6 +105,7 @@ public class SignupController {
         try {
             getRepo().saveUser(user);
         } catch (AlreadyExistingUserException error) {
+            setErrorMsgColor("#FF0000");
             setErrorMsg(rs.getString("user_exists"));
             getLog().warning("User with this email already exists");
             return;
