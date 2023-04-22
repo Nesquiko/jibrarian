@@ -1,6 +1,8 @@
+import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import sk.fiit.jibrarian.UtilAuth;
 import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemAlreadyExistsException;
 import sk.fiit.jibrarian.data.ConnectionPool;
@@ -60,12 +62,12 @@ class LocalDBSetupTest {
     }
 
     private final List<User> users = List.of(
-            new User(UUID.randomUUID(), "member1@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "member2@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "member3@jibrarian.sk", "hash", Role.MEMBER),
-            new User(UUID.randomUUID(), "librarian1@jibrarian.sk", "hash", Role.LIBRARIAN),
-            new User(UUID.randomUUID(), "librarian2@jibrarian.sk", "hash", Role.LIBRARIAN),
-            new User(UUID.randomUUID(), "admin@jibrarian.sk", "hash", Role.ADMIN)
+            new User(UUID.randomUUID(), "member1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "member2@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "member3@jibrarian.sk", UtilAuth.hashPassword("123"), Role.MEMBER),
+            new User(UUID.randomUUID(), "librarian1@jibrarian.sk", UtilAuth.hashPassword("123"), Role.LIBRARIAN),
+            new User(UUID.randomUUID(), "librarian2@jibrarian.sk", UtilAuth.hashPassword("123"), Role.LIBRARIAN),
+            new User(UUID.randomUUID(), "admin@jibrarian.sk", UtilAuth.hashPassword("123"), Role.ADMIN)
     );
 
     private List<Item> items() throws URISyntaxException, IOException {
@@ -78,7 +80,7 @@ class LocalDBSetupTest {
                                 space with nothing but their towels and an innocuous-looking book inscribed, in large
                                 friendly letters, with the words: DON'T PANIC. The weekend has only just begun...
                                 """,
-                        "EN", "Fantasy", "0345391802", ItemType.BOOK, 224, 10, 10, 0,
+                        "EN", "Fantasy", "0345391802", ItemType.BOOK, 224, 10, 10, 0, 0,
                         itemImage("/hitchhikers-guide-cover.png")
                 ),
                 new Item(UUID.randomUUID(), "Drak sa vracia", "Dobroslav Chrobak",
@@ -92,7 +94,7 @@ class LocalDBSetupTest {
                                 posunutá až do polohy legendy či mýtu, to všetko je nielen charakteristickým znakom
                                 slovenského naturizmu, ale aj dobrého románového čítania vo všeobecnosti.
                                 """,
-                        "SK", "Roman", "9788055130842", ItemType.BOOK, 128, 5, 5, 0,
+                        "SK", "Roman", "9788055130842", ItemType.BOOK, 128, 5, 5, 0, 0,
                         itemImage("/drak-sa-vracia-cover.jpg")
                 ),
                 new Item(UUID.randomUUID(), "War and Peace", "Lev Nikolayevich Tolstoy",
@@ -109,7 +111,7 @@ class LocalDBSetupTest {
                                 difficulty lies in conveying not only the simplicity but the subtlety of the book's
                                 scale and effect.
                                 """,
-                        "EN", "Romance", "9780143039990", ItemType.BOOK, 1408, 5, 5, 0,
+                        "EN", "Romance", "9780143039990", ItemType.BOOK, 1408, 5, 5, 0, 0,
                         itemImage("/war-and-peace-cover.jpg")
                 ),
                 new Item(UUID.randomUUID(), "All Quiet on the Western Front", "Erich Maria Remarque",
@@ -120,7 +122,7 @@ class LocalDBSetupTest {
                                 story, and is considered a classic of 20th-century literature. The novel is also notable for
                                 its anti-war sentiment, which is a common theme in Remarque's work.
                                 """,
-                        "EN", "War", "9781907360671", ItemType.BOOK, 364, 5, 5, 0,
+                        "EN", "War", "9781907360671", ItemType.BOOK, 364, 5, 5, 0, 0,
                         itemImage("/all-quiet-on-western-cover.jpg")
                 )
         );

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.ConnectionPool;
 import sk.fiit.jibrarian.data.ConnectionPool.ConnectionPoolBuilder;
+import sk.fiit.jibrarian.data.ReservationRepository.ItemAlreadyReservedException;
 import sk.fiit.jibrarian.data.ReservationRepository.TooManyReservationsException;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PostgresReservationRepositoryIT {
@@ -52,13 +54,14 @@ class PostgresReservationRepositoryIT {
         clearDatabase();
         user = new User(UUID.randomUUID(), "email", "passHash", Role.MEMBER);
         item = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                100, 10, 10, 0, null);
+                100, 10, 10, 0, 0, null);
         saveUser(user);
         saveItem(item);
     }
 
     @Test
-    void saveReservation() throws TooManyReservationsException, ItemNotAvailableException {
+    void saveReservation() throws TooManyReservationsException, ItemNotAvailableException,
+            ItemAlreadyReservedException {
         var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         var savedItem = postgresReservationRepository.saveReservation(reservation);
@@ -69,10 +72,14 @@ class PostgresReservationRepositoryIT {
     }
 
     @Test
-    void saveReservationTooManyReservations() throws TooManyReservationsException, ItemNotAvailableException {
-        postgresReservationRepository.saveReservation(newReservation());
-        postgresReservationRepository.saveReservation(newReservation());
-        postgresReservationRepository.saveReservation(newReservation());
+    void saveReservationTooManyReservations()
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
+        var reservation = newReservation();
+        postgresReservationRepository.saveReservation(reservation);
+        reservation = newReservationWithNewItem();
+        postgresReservationRepository.saveReservation(reservation);
+        reservation = newReservationWithNewItem();
+        postgresReservationRepository.saveReservation(reservation);
         assertThrows(TooManyReservationsException.class,
                 () -> postgresReservationRepository.saveReservation(newReservation()));
     }
@@ -87,26 +94,37 @@ class PostgresReservationRepositoryIT {
                 () -> postgresReservationRepository.saveReservation(newReservation()));
     }
 
+    @Test
+    void saveReservationItemAlreadyReserved()
+            throws ItemAlreadyReservedException, ItemNotAvailableException, TooManyReservationsException {
+        postgresReservationRepository.saveReservation(newReservation());
+        assertThrows(ItemAlreadyReservedException.class,
+                () -> postgresReservationRepository.saveReservation(newReservation()));
+    }
 
     @Test
-    void getReservationsForUserOnlyNotDeleted() throws TooManyReservationsException, ItemNotAvailableException {
+    void getReservationsForUserOnlyNotDeleted()
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         var reservation = newReservation();
         var deletedReservation = newReservation();
         deletedReservation.setDeletedAt(LocalDateTime.now().minusSeconds(1));
-        postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.saveReservation(deletedReservation);
+        postgresReservationRepository.deleteReservation(deletedReservation);
+        postgresReservationRepository.saveReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
         assertEquals(1, reservations.size());
     }
 
     @Test
-    void deleteReservation() throws TooManyReservationsException, ItemNotAvailableException {
+    void deleteReservation()
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException {
         var reservation = new Reservation(UUID.randomUUID(), user.getId(), item,
                 LocalDate.now().plusDays(1), null);
         postgresReservationRepository.saveReservation(reservation);
         postgresReservationRepository.deleteReservation(reservation);
         var reservations = postgresReservationRepository.getReservationsForUser(user);
         assertEquals(0, reservations.size());
+        assertNotNull(reservation.getDeletedAt());
     }
 
 
@@ -178,6 +196,18 @@ class PostgresReservationRepositoryIT {
         reservation.setId(UUID.randomUUID());
         reservation.setUserId(user.getId());
         reservation.setItem(item);
+        reservation.setUntil(LocalDate.now().plusDays(1));
+        return reservation;
+    }
+
+    private Reservation newReservationWithNewItem() {
+        var newItem = new Item(UUID.randomUUID(), "title", "author", "description", "language", "genre", "isbn",
+                ItemType.BOOK, 100, 10, 10, 0, 0, null);
+        saveItem(newItem);
+        Reservation reservation = new Reservation();
+        reservation.setId(UUID.randomUUID());
+        reservation.setUserId(user.getId());
+        reservation.setItem(newItem);
         reservation.setUntil(LocalDate.now().plusDays(1));
         return reservation;
     }

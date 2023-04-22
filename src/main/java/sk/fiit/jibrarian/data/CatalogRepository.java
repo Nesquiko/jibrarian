@@ -48,6 +48,12 @@ public interface CatalogRepository {
      */
     Item returnItem(BorrowedItem borrowedItem) throws ItemNotFoundException;
 
+    /**
+     * Deletes item from the catalog. If the item isn't found, throws ItemNotFoundException. If the item is borrowed,
+     * throws ItemIsBorrowedException
+     */
+    void deleteItem(Item item) throws ItemNotFoundException, ItemIsBorrowedException;
+
     class ItemAlreadyExistsException extends Exception {
         public ItemAlreadyExistsException(String message) {
             super(message);
@@ -62,6 +68,12 @@ public interface CatalogRepository {
 
     class ItemNotAvailableException extends Exception {
         public ItemNotAvailableException(String message) {
+            super(message);
+        }
+    }
+
+    class ItemIsBorrowedException extends Exception {
+        public ItemIsBorrowedException(String message) {
             super(message);
         }
     }

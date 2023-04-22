@@ -5,11 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import sk.fiit.jibrarian.App;
-
+import sk.fiit.jibrarian.UtilAuth;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +21,15 @@ public class AdminScreenController implements Initializable {
     @FXML
     private BorderPane bp;
     @FXML
-    private ToggleButton libBtn, addBookBtn, dashboardBtn;
+    private ToggleButton libBtn, addBookBtn, dashboardBtn, logoutBtn;
+    @FXML
+    private Label email;
+
+    private FXMLLoader loader;
+
+    public Label getEmail() {
+        return email;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,6 +51,8 @@ public class AdminScreenController implements Initializable {
     @FXML
     public void add_book(ActionEvent actionEvent) {
         loadScreenPart("../views/librarian_add_book_screen.fxml");
+        AddBookController controller = loader.getController();
+        controller.switchLocals();
         addBookBtn.setDisable(true);
         libBtn.setDisable(false);
         dashboardBtn.setDisable(false);
@@ -52,8 +62,9 @@ public class AdminScreenController implements Initializable {
 
     @FXML
     public void admin_dashboard(ActionEvent actionEvent) {
-
         loadScreenPart("../views/admin_screen_list.fxml");
+        AdminScreenListController controller = loader.getController();
+        controller.switchLocals();
         dashboardBtn.setDisable(true);
         libBtn.setDisable(false);
         addBookBtn.setDisable(false);
@@ -63,14 +74,17 @@ public class AdminScreenController implements Initializable {
 
     @FXML
     public void exit() throws IOException {
-        App.setRoot("views/user_auth");
+        App.setRoot("views/Login");
+        LoginController controller = App.getLoader().getController();
+        controller.switchLocals();
+        App.minimizeScreen();
     }
 
     private void loadScreenPart(String part) {
         Parent root = null;
         try {
             URL fxmlLocation = getClass().getResource(part);
-            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            loader = new FXMLLoader(fxmlLocation);
             root = loader.load();
 
         } catch (IOException error) {
@@ -78,5 +92,14 @@ public class AdminScreenController implements Initializable {
         }
 
         bp.setCenter(root);
+    }
+
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        libBtn.setText(rs.getString("libBtn"));
+        dashboardBtn.setText(rs.getString("dashboardBtn"));
+        addBookBtn.setText(rs.getString("addBookBtn"));
+        logoutBtn.setText(rs.getString("logout"));
+        getEmail().setText(UtilAuth.getEmail());
     }
 }

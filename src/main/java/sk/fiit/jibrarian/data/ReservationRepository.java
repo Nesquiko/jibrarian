@@ -14,7 +14,8 @@ public interface ReservationRepository {
      * If item is not available, throws ItemNotAvailableException.
      * Returns the item with updated count of available items.
      */
-    Item saveReservation(Reservation reservation) throws TooManyReservationsException, ItemNotAvailableException;
+    Item saveReservation(Reservation reservation)
+            throws TooManyReservationsException, ItemNotAvailableException, ItemAlreadyReservedException;
 
     /**
      * Returns all reservations for user
@@ -28,6 +29,12 @@ public interface ReservationRepository {
 
     class TooManyReservationsException extends Exception {
         public TooManyReservationsException(String message) {
+            super(message);
+        }
+    }
+
+    class ItemAlreadyReservedException extends Exception {
+        public ItemAlreadyReservedException(String message) {
             super(message);
         }
     }

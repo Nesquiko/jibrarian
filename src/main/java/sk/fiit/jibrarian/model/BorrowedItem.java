@@ -1,6 +1,7 @@
 package sk.fiit.jibrarian.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,15 +10,17 @@ public class BorrowedItem {
     private UUID userId;
     private Item item;
     private LocalDate until;
+    private LocalDateTime deletedAt;
 
     public BorrowedItem() {
     }
 
-    public BorrowedItem(UUID id, UUID userId, Item item, LocalDate until) {
+    public BorrowedItem(UUID id, UUID userId, Item item, LocalDate until, LocalDateTime deletedAt) {
         this.id = id;
         this.userId = userId;
         this.item = item;
         this.until = until;
+        this.deletedAt = deletedAt;
     }
 
     public UUID getId() {
@@ -52,6 +55,14 @@ public class BorrowedItem {
         this.until = until;
     }
 
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,7 +74,7 @@ public class BorrowedItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, item, until);
+        return Objects.hash(id, userId, item, until, deletedAt);
     }
 
     @Override
@@ -73,6 +84,7 @@ public class BorrowedItem {
                 ", userId=" + userId +
                 ", item=" + item.toString() +
                 ", until=" + until +
+                ", deletedAt=" + deletedAt +
                 '}';
     }
 }

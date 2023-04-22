@@ -3,6 +3,7 @@ package sk.fiit.jibrarian.data.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemAlreadyExistsException;
+import sk.fiit.jibrarian.data.CatalogRepository.ItemIsBorrowedException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotAvailableException;
 import sk.fiit.jibrarian.data.CatalogRepository.ItemNotFoundException;
 import sk.fiit.jibrarian.model.Item;
@@ -90,15 +91,20 @@ class InMemoryCatalogRepositoryTest {
     }
 
     @Test
-    void lendItemCorrectAvailable() throws ItemAlreadyExistsException, ItemNotAvailableException {
+    void lendItemCorrectAvailableAndBorrowed() throws ItemAlreadyExistsException, ItemNotAvailableException {
+        var expectedAvailable = item.getAvailable() - 1;
+        var expectedBorrowed = item.getBorrowed() + 1;
         inMemoryCatalogRepository.saveItem(item);
         inMemoryCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
         var items = inMemoryCatalogRepository.getItemPage(0, 1).items();
-        assertEquals(0, items.get(0).getAvailable());
+        assertEquals(expectedAvailable, items.get(0).getAvailable());
+        assertEquals(expectedBorrowed, items.get(0).getBorrowed());
     }
 
     @Test
     void lendItemNotAvailable() throws ItemAlreadyExistsException, ItemNotAvailableException {
+        item.setTotal(1);
+        item.setAvailable(1);
         inMemoryCatalogRepository.saveItem(item);
         inMemoryCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
         assertThrows(ItemNotAvailableException.class,
@@ -117,15 +123,39 @@ class InMemoryCatalogRepositoryTest {
 
     @Test
     void returnItemSuccessfully() throws ItemAlreadyExistsException, ItemNotAvailableException, ItemNotFoundException {
+        var expectedAvailable = item.getAvailable();
+
         inMemoryCatalogRepository.saveItem(item);
         var borrowedItem = inMemoryCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
         inMemoryCatalogRepository.returnItem(borrowedItem);
         var items = inMemoryCatalogRepository.getItemPage(0, 1).items();
-        assertEquals(1, items.get(0).getAvailable());
+        assertEquals(expectedAvailable, items.get(0).getAvailable());
+        assertEquals(0, items.get(0).getBorrowed());
+    }
+
+    @Test
+    void deleteItemItemNotFound() {
+        assertThrows(ItemNotFoundException.class, () -> inMemoryCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemItemIsBorrowed() throws ItemAlreadyExistsException, ItemNotAvailableException {
+        inMemoryCatalogRepository.saveItem(item);
+        inMemoryCatalogRepository.lendItem(item, user, LocalDate.now().plusDays(1));
+        assertThrows(ItemIsBorrowedException.class, () -> inMemoryCatalogRepository.deleteItem(item));
+    }
+
+    @Test
+    void deleteItemSuccessfully()
+            throws ItemAlreadyExistsException, ItemNotFoundException, ItemIsBorrowedException {
+        inMemoryCatalogRepository.saveItem(item);
+        inMemoryCatalogRepository.deleteItem(item);
+        var items = inMemoryCatalogRepository.getItemPage(0, 1).items();
+        assertEquals(0, items.size());
     }
 
     private Item createItem(String title) {
         return new Item(UUID.randomUUID(), title, "author", "description", "language", "genre", "isbn", ItemType.BOOK,
-                1, 1, 1, 1, null);
+                1, 3, 3, 0, 0, null);
     }
 }

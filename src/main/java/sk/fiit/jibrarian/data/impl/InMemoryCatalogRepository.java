@@ -57,6 +57,7 @@ public class InMemoryCatalogRepository implements CatalogRepository {
             throw new ItemNotAvailableException(String.format("Item with id %s not available", item.getId()));
         }
         itemToBorrow.setAvailable(itemToBorrow.getAvailable() - 1);
+        itemToBorrow.setBorrowed(itemToBorrow.getBorrowed() + 1);
         var borrowedItem = createNewBorrowedItem(itemToBorrow, user, until);
         borrowedItems.put(borrowedItem.getId(), borrowedItem);
         return borrowedItem;
@@ -74,12 +75,27 @@ public class InMemoryCatalogRepository implements CatalogRepository {
     public Item returnItem(BorrowedItem borrowedItem) throws ItemNotFoundException {
         var item = items.get(borrowedItem.getItem().getId());
         item.setAvailable(item.getAvailable() + 1);
+        item.setBorrowed(item.getBorrowed() - 1);
         updateItem(item);
         borrowedItems.remove(borrowedItem.getId());
         return item;
     }
 
+    @Override
+    public void deleteItem(Item item) throws ItemNotFoundException, ItemIsBorrowedException {
+        if (!items.containsKey(item.getId())) {
+            LOGGER.log(Level.WARNING, "Item with id {0} not found", item.getId());
+            throw new ItemNotFoundException(String.format("Item with id %s not found", item.getId()));
+        }
+        if (borrowedItems.values().stream()
+                .anyMatch(borrowedItem -> borrowedItem.getItem().getId().equals(item.getId()))) {
+            LOGGER.log(Level.WARNING, "Item with id {0} is borrowed", item.getId());
+            throw new ItemIsBorrowedException(String.format("Item with id %s is borrowed", item.getId()));
+        }
+        items.remove(item.getId());
+    }
+
     private BorrowedItem createNewBorrowedItem(Item item, User user, LocalDate until) {
-        return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until);
+        return new BorrowedItem(UUID.randomUUID(), user.getId(), item, until, null);
     }
 }

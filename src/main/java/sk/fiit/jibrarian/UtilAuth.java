@@ -1,6 +1,9 @@
 package sk.fiit.jibrarian;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import sk.fiit.jibrarian.data.RepositoryFactory;
 
 public class UtilAuth {
 
@@ -15,6 +18,16 @@ public class UtilAuth {
 
     public static boolean comparePassword(String thisPass, String userPass) {
         return BCrypt.verifyer().verify(thisPass.toCharArray(), userPass).verified;
+    }
+
+    public static String getEmail() {
+        var user = RepositoryFactory.getUserRepository().getCurrentlyLoggedInUser();
+        if (user.isEmpty()) {
+            Logger.getLogger(UtilAuth.class.getName()).log(Level.SEVERE, "Currently logged in user object was not found");
+            return "";
+        }
+        else
+            return user.get().getEmail(); 
     }
 
 }

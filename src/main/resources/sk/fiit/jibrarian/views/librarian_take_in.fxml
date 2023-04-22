@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.LibrarianTakeInController">
+    <children>
+        <VBox alignment="CENTER" layoutX="-7.0" layoutY="-8.0" prefHeight="600.0" prefWidth="800.0">
+            <children>
+                <Label fx:id="titleLabel" alignment="CENTER" prefHeight="39.0" prefWidth="738.0" text="Title" textAlignment="CENTER" wrapText="true">
+                    <font>
+                        <Font name="System Bold" size="27.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label fx:id="availableLabel" text="Available:">
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="reservedLabel" text="Reserved:">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                            </HBox.margin>
+                        </Label>
+                  <Label fx:id="borrowedLabel" text="Borrowed:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
+                        <Label fx:id="totalLabel" text="Total:">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="50.0" />
+                    </VBox.margin>
+                </HBox>
+            <Label text="Reader's email:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="200.0" />
+               </VBox.margin>
+            </Label>
+                <TextField fx:id="readersEmail" maxWidth="300.0" prefHeight="35.0" promptText="Reader's email">
+                    <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </TextField>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#takeInButton" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: RED; -fx-text-fill: WHITE;" text="Take in">
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#closeWindow" prefHeight="40.0" prefWidth="130.0" text="Cancel">
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="50.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

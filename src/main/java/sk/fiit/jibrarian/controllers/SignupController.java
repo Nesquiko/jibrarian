@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -25,6 +26,9 @@ import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
 
 public class SignupController {
+
+    @FXML
+    private Label label;
 
     @FXML
     private Button cancelButton;
@@ -62,28 +66,35 @@ public class SignupController {
     void cancel(ActionEvent event) throws IOException { //loads back the login stage
     	App.setRoot("views/Login");
         getLog().info("Opening login interface");
+        LoginController controller = App.getLoader().getController();
+        controller.switchLocals();
     }
     
     @FXML
     void signUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle()); //localization
         // sign up checking for formats & lengths
 		if (email.getText().length() < 8) {
-        	setErrorMsg("Email has to have at least 8 characters...");
+            setErrorMsgColor("#FF0000");
+        	setErrorMsg(rs.getString("invalid_email_length"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (UtilAuth.emailValidityCheck(email.getText()) == false) {
-        	setErrorMsg("Invalid email format...");
+            setErrorMsgColor("#FF0000");
+        	setErrorMsg(rs.getString("invalid_email_format"));
             getLog().warning("Invalid email address");
     		return;
         }
         else if (password.getText().length() < 8) {
-        	setErrorMsg("Password has to have at least 8 characters...");
+            setErrorMsgColor("#FF0000");
+        	setErrorMsg(rs.getString("invalid_password_length"));
             getLog().warning("Invalid password");
         	return;
         }
         else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
-        	setErrorMsg("Passwords do not match...");
+            setErrorMsgColor("#FF0000");
+        	setErrorMsg(rs.getString("confirm_password_failure"));
             getLog().warning("Passwords do not match");
         	return;
         }
@@ -94,13 +105,14 @@ public class SignupController {
         try {
             getRepo().saveUser(user);
         } catch (AlreadyExistingUserException error) {
-            setErrorMsg("User with this email already exists...");
+            setErrorMsgColor("#FF0000");
+            setErrorMsg(rs.getString("user_exists"));
             getLog().warning("User with this email already exists");
             return;
         }
         getLog().info("User successfully created");
         setErrorMsgColor("#00c900");
-        setErrorMsg("You have succesfully signed in!");
+        setErrorMsg(rs.getString("signed_in"));
     }
     
     public void setErrorMsgColor(String color) {
@@ -135,4 +147,12 @@ public class SignupController {
         timer.schedule(task, 3000);
     }
 
+    public void switchLocals() { //switch labels from local change
+        ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
+        label.setText(rs.getString("signup"));
+        password.setPromptText(rs.getString("password"));
+        passwordConfirm.setPromptText(rs.getString("confirm_password"));
+        cancelButton.setText(rs.getString("login"));
+        signUpButton.setText(rs.getString("signup"));
+    }
 }
