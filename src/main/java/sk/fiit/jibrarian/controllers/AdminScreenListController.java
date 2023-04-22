@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
+
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,6 +20,7 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.User;
 import java.io.IOException;
 import java.net.URL;
+
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,8 +36,6 @@ public class AdminScreenListController implements Initializable {
     private Button modifyBtn, refreshBtn;
 
     private int selected = 2;
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -71,7 +71,7 @@ public class AdminScreenListController implements Initializable {
 
     }
 
-    private void loadList() {
+    public void loadList() {
         listOfUsers.getChildren().clear();
         List<User> users = getData();
         for (int i=0; i < users.size();i++) {
@@ -81,14 +81,13 @@ public class AdminScreenListController implements Initializable {
                 AnchorPane anchorPane = loader.load();
                 User user = users.get(i);
                 AdminScreenUserController adminScreenUserController = loader.getController();
-                adminScreenUserController.setData(user);
+                adminScreenUserController.setData(user, this);
                 adminScreenUserController.switchLocals();
                 listOfUsers.getChildren().add(anchorPane);
             } catch (IOException e) {
                 e.printStackTrace();
 
             }
-
         }
     }
     public void addClick(ActionEvent actionEvent) {

@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
+<AnchorPane fx:id="pane" prefHeight="60.0" style="-fx-background-color: #ffffff; -fx-background-radius: 18 18 18 18; -fx-border-radius: 18 18 18 18;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.fiit.jibrarian.controllers.AdminScreenUserController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="470.0">
          <children>
-            <Label fx:id="userId" prefHeight="40.0" prefWidth="214.0" text="User">
+            <Label fx:id="userId" prefHeight="40.0" prefWidth="333.0" text="User">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -25,9 +25,9 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <VBox prefHeight="65.0" prefWidth="115.0" spacing="2.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                <children>
-                  <RadioButton fx:id="rButton1" mnemonicParsing="false" onAction="#setAdmin" prefHeight="17.0" prefWidth="110.0" text="Admin">
+                  <RadioButton fx:id="rButton1" mnemonicParsing="false" onAction="#setAdmin" text="Admin">
                      <toggleGroup>
                         <ToggleGroup fx:id="radio" />
                      </toggleGroup>

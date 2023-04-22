@@ -17,10 +17,11 @@ import sk.fiit.jibrarian.model.User;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.UUID;
+
 import static sk.fiit.jibrarian.model.Role.ADMIN;
 import static sk.fiit.jibrarian.model.Role.LIBRARIAN;
 import static sk.fiit.jibrarian.model.Role.MEMBER;
-
 
 public class AddLibrarianModalAdminController implements Initializable {
 
@@ -84,6 +85,7 @@ public class AddLibrarianModalAdminController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         errorMSG.setVisible(false);
     }
+    
     private void setRButton(Boolean x) {
         if (x) {
             errorMSG.setVisible(false);
