@@ -71,7 +71,7 @@ public class AdminScreenListController implements Initializable {
 
     }
 
-    private void loadList() {
+    public void loadList() {
         listOfUsers.getChildren().clear();
         List<User> users = getData();
         for (int i=0; i < users.size();i++) {
