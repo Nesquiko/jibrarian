@@ -81,7 +81,7 @@ public class AdminScreenListController implements Initializable {
                 AnchorPane anchorPane = loader.load();
                 User user = users.get(i);
                 AdminScreenUserController adminScreenUserController = loader.getController();
-                adminScreenUserController.setData(user);
+                adminScreenUserController.setData(user, this);
                 adminScreenUserController.switchLocals();
                 listOfUsers.getChildren().add(anchorPane);
             } catch (IOException e) {
