@@ -8,11 +8,10 @@ import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
+
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ResourceBundle;
-
 
 
 public class ItemController {
@@ -28,21 +27,18 @@ public class ItemController {
     private Label bookTitle;
     @FXML
     private Label bookTotal;
-    private Item item;
 
-    public void setData(Item item, User user) throws IOException {
+    public void setData(Item item, User user) {
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
-        this.item = item;
         bookAuthor.setText(item.getAuthor());
         bookTitle.setText(item.getTitle());
 
-        if (user.getRole().equals(Role.MEMBER)){
+        if (user.getRole().equals(Role.MEMBER)) {
             bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
 
             bookReserved.setVisible(false);
             bookTotal.setVisible(false);
-        }
-        else {
+        } else {
             bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
             bookReserved.setText(rs.getString("reserved") + ": " + item.getReserved().toString());
             bookTotal.setText(rs.getString("total") + ": " + item.getTotal().toString());

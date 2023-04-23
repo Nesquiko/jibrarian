@@ -28,7 +28,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <RadioButton fx:id="rButton2" mnemonicParsing="false" onAction="#setLibrarian" text="Librarian" toggleGroup="$radio" />
-                  <RadioButton fx:id="rButton3" mnemonicParsing="false" onAction="#SetUser" text="User" toggleGroup="$radio" />
+                  <RadioButton fx:id="rButton3" mnemonicParsing="false" onAction="#setUser" text="User" toggleGroup="$radio" />
                </children>
                <padding>
                   <Insets bottom="5.0" right="10.0" top="5.0" />

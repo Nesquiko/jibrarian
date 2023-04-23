@@ -7,8 +7,7 @@ import javafx.scene.image.ImageView;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.model.BorrowedItem;
 import sk.fiit.jibrarian.model.Item;
-import sk.fiit.jibrarian.model.Reservation;
-import sk.fiit.jibrarian.model.User;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,13 +16,13 @@ import java.util.ResourceBundle;
 
 public class BorrowedItemCatalogController {
     @FXML
-    public Label borrowedUntilLabel;
+    private Label borrowedUntilLabel;
     @FXML
-    public Label bookAuthor;
+    private Label bookAuthor;
     @FXML
-    public Label bookTitle;
+    private Label bookTitle;
     @FXML
-    public ImageView bookImg;
+    private ImageView bookImg;
 
     private Item item;
 
@@ -44,5 +43,9 @@ public class BorrowedItemCatalogController {
         InputStream is = new ByteArrayInputStream(byteArrayImage);
         Image image = new Image(is);
         bookImg.setImage(image);
+    }
+
+    public Label getBorrowedUntilLabel() {
+        return borrowedUntilLabel;
     }
 }

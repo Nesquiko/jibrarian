@@ -1,14 +1,5 @@
 package sk.fiit.jibrarian.controllers;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.sql.SQLException;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +15,14 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.data.UserRepository.AlreadyExistingUserException;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
+
+import java.io.IOException;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 public class SignupController {
 
@@ -44,59 +43,56 @@ public class SignupController {
 
     @FXML
     private Button signUpButton;
-    
+
     @FXML
     private Label errorMsg;
-    
+
     private int lastErrorMsg;
 
-    private UserRepository userRepo = RepositoryFactory.getUserRepository();
+    private final UserRepository userRepo = RepositoryFactory.getUserRepository();
 
-    private static final Logger LOG = Logger.getLogger(LoginController.class.getName());
+    private static final Logger LOG = Logger.getLogger(SignupController.class.getName());
 
     public UserRepository getRepo() {
         return userRepo;
     }
-    
+
     public Logger getLog() {
         return SignupController.LOG;
     }
-    
+
     @FXML
     void cancel(ActionEvent event) throws IOException { //loads back the login stage
-    	App.setRoot("views/Login");
+        App.setRoot("views/Login");
         getLog().info("Opening login interface");
         LoginController controller = App.getLoader().getController();
         controller.switchLocals();
     }
-    
+
     @FXML
-    void signUp(ActionEvent event) throws SQLException, IOException, ConnectException { //sign up to the application 
+    void signUp(ActionEvent event) { //sign up to the application
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle()); //localization
         // sign up checking for formats & lengths
-		if (email.getText().length() < 8) {
+        if (email.getText().length() < 8) {
             setErrorMsgColor("#FF0000");
-        	setErrorMsg(rs.getString("invalid_email_length"));
+            setErrorMsg(rs.getString("invalid_email_length"));
             getLog().warning("Invalid email address");
-    		return;
-        }
-        else if (UtilAuth.emailValidityCheck(email.getText()) == false) {
+            return;
+        } else if (!UtilAuth.emailValidityCheck(email.getText())) {
             setErrorMsgColor("#FF0000");
-        	setErrorMsg(rs.getString("invalid_email_format"));
+            setErrorMsg(rs.getString("invalid_email_format"));
             getLog().warning("Invalid email address");
-    		return;
-        }
-        else if (password.getText().length() < 8) {
+            return;
+        } else if (password.getText().length() < 8) {
             setErrorMsgColor("#FF0000");
-        	setErrorMsg(rs.getString("invalid_password_length"));
+            setErrorMsg(rs.getString("invalid_password_length"));
             getLog().warning("Invalid password");
-        	return;
-        }
-        else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
+            return;
+        } else if (password.getText().compareTo(passwordConfirm.getText()) != 0) {
             setErrorMsgColor("#FF0000");
-        	setErrorMsg(rs.getString("confirm_password_failure"));
+            setErrorMsg(rs.getString("confirm_password_failure"));
             getLog().warning("Passwords do not match");
-        	return;
+            return;
         }
 
         //pushing new member into database
@@ -114,33 +110,33 @@ public class SignupController {
         setErrorMsgColor("#00c900");
         setErrorMsg(rs.getString("signed_in"));
     }
-    
+
     public void setErrorMsgColor(String color) {
-    	this.errorMsg.setTextFill(Color.web(color));
+        this.errorMsg.setTextFill(Color.web(color));
     }
 
     public void setLastErrorMsg(int id) {
-    	this.lastErrorMsg = id;
+        this.lastErrorMsg = id;
     }
-    
+
     public int getLastErrorMsg() {
-    	return this.lastErrorMsg;
+        return this.lastErrorMsg;
     }
-    
+
     public void setErrorMsgNull() {
         this.errorMsg.setText(" ");
     }
-    
+
     public void setErrorMsg(String info) {
-    	int id = new Random().nextInt(1000000);
-    	this.setLastErrorMsg(id);
-    	this.errorMsg.setText(info);
+        int id = new Random().nextInt(1000000);
+        this.setLastErrorMsg(id);
+        this.errorMsg.setText(info);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                	if (id == getLastErrorMsg()) setErrorMsgNull();
+                    if (id == getLastErrorMsg()) setErrorMsgNull();
                 });
             }
         };

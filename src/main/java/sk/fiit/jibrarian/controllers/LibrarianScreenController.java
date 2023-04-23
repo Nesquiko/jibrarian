@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.UtilAuth;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,8 +19,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
+
 
 public class LibrarianScreenController implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(LibrarianScreenController.class.getName());
 
     @FXML
     private BorderPane bp;
@@ -44,12 +49,12 @@ public class LibrarianScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         libBtn.setSelected(true);
         libBtn.setDisable(true);
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
     }
 
     @FXML
     public void library() {
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
         libBtn.setDisable(true);
         addBookBtn.setDisable(false);
         borrowBtn.setDisable(false);
@@ -59,23 +64,23 @@ public class LibrarianScreenController implements Initializable {
     }
 
     @FXML
-    public void add_book() {
-        loadScreenPart("../views/librarian_add_book_screen.fxml");
-        addBookBtn.setDisable(true);
-        libBtn.setDisable(false);
-        borrowBtn.setDisable(false);
-        libBtn.setSelected(false);
-        borrowBtn.setSelected(false);
-    }
-
-    @FXML
-    public void borrowed_books() {
-        loadScreenPart("../views/borrowed_books.fxml");
+    public void borrowedBooks() {
+        loadScreenPart(APP_CLASSPATH + "/views/borrowed_books.fxml");
         borrowBtn.setDisable(true);
         libBtn.setDisable(false);
         addBookBtn.setDisable(false);
         libBtn.setSelected(false);
         addBookBtn.setSelected(false);
+    }
+
+    @FXML
+    public void addBook() {
+        loadScreenPart(APP_CLASSPATH + "/views/librarian_add_book_screen.fxml");
+        addBookBtn.setDisable(true);
+        libBtn.setDisable(false);
+        borrowBtn.setDisable(false);
+        libBtn.setSelected(false);
+        borrowBtn.setSelected(false);
     }
 
     @FXML
@@ -88,7 +93,6 @@ public class LibrarianScreenController implements Initializable {
     }
 
     private void loadScreenPart(String part) {
-
         if (playedFirstTime) {
             int swipe = -2000;
             if (lastPart != null) {
@@ -117,7 +121,7 @@ public class LibrarianScreenController implements Initializable {
                         }
 
                     } catch (IOException error) {
-                        Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+                        LOGGER.log(Level.SEVERE, "Error while loading screen part", error);
                     }
                     bp.setCenter(root);
                     root.setTranslateX(finalSwipe * (-1));
@@ -140,7 +144,7 @@ public class LibrarianScreenController implements Initializable {
                 }
 
             } catch (IOException error) {
-                Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+                LOGGER.log(Level.SEVERE, "Error while loading screen part", error);
             }
             bp.setCenter(root);
         }
@@ -148,8 +152,9 @@ public class LibrarianScreenController implements Initializable {
 
     private boolean swipeLeft(String part) {
         return switch (lastPart) {
-            case "../views/borrowed_books.fxml" -> true;
-            case "../views/librarian_add_book_screen.fxml" -> part.equals("../views/library_catalog_screen.fxml");
+            case APP_CLASSPATH + "/views/borrowed_books.fxml" -> true;
+            case APP_CLASSPATH + "/views/librarian_add_book_screen.fxml" ->
+                    part.equals(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
             default -> false;
         };
     }
