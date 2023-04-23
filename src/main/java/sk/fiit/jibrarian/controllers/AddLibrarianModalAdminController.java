@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
@@ -145,4 +144,3 @@ public class AddLibrarianModalAdminController implements Initializable {
         this.adminScreenListController = adminScreenListController;
     }
 }
-    
