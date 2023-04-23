@@ -44,20 +44,6 @@ public class AdminScreenListController implements Initializable {
     }
 
     private List<User> getData() {
-//        User user;
-//        for (int i = 0; i < 12; i++) {
-//            user = new User();
-//            user.setEmail("123@123.com"+i);
-//            user.setId(UUID.randomUUID());
-//            user.setRole(Role.LIBRARIAN);
-//            user.setPassHash("");
-//
-//            try {
-//                userRepository.saveUser(user);
-//            } catch (UserRepository.AlreadyExistingUserException e) {
-//                e.printStackTrace();
-//            }
-//       }
         if (selected == 1){
             return userRepository.getAllAdmins();
         }
@@ -97,6 +83,7 @@ public class AdminScreenListController implements Initializable {
             root = fxmlLoader.load();
             AddLibrarianModalAdminController controller = fxmlLoader.getController();
             controller.switchLocals();
+            controller.setInfo(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

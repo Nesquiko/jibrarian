@@ -41,6 +41,7 @@ public class AddLibrarianModalAdminController implements Initializable {
     private Button searchBtn;
 
     Stage stage;
+    AdminScreenListController adminScreenListController;
 
     Optional<User> user;
     User selected;
@@ -68,17 +69,23 @@ public class AddLibrarianModalAdminController implements Initializable {
 
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);
-        System.out.println("admin is set");
+        Stage stage = (Stage) infoTextBox.getScene().getWindow();
+        adminScreenListController.loadList();
+        stage.close();
     }
 
     public void setLibrarian(ActionEvent actionEvent) {
         updateUserRole(LIBRARIAN);
-        System.out.println("librarian is set");
+        Stage stage = (Stage) infoTextBox.getScene().getWindow();
+        adminScreenListController.loadList();
+        stage.close();
     }
 
     public void SetUser(ActionEvent actionEvent) {
         updateUserRole(MEMBER);
-        System.out.println("user is set");
+        Stage stage = (Stage) infoTextBox.getScene().getWindow();
+        adminScreenListController.loadList();
+        stage.close();
     }
 
     @Override
@@ -133,6 +140,10 @@ public class AddLibrarianModalAdminController implements Initializable {
         rButton2.setText(rs.getString("librarianLabel"));
         rButton3.setText(rs.getString("userLabel"));
         errorMSG.setText(rs.getString("userNotFound"));
+    }
+
+    public void setInfo(AdminScreenListController adminScreenListController) {
+        this.adminScreenListController = adminScreenListController;
     }
 }
     

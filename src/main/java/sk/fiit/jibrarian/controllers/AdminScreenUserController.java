@@ -67,17 +67,17 @@ public class AdminScreenUserController {
     }
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);
-        System.out.println("admin is set");
+        adminScreenListController.loadList();
     }
 
     public void setLibrarian(ActionEvent actionEvent) {
         updateUserRole(LIBRARIAN);
-        System.out.println("librarian is set");
+        adminScreenListController.loadList();
     }
 
     public void SetUser(ActionEvent actionEvent) {
         updateUserRole(MEMBER);
-        System.out.println("user is set");
+        adminScreenListController.loadList();
     }
 
     private void updateUserRole(Role x){
