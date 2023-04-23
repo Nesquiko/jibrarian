@@ -52,6 +52,8 @@ public class App extends Application {
         Stage stage = (Stage) scene.getWindow();
         stage.setMaximized(false);
         stage.setResizable(false);
+        stage.setWidth(810);
+        stage.setHeight(600);
     }
 
     public static Locale getSk() {
