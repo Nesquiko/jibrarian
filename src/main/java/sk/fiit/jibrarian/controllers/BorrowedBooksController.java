@@ -24,12 +24,15 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
+
 public class BorrowedBooksController implements Initializable {
-    public ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
-    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private static final Logger LOGGER = Logger.getLogger(BorrowedBooksController.class.getName());
+    private final ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     @FXML
-    public Label reservationsTextLabel;
-    private UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private Label reservationsTextLabel;
     private User user;
 
     @FXML
@@ -40,8 +43,6 @@ public class BorrowedBooksController implements Initializable {
 
     @FXML
     private Label reservationStatusLabel;
-
-    private static final Logger LOGGER = Logger.getLogger(BorrowedBooksController.class.getName());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,7 +58,6 @@ public class BorrowedBooksController implements Initializable {
 
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         reservationsTextLabel.setText(rs.getString("reservations"));
-
 
 
         reservationsTextLabel.setVisible(false);
@@ -79,7 +79,8 @@ public class BorrowedBooksController implements Initializable {
                     Item book = reservation.getItem();
 
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(getClass().getResource("../views/reservation_catalog_item.fxml"));
+                    loader.setLocation(
+                            getClass().getResource(APP_CLASSPATH + "/views/reservation_catalog_item.fxml"));
                     AnchorPane anchorPane = loader.load();
 
                     ReservationCatalogItemController reservationCatalogItemController = loader.getController();
@@ -92,7 +93,7 @@ public class BorrowedBooksController implements Initializable {
                     reservationsGrid.add(anchorPane, column++, row);
                 }
             } catch (IOException exception) {
-                exception.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error while loading reservation catalog item", exception);
             }
         }
 
@@ -105,18 +106,16 @@ public class BorrowedBooksController implements Initializable {
 
         try {
             for (BorrowedItem borrowedItem : borrowedItems) {
-
                 Item book = borrowedItem.getItem();
-
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../views/borrowed_item_catalog.fxml"));
+                loader.setLocation(getClass().getResource(APP_CLASSPATH + "/views/borrowed_item_catalog.fxml"));
                 AnchorPane anchorPane = loader.load();
 
                 BorrowedItemCatalogController borrowedItemCatalogController = loader.getController();
                 borrowedItemCatalogController.setData(book, borrowedItem);
 
                 if (LocalDate.now().isAfter(borrowedItem.getUntil())) { //ked pouzivatel nevratil knihu
-                    borrowedItemCatalogController.borrowedUntilLabel.setStyle("-fx-text-fill: red");
+                    borrowedItemCatalogController.getBorrowedUntilLabel().setStyle("-fx-text-fill: red");
                 }
 
                 if (column == 2) {
@@ -127,7 +126,7 @@ public class BorrowedBooksController implements Initializable {
 
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while loading borrowed item catalog", exception);
         }
 
 

@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.UtilAuth;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,9 +19,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
+
 
 public class UserScreenController implements Initializable {
-
+    private static final Logger LOGGER = Logger.getLogger(UserScreenController.class.getName());
     @FXML
     private BorderPane bp;
     private FXMLLoader loader;
@@ -28,7 +31,7 @@ public class UserScreenController implements Initializable {
     private ToggleButton libBtn, borrowBtn, logoutBtn;
     @FXML
     private Label email;
-  
+
     private boolean playedFirstTime = false;
 
     private String lastPart;
@@ -41,15 +44,14 @@ public class UserScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         libBtn.setSelected(true);
         libBtn.setDisable(true);
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
     }
 
     @FXML
     public void library() {
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
         libBtn.setDisable(true);
         borrowBtn.setDisable(false);
         borrowBtn.setSelected(false);
@@ -57,7 +59,7 @@ public class UserScreenController implements Initializable {
 
     @FXML
     public void borrowed_books() {
-        loadScreenPart("../views/borrowed_books.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/borrowed_books.fxml");
         borrowBtn.setDisable(true);
         libBtn.setDisable(false);
         libBtn.setSelected(false);
@@ -73,7 +75,7 @@ public class UserScreenController implements Initializable {
     }
 
     private void loadScreenPart(String part) {
-        if(playedFirstTime){
+        if (playedFirstTime) {
             int swipe = -2000;
             if (lastPart != null) {
                 if (swipeLeft()) {
@@ -87,8 +89,8 @@ public class UserScreenController implements Initializable {
             tt.setNode(root);
             tt.setByX(swipe);
             int finalSwipe = swipe;
-            tt.setOnFinished(v ->{
-                if(!played.get()) {
+            tt.setOnFinished(v -> {
+                if (!played.get()) {
                     root = null;
                     played.set(true);
                     try {
@@ -100,23 +102,22 @@ public class UserScreenController implements Initializable {
                         Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
                     }
                     bp.setCenter(root);
-                    root.setTranslateX(finalSwipe *(-1));
+                    root.setTranslateX(finalSwipe * (-1));
                     tt.setNode(root);
                     tt.setByX(finalSwipe);
                     tt.play();
                 }
             });
             tt.play();
-        }else{
+        } else {
             playedFirstTime = true;
             root = null;
             try {
                 URL fxmlLocation = getClass().getResource(part);
                 loader = new FXMLLoader(fxmlLocation);
                 root = loader.load();
-
             } catch (IOException error) {
-                Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
+                LOGGER.log(Level.SEVERE, "Error while loading screen part: {0}", part);
             }
             bp.setCenter(root);
         }
@@ -124,7 +125,7 @@ public class UserScreenController implements Initializable {
 
     private boolean swipeLeft() {
         return switch (lastPart) {
-            case "../views/borrowed_books.fxml" -> true;
+            case APP_CLASSPATH + "/views/borrowed_books.fxml" -> true;
             default -> false;
         };
     }
@@ -136,5 +137,4 @@ public class UserScreenController implements Initializable {
         logoutBtn.setText(rs.getString("logout"));
         getEmail().setText(UtilAuth.getEmail());
     }
-
 }

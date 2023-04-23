@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -26,11 +27,12 @@ public class App extends Application {
         }
     }
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+    public static final String APP_CLASSPATH = "/sk/fiit/jibrarian";
     private static final Locale LOCALE_SK = new Locale("sk", "SK");
     private static final String RESOURCE_BUNDLE = "sk.fiit.jibrarian.localization.strings";
     private static FXMLLoader loader;
     private static Scene scene;
-    
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("views/Login"), 800, 600);

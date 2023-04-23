@@ -14,10 +14,11 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
+import java.util.logging.Logger;
 
 import static sk.fiit.jibrarian.model.Role.ADMIN;
 import static sk.fiit.jibrarian.model.Role.LIBRARIAN;
@@ -25,6 +26,7 @@ import static sk.fiit.jibrarian.model.Role.MEMBER;
 
 public class AddLibrarianModalAdminController implements Initializable {
 
+    private static final Logger LOGGER = Logger.getLogger(AddLibrarianModalAdminController.class.getName());
     @FXML
     private TextField emailTextBox;
     @FXML
@@ -40,25 +42,22 @@ public class AddLibrarianModalAdminController implements Initializable {
     @FXML
     private Button searchBtn;
 
-    Stage stage;
-    AdminScreenListController adminScreenListController;
-
-    Optional<User> user;
-    User selected;
-    public UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private AdminScreenListController adminScreenListController;
+    private Optional<User> user;
+    private User selected;
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
 
     public void search(ActionEvent actionEvent) {
         String email = emailTextBox.getText();
         user = userRepository.getUserByEmail(email);
         if (user.isEmpty()) {
-            System.out.println("user not found" );
-            errorMSG.setVisible(true); 
+            System.out.println("user not found");
+            errorMSG.setVisible(true);
             ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
             infoTextBox.setText(rs.getString("searchUser"));
             selected = null;
             setRButton(false);
-        }
-        else {
+        } else {
             selected = user.get();
             infoTextBox.setText(selected.getEmail());
             setRButton(true);
@@ -69,6 +68,7 @@ public class AddLibrarianModalAdminController implements Initializable {
 
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);
+        LOGGER.info("admin is set");
         Stage stage = (Stage) infoTextBox.getScene().getWindow();
         adminScreenListController.loadList();
         stage.close();
@@ -76,13 +76,15 @@ public class AddLibrarianModalAdminController implements Initializable {
 
     public void setLibrarian(ActionEvent actionEvent) {
         updateUserRole(LIBRARIAN);
+        LOGGER.info("librarian is set");
         Stage stage = (Stage) infoTextBox.getScene().getWindow();
         adminScreenListController.loadList();
         stage.close();
     }
 
-    public void SetUser(ActionEvent actionEvent) {
+    public void setUser(ActionEvent actionEvent) {
         updateUserRole(MEMBER);
+        LOGGER.info("user is set");
         Stage stage = (Stage) infoTextBox.getScene().getWindow();
         adminScreenListController.loadList();
         stage.close();
@@ -92,7 +94,7 @@ public class AddLibrarianModalAdminController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         errorMSG.setVisible(false);
     }
-    
+
     private void setRButton(Boolean x) {
         if (x) {
             errorMSG.setVisible(false);
@@ -103,19 +105,16 @@ public class AddLibrarianModalAdminController implements Initializable {
                 rButton1.setSelected(true);
                 rButton2.setSelected(false);
                 rButton3.setSelected(false);
-            }
-            else if (selected.getRole() == LIBRARIAN) {
+            } else if (selected.getRole() == LIBRARIAN) {
                 rButton1.setSelected(false);
                 rButton2.setSelected(true);
                 rButton3.setSelected(false);
-            }
-            else {
+            } else {
                 rButton1.setSelected(false);
                 rButton2.setSelected(false);
                 rButton3.setSelected(true);
             }
-        }
-        else {
+        } else {
             rButton1.setVisible(false);
             rButton2.setVisible(false);
             rButton3.setVisible(false);
@@ -123,7 +122,7 @@ public class AddLibrarianModalAdminController implements Initializable {
 
     }
 
-    private void updateUserRole(Role x){
+    private void updateUserRole(Role x) {
         selected.setRole(x);
         try {
             userRepository.updateUser(selected);

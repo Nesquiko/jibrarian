@@ -38,11 +38,11 @@ class LocalDBSetupTest {
     @BeforeAll
     static void setUpClass() throws SQLException {
         connectionPool = new ConnectionPoolBuilder()
-                .setHost("localhost")
-                .setPort(42069)
+                .setHost("db-postgresql-fra1-55972-do-user-11261227-0.b.db.ondigitalocean.com")
+                .setPort(25060)
                 .setDatabase("jibrarian")
-                .setUser("jibrarian")
-                .setPassword("password")
+                .setUser("doadmin")
+                .setPassword("AVNS_Mysl-tzZFG67x-IVkmC")
                 .build();
         clearDatabase();
         catalogRepository = new PostgresCatalogRepository(connectionPool);
