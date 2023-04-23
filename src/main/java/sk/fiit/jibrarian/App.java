@@ -8,19 +8,26 @@ import javafx.stage.Stage;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.RepositoryFactory.EnvironmentSetupException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
-import java.util.logging.XMLFormatter;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+    static {
+        try (InputStream loggingProperties = App.class.getClassLoader().getResourceAsStream("logging.properties")) {
+            LogManager.getLogManager().readConfiguration(loggingProperties);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private static final Locale LOCALE_SK = new Locale("sk", "SK");
     private static final String RESOURCE_BUNDLE = "sk.fiit.jibrarian.localization.strings";
-    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private static FXMLLoader loader;
     private static Scene scene;
     
@@ -68,10 +75,7 @@ public class App extends Application {
         return loader;
     }
 
-    public static void main(String[] args) throws IOException {
-        FileHandler fileHandler = new FileHandler("logs.xml");
-        fileHandler.setFormatter(new XMLFormatter());
-        LOGGER.addHandler(fileHandler);
+    public static void main(String[] args) {
         Locale.setDefault(Locale.US);
         try {
             RepositoryFactory.initializeEnvironment();

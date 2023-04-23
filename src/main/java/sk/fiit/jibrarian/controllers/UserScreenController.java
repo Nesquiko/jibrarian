@@ -69,6 +69,7 @@ public class UserScreenController implements Initializable {
         LoginController controller = App.getLoader().getController();
         controller.switchLocals();
         App.minimizeScreen();
+        Logger.getLogger(LoginController.class.getName()).log(Level.INFO, "User logged out");
     }
 
     private void loadScreenPart(String part) {

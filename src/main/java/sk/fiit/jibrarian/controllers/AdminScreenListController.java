@@ -120,11 +120,11 @@ public class AdminScreenListController implements Initializable {
 
     public void switchLocals() { //switch labels from local change
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
-        roleLabel.setText(rs.getString("librarians"));
+        if (roleLabel != null) roleLabel.setText(rs.getString("librarians"));
         if (AdminLabel != null) AdminLabel.setText(rs.getString("adminLabel"));
-        LibrarianLabel.setText(rs.getString("librarianLabel"));
-        UserLabel.setText(rs.getString("userLabel"));
-        modifyBtn.setText(rs.getString("modifyBtn"));
-        refreshBtn.setText(rs.getString("refreshBtn"));
+        if (LibrarianLabel != null) LibrarianLabel.setText(rs.getString("librarianLabel"));
+        if (UserLabel != null) UserLabel.setText(rs.getString("userLabel"));
+        if (modifyBtn != null) modifyBtn.setText(rs.getString("modifyBtn"));
+        if (refreshBtn != null) refreshBtn.setText(rs.getString("refreshBtn"));
     }
 }

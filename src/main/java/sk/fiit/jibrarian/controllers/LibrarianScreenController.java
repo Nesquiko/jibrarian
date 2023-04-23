@@ -84,6 +84,7 @@ public class LibrarianScreenController implements Initializable {
         LoginController controller = App.getLoader().getController();
         controller.switchLocals();
         App.minimizeScreen();
+        Logger.getLogger(LoginController.class.getName()).log(Level.INFO, "User logged out");
     }
 
     private void loadScreenPart(String part) {
@@ -110,6 +111,10 @@ public class LibrarianScreenController implements Initializable {
                         URL fxmlLocation = getClass().getResource(part);
                         loader = new FXMLLoader(fxmlLocation);
                         root = loader.load();
+                        if (part == "../views/librarian_add_book_screen.fxml") {
+                            AddBookController controller = loader.getController();
+                            controller.switchLocals();
+                        }
 
                     } catch (IOException error) {
                         Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
@@ -129,6 +134,10 @@ public class LibrarianScreenController implements Initializable {
                 URL fxmlLocation = getClass().getResource(part);
                 loader = new FXMLLoader(fxmlLocation);
                 root = loader.load();
+                if (part == "../views/librarian_add_book_screen.fxml") {
+                    AddBookController controller = loader.getController();
+                    controller.switchLocals();
+                }
 
             } catch (IOException error) {
                 Logger.getLogger(LibrarianScreenController.class.getName()).log(Level.SEVERE, null, error);
