@@ -14,6 +14,7 @@ import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.Reservation;
 import sk.fiit.jibrarian.model.User;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -24,11 +25,11 @@ import java.util.logging.Logger;
 
 public class BookModalUserController {
     @FXML
-    public Label description;
+    private Label description;
     @FXML
-    public Button reserveButton;
+    private Button reserveButton;
     @FXML
-    public Label reserveLabel;
+    private Label reserveLabel;
     @FXML
     private Label bookAvailable;
     @FXML
@@ -39,9 +40,9 @@ public class BookModalUserController {
 
     private User user;
 
-    public ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
+    private final ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
 
-    private UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private static final Logger LOGGER = Logger.getLogger(BookModalUserController.class.getName());
 
     @FunctionalInterface
@@ -52,10 +53,11 @@ public class BookModalUserController {
     private OnSuccessfulReserve onSuccessfulReserve;
 
     public void onReserveButtonClicked() {
-        Reservation reservation = new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(2), null);
+        Reservation reservation =
+                new Reservation(UUID.randomUUID(), user.getId(), item, LocalDate.now().plusDays(2), null);
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
 
-        try{
+        try {
             Item updatedItem = reservationRepository.saveReservation(reservation);
 
             item.setReserved(updatedItem.getReserved());
@@ -65,16 +67,13 @@ public class BookModalUserController {
 
             reserveLabel.setText(rs.getString("confirmReservation"));
             reserveLabel.setStyle("-fx-text-fill: green");
-        }
-        catch (ReservationRepository.TooManyReservationsException e) {
+        } catch (ReservationRepository.TooManyReservationsException e) {
             AlertDialog.showDialog(rs.getString("tooManyReservations"));
         } catch (CatalogRepository.ItemNotAvailableException e) {
             AlertDialog.showDialog(rs.getString("notAvailable"));
         } catch (ReservationRepository.ItemAlreadyReservedException e) {
             AlertDialog.showDialog(rs.getString("sameReservationError"));
         }
-
-
     }
 
     public void setData(Item item, OnSuccessfulReserve onSuccessfulReserve) {
@@ -89,7 +88,7 @@ public class BookModalUserController {
 
         bookTitle.setText(item.getTitle());
         description.setText(item.getDescription());
-        
+
         ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
         bookAvailable.setText(rs.getString("available") + ": " + item.getAvailable().toString());
         reserveButton.setText(rs.getString("reserve"));
@@ -98,8 +97,5 @@ public class BookModalUserController {
         InputStream is = new ByteArrayInputStream(byteArrayImage);
         Image image = new Image(is);
         bookImg.setImage(image);
-
     }
-
-
 }

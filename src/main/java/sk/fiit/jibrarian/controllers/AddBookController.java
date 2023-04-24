@@ -4,7 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -15,6 +21,7 @@ import sk.fiit.jibrarian.data.CatalogRepository;
 import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.model.Item;
 import sk.fiit.jibrarian.model.ItemType;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,9 +29,11 @@ import java.nio.file.Files;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.UUID;
+
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static sk.fiit.jibrarian.AlertDialog.showDialog;
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
 
 
 public class AddBookController implements Initializable {
@@ -32,7 +41,7 @@ public class AddBookController implements Initializable {
     private final String[] itemGenres =
             {"Not Set", "Action and Adventure", "Classics", "Comic Book", "Detective and Mystery", "Fantasy", "Historical Fiction",//
                     "Horror", "Literary Fiction", "Romance", "Science Fiction (Sci-Fi)", "Short Stories", "Suspense and Thrillers"};
-    public CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
+    private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
     @FXML
     private Button addBookButton;
     @FXML
@@ -57,8 +66,8 @@ public class AddBookController implements Initializable {
     @FXML
     private TextField isbnInput;
     @FXML
-    private Label titleLabel, authorLabel, quantityLabel, languageLabel, totalPagesLabel, descriptionLabel, isbnLabel, itemTypeLabel,
-            genreLabel;
+    private Label titleLabel, authorLabel, quantityLabel, languageLabel, totalPagesLabel, descriptionLabel, isbnLabel,
+            itemTypeLabel, genreLabel;
     @FXML
     private ComboBox<String> itemTypeInput;
     @FXML
@@ -105,7 +114,7 @@ public class AddBookController implements Initializable {
             newBook.setImage(imageBytes);
             catalogRepository.saveItem(newBook);
             clearFields();
-            
+
             ResourceBundle rs = ResourceBundle.getBundle(App.getResourceBundle());
             showDialog(rs.getString("bookAdded"), INFORMATION);
         }
@@ -222,7 +231,8 @@ public class AddBookController implements Initializable {
         itemTypeInput.getSelectionModel().selectFirst();
         genreInput.getSelectionModel().selectFirst();
         totalPagesInput.clear();
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("../views/choose.png")));
+        Image img =
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream(APP_CLASSPATH + "/views/choose.png")));
         chosenBookImage.setImage(img);
     }
 

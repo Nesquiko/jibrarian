@@ -31,12 +31,13 @@ import java.util.logging.Logger;
 
 import static sk.fiit.jibrarian.AlertDialog.confirmationDialog;
 import static sk.fiit.jibrarian.AlertDialog.showDialog;
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
 
 
 public class BookModalLibrarianController {
-    private static final Logger LOGGER = Logger.getLogger(BookModalUserController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(BookModalLibrarianController.class.getName());
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
-    public ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
+    private final ReservationRepository reservationRepository = RepositoryFactory.getReservationRepository();
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     @FXML
     private Label bookAvailable;
@@ -99,7 +100,7 @@ public class BookModalLibrarianController {
 
     @FXML
     public void takeIn() {
-        var viewName = "../views/librarian_take_in.fxml";
+        var viewName = APP_CLASSPATH + "/views/librarian_take_in.fxml";
         FXMLLoader fxmlLoader = showScreen(viewName, "Take in book Screen");
         LibrarianTakeInController takeInController = fxmlLoader.getController();
         takeInController.setData(item, onSuccessfulAction);
@@ -171,6 +172,7 @@ public class BookModalLibrarianController {
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error while loading view", e);
             throw new RuntimeException(e);
         }
         Stage stage = new Stage();

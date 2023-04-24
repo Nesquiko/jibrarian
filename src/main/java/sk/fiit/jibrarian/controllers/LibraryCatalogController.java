@@ -29,6 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
+
 
 public class LibraryCatalogController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
@@ -47,7 +49,7 @@ public class LibraryCatalogController implements Initializable {
     private final UserRepository userRepository = RepositoryFactory.getUserRepository();
     private final CatalogRepository catalogRepository = RepositoryFactory.getCatalogRepository();
 
-    private Integer totalPages = (int) Math.floor(catalogRepository.getItemPage(0, 12).total() / 12.01);
+    private final Integer totalPages = (int) Math.floor(catalogRepository.getItemPage(0, 12).total() / 12.01);
 
     private List<Item> getData(Integer page) {
         return catalogRepository.getItemPage(page, 12).items();
@@ -77,7 +79,7 @@ public class LibraryCatalogController implements Initializable {
         try {
             for (Item book : books) {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("../views/catalog_item.fxml"));
+                loader.setLocation(getClass().getResource(APP_CLASSPATH + "/views/catalog_item.fxml"));
                 AnchorPane anchorPane = loader.load();
 
                 ItemController itemController = loader.getController();
@@ -93,8 +95,8 @@ public class LibraryCatalogController implements Initializable {
                     String viewName = "";
                     Role role = user.getRole();
                     switch (role) {
-                        case MEMBER -> viewName = "../views/book_modal_user.fxml";
-                        case LIBRARIAN -> viewName = "../views/book_modal_librarian.fxml";
+                        case MEMBER -> viewName = APP_CLASSPATH + "/views/book_modal_user.fxml";
+                        case LIBRARIAN -> viewName = APP_CLASSPATH + "/views/book_modal_librarian.fxml";
                     }
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
                     Parent root;
@@ -102,13 +104,13 @@ public class LibraryCatalogController implements Initializable {
                     try {
                         root = fxmlLoader.load();
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        LOGGER.log(Level.SEVERE, "Failed to load view", e);
+                        return;
                     }
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
-                    stage.initModality(
-                            Modality.APPLICATION_MODAL); //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
-
+                    //toto zabrani klikat na ine miesta v aplikacii, pokym sa nezavrie toto okno
+                    stage.initModality(Modality.APPLICATION_MODAL);
                     switch (role) {
                         case MEMBER -> {
                             BookModalUserController bookModalUserController =
@@ -126,7 +128,7 @@ public class LibraryCatalogController implements Initializable {
             }
 
         } catch (IOException exception) {
-            exception.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to load view", exception);
         }
     }
 
@@ -139,7 +141,7 @@ public class LibraryCatalogController implements Initializable {
         tt.setNode(libraryCatalog);
         tt.setAutoReverse(true);
         tt.setOnFinished(v -> {
-            if(!played.get()){
+            if (!played.get()) {
                 getCatalogPage(++currentPage);
                 catalogPageLabel.setText(String.valueOf(currentPage + 1));
                 libraryCatalog.setTranslateX(1920);
@@ -159,7 +161,7 @@ public class LibraryCatalogController implements Initializable {
         tt.setByX(1920);
         tt.setNode(libraryCatalog);
         tt.setOnFinished(v -> {
-            if(!played.get()){
+            if (!played.get()) {
                 getCatalogPage(--currentPage);
                 catalogPageLabel.setText(String.valueOf(currentPage + 1));
                 played.set(true);

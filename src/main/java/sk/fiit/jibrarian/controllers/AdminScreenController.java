@@ -10,11 +10,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import sk.fiit.jibrarian.App;
 import sk.fiit.jibrarian.UtilAuth;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static sk.fiit.jibrarian.App.APP_CLASSPATH;
 
 public class AdminScreenController implements Initializable {
 
@@ -33,14 +36,14 @@ public class AdminScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
         libBtn.setSelected(true);
         libBtn.setDisable(true);
     }
 
     @FXML
     public void library(ActionEvent actionEvent) {
-        loadScreenPart("../views/library_catalog_screen.fxml");
+        loadScreenPart(APP_CLASSPATH + "/views/library_catalog_screen.fxml");
         libBtn.setDisable(true);
         addBookBtn.setDisable(false);
         dashboardBtn.setDisable(false);
@@ -49,8 +52,8 @@ public class AdminScreenController implements Initializable {
     }
 
     @FXML
-    public void add_book(ActionEvent actionEvent) {
-        loadScreenPart("../views/librarian_add_book_screen.fxml");
+    public void addBook(ActionEvent actionEvent) {
+        loadScreenPart(APP_CLASSPATH + "/views/librarian_add_book_screen.fxml");
         AddBookController controller = loader.getController();
         controller.switchLocals();
         addBookBtn.setDisable(true);
@@ -61,8 +64,8 @@ public class AdminScreenController implements Initializable {
     }
 
     @FXML
-    public void admin_dashboard(ActionEvent actionEvent) {
-        loadScreenPart("../views/admin_screen_list.fxml");
+    public void adminDashboard(ActionEvent actionEvent) {
+        loadScreenPart(APP_CLASSPATH + "/views/admin_screen_list.fxml");
         AdminScreenListController controller = loader.getController();
         controller.switchLocals();
         dashboardBtn.setDisable(true);

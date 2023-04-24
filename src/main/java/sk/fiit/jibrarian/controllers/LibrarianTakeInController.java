@@ -21,7 +21,7 @@ import static sk.fiit.jibrarian.AlertDialog.showDialog;
 
 public class LibrarianTakeInController {
 
-    private static final Logger LOGGER = Logger.getLogger(LibraryCatalogController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LibrarianTakeInController.class.getName());
     @FXML
     private Label availableLabel;
 
@@ -66,7 +66,7 @@ public class LibrarianTakeInController {
         String userEmail = readersEmail.getText();
         var optUser = userRepository.getUserByEmail(userEmail);
         if (optUser.isEmpty()) {
-            LOGGER.log(Level.WARNING, "Entered user doesn't exist.");
+            LOGGER.log(Level.WARNING, "Entered user doesnt exist.");
             showDialog("Entered user doesn't exist!", Alert.AlertType.ERROR);
         } else {
             User user = optUser.get();

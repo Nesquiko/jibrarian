@@ -12,14 +12,18 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 import sk.fiit.jibrarian.data.UserRepository;
 import sk.fiit.jibrarian.model.Role;
 import sk.fiit.jibrarian.model.User;
+
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
+
 import static sk.fiit.jibrarian.model.Role.ADMIN;
 import static sk.fiit.jibrarian.model.Role.LIBRARIAN;
 import static sk.fiit.jibrarian.model.Role.MEMBER;
-import java.util.ResourceBundle;
 
 
 public class AdminScreenUserController {
-    public UserRepository userRepository = RepositoryFactory.getUserRepository();
+    private static final Logger LOGGER = Logger.getLogger(AdminScreenUserController.class.getName());
+    private final UserRepository userRepository = RepositoryFactory.getUserRepository();
 
     @FXML
     private Label userId;
@@ -33,23 +37,22 @@ public class AdminScreenUserController {
     private RadioButton rButton3;
     @FXML
     private AnchorPane pane;
-    AdminScreenListController adminScreenListController;
-    User user;
+    private AdminScreenListController adminScreenListController;
+    private User user;
+
     public void setData(User user, AdminScreenListController adminScreenListController) {
-        this.user=user;
+        this.user = user;
         this.adminScreenListController = adminScreenListController;
         userId.setText(user.getEmail());
-        if(user.getRole() == ADMIN) {
+        if (user.getRole() == ADMIN) {
             rButton1.setSelected(true);
             rButton2.setSelected(false);
             rButton3.setSelected(false);
-        }
-        else if (user.getRole() == LIBRARIAN) {
+        } else if (user.getRole() == LIBRARIAN) {
             rButton1.setSelected(false);
             rButton2.setSelected(true);
             rButton3.setSelected(false);
-        }
-        else {
+        } else {
             rButton1.setSelected(false);
             rButton2.setSelected(false);
             rButton3.setSelected(true);
@@ -65,22 +68,26 @@ public class AdminScreenUserController {
         rButton3.setVisible(false);
         adminScreenListController.loadList();
     }
+
     public void setAdmin(ActionEvent actionEvent) {
         updateUserRole(ADMIN);
+        LOGGER.info("admin is set");
         adminScreenListController.loadList();
     }
 
     public void setLibrarian(ActionEvent actionEvent) {
         updateUserRole(LIBRARIAN);
+        LOGGER.info("librarian is set");
         adminScreenListController.loadList();
     }
 
-    public void SetUser(ActionEvent actionEvent) {
+    public void setUser(ActionEvent actionEvent) {
         updateUserRole(MEMBER);
+        LOGGER.info("user is set");
         adminScreenListController.loadList();
     }
 
-    private void updateUserRole(Role x){
+    private void updateUserRole(Role x) {
         user.setRole(x);
         try {
             userRepository.updateUser(user);
