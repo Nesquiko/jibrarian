@@ -293,10 +293,43 @@ in Enterprise Architect.
 \end{figure}
 
 \section{Class Diagram}
+
 Class diagram is too big to be included in this documentation (if included, it would
-be unreadable). To view the class diagram, please open the \emph{doc/eea/vava-jibrarian.qea}
+be unreadable). In this section there are only parts of the whole class diagram.
+To view the whole class diagram, please open the \emph{doc/eea/vava-jibrarian.qea}
 in Enterprise Architect and see the \emph{Class Diagram} model.
 
+\subsection{Package sk.fiit.jibrarian.model}
+
+This part shows main classes serving as a model for Jibrarian application.
+
+\begin{figure}[!ht]
+    \includegraphics[scale=.5]{../ea/Class Diagram model.png}
+    \centering
+\end{figure}
+
+\subsection{Package sk.fiit.jibrarian.data}
+
+This part of class diagram documents the class hierarchy of the
+\textbf{sk.fiit.jibrarian.data} package, which is responsible for reading and
+writing data of the application to either RAM or database (based on run environment).
+
+\begin{figure}[!ht]
+    \includegraphics[scale=.35]{../ea/Class Diagram data.png}
+    \centering
+\end{figure}
+
+\pagebreak
+\subsection{Package sk.fiit.jibrarian.controllers}
+
+This part of class diagram shows all JavaFx controllers used in GUI part of Jibrarian.
+
+\begin{figure}[!ht]
+    \includegraphics[scale=.4]{../ea/Class Diagram controllers.png}
+    \centering
+\end{figure}
+
+\pagebreak
 \section{Assignment requirements}
 
 List below documents how are different assignment requirements fulfilled
