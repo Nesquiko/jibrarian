@@ -404,11 +404,16 @@ Dependencies listed below are taken from projects \emph{pom.xml}.
 
 \section{How to run}
 
+Before running make sure that all SQL scripts in \emph{./db/migration} are applied
+to local database.
+
 The easiest way to run the application is importing it into Intellij IDE, and
 using provided Maven run configurations. More can be read in \emph{./doc/setup.md}
-and \emph{./doc/run.md}
+and \emph{./doc/run.md}.
 
-Provided jar file is a fat jar with all dependencies included.
+If you want to run the application only through provided jar file, take a look
+at the \emph{./run-jar.sh}. It shows how to run Jibrarian against local database
+only with Java 17.
 
 \section{What did we learn}
 
