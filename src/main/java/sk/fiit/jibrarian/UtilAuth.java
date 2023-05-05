@@ -8,7 +8,7 @@ import sk.fiit.jibrarian.data.RepositoryFactory;
 public class UtilAuth {
 
     public static boolean emailValidityCheck(String email) {
-        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}\\.[a-z]{2,}$";
         return email.matches(emailRegex);
     }
 
