@@ -115,7 +115,7 @@ public class LibrarianScreenController implements Initializable {
                         URL fxmlLocation = getClass().getResource(part);
                         loader = new FXMLLoader(fxmlLocation);
                         root = loader.load();
-                        if (part == "../views/librarian_add_book_screen.fxml") {
+                        if (part == "/sk/fiit/jibrarian/views/librarian_add_book_screen.fxml") {
                             AddBookController controller = loader.getController();
                             controller.switchLocals();
                         }
